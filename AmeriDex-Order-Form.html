@@ -440,6 +440,7 @@
         text-decoration: underline;
     }
 
+    /* Mobile layout for table */
     @media (max-width: 768px) {
         header.app-header {
             border-radius: 0 0 10px 10px;
@@ -448,12 +449,56 @@
         .card {
             padding-inline: 1.2rem;
         }
-        th:nth-child(1) { width: 28%; }
-        th:nth-child(2) { width: 16%; }
-        th:nth-child(3) { width: 14%; }
-        th:nth-child(4) { width: 10%; }
-        th:nth-child(5) { width: 15%; }
-        th:nth-child(6) { width: 13%; }
+
+        #line-items,
+        #line-items thead,
+        #line-items tbody,
+        #line-items th,
+        #line-items td,
+        #line-items tr {
+            display: block;
+        }
+
+        #line-items thead {
+            display: none;
+        }
+
+        #line-items tr {
+            margin-bottom: 0.9rem;
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            background-color: #ffffff;
+            padding: 0.4rem 0.65rem;
+        }
+
+        #line-items td {
+            border: none;
+            padding: 0.25rem 0;
+            text-align: left;
+        }
+
+        #line-items td::before {
+            content: attr(data-label);
+            display: inline-block;
+            min-width: 90px;
+            font-weight: 600;
+            font-size: 0.78rem;
+            color: #6b7280;
+            margin-right: 0.25rem;
+        }
+
+        #line-items td.numeric {
+            text-align: left;
+        }
+
+        .table-actions-cell {
+            text-align: right;
+            margin-top: 0.35rem;
+        }
+
+        .preview-img {
+            margin-top: 0.35rem;
+        }
     }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -462,8 +507,8 @@
 
 <div class="page-shell">
     <header class="app-header">
-        <!-- If you keep AmeriDex (1).png instead of renaming, use src="colors/AmeriDex.png" -->
-        <img src="colors/AmeriDex.png" alt="AmeriDex Logo">
+        <!-- Rename your file to colors/AmeriDex-logo.png for simplicity -->
+        <img src="colors/AmeriDex-logo.png" alt="AmeriDex Logo">
         <h1>AmeriDex Order Form</h1>
         <p class="header-sub">
             AmeriDex System Boards pricing includes integrated Dexerdry. Use standalone Dexerdry only for non-system applications.
@@ -689,15 +734,15 @@ const PRODUCTS = {
 
 const COLORS = ["Driftwood","Khaki","Slate","Beachwood","Chestnut","Redwood","Hazelnut"];
 
-// Map of color names to GitHub-served image files
+// Adjust extensions here to match your real files (.jpg or .png)
 const COLOR_IMAGES = {
-    Driftwood: "Driftwood.png",
-    Khaki: "Khaki.png",
-    Slate: "Slate.png",          // when you add it
-    Beachwood: "Beachwood.png",
-    Chestnut: "Chestnut.png",
-    Redwood: "Redwood.png",
-    Hazelnut: "Hazelnut.png"
+    Driftwood: "Driftwood.jpg",
+    Khaki: "Khaki.jpg",
+    Slate: "Slate.jpg",          // add when ready
+    Beachwood: "Beachwood.jpg",
+    Chestnut: "Chestnut.jpg",
+    Redwood: "Redwood.jpg",
+    Hazelnut: "Hazelnut.jpg"
 };
 
 const BOARD_WIDTH_INCH = 5.5;
@@ -782,6 +827,7 @@ function render() {
 
         // Product
         let td = document.createElement("td");
+        td.setAttribute("data-label", "Product");
         const sel = document.createElement("select");
         Object.keys(PRODUCTS).forEach(k => {
             const opt = document.createElement("option");
@@ -805,6 +851,7 @@ function render() {
 
         // Color
         td = document.createElement("td");
+        td.setAttribute("data-label", "Color");
         if (prod.hasColor) {
             const csel = document.createElement("select");
             COLORS.forEach(c => {
@@ -814,28 +861,42 @@ function render() {
                 if (c === item.color) o.selected = true;
                 csel.appendChild(o);
             });
-            csel.onchange = e => { item.color = e.target.value; updateTotalAndFasteners(); };
-            td.appendChild(csel);
 
             const prev = document.createElement("img");
-            const colorName = item.color || COLORS[0];
-            const imgFile = COLOR_IMAGES[colorName] || COLOR_IMAGES.Driftwood;
-            prev.src = "colors/" + imgFile;
+            const applyImage = () => {
+                const colorName = item.color || COLORS[0];
+                const imgFile = COLOR_IMAGES[colorName] || COLOR_IMAGES.Driftwood;
+                prev.src = "colors/" + imgFile;
+            };
+
+            csel.onchange = e => {
+                item.color = e.target.value;
+                applyImage();          // update immediately when color changes
+                updateTotalAndFasteners();
+            };
+
+            td.appendChild(csel);
+
             prev.className = "preview-img";
             prev.alt = "preview";
             prev.title = "Click to enlarge";
             prev.onerror = () => { prev.src = "https://via.placeholder.com/34?text=?"; };
             prev.onclick = () => {
                 modalImg.src = prev.src;
-                modalName.textContent = colorName;
+                modalName.textContent = item.color || COLORS[0];
                 modal.style.display = "flex";
             };
+
+            item.color = item.color || COLORS[0];
+            applyImage();
+
             td.appendChild(prev);
         }
         row.appendChild(td);
 
         // Length
         td = document.createElement("td");
+        td.setAttribute("data-label", "Length (ft)");
         if (prod.isFt) {
             if (["system","grooved","solid"].includes(item.type)) {
                 const lsel = document.createElement("select");
@@ -879,6 +940,7 @@ function render() {
         // Qty and custom extras
         td = document.createElement("td");
         td.className = "numeric";
+        td.setAttribute("data-label", "Qty");
         const q = document.createElement("input");
         q.type = "number";
         q.min = "1";
@@ -911,6 +973,7 @@ function render() {
         // Unit price
         td = document.createElement("td");
         td.className = "numeric";
+        td.setAttribute("data-label", "Unit Price");
         if (prod.isFt || item.type === "custom") {
             const p = document.createElement("input");
             p.type = "number";
@@ -931,11 +994,13 @@ function render() {
         td = document.createElement("td");
         td.className = "numeric";
         td.id = "sub-" + i;
+        td.setAttribute("data-label", "Subtotal");
         row.appendChild(td);
 
         // Remove
         td = document.createElement("td");
         td.className = "table-actions-cell";
+        td.setAttribute("data-label", "Actions");
         const rm = document.createElement("button");
         rm.type = "button";
         rm.textContent = "×";
