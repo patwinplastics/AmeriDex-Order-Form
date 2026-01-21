@@ -234,9 +234,9 @@
         border-radius: 6px;
     }
 
-    td .qty-input { max-width: 70px; }
+    td .qty-input { max-width: 60px; }
     td .len-input { max-width: 90px; }
-    td .price-input { max-width: 110px; }
+    td .price-input { max-width: 140px; }
 
     .preview-img {
         width: 34px;
@@ -264,9 +264,7 @@
         cursor: pointer;
     }
 
-    .btn-remove-row:hover {
-        background-color: #fecaca;
-    }
+    .btn-remove-row:hover { background-color: #fecaca; }
 
     .btn-add-row {
         margin-top: 0.9rem;
@@ -416,6 +414,24 @@
 
     footer.app-footer a:hover { text-decoration: underline; }
 
+    /* Desktop column widths */
+    @media (min-width: 769px) {
+        #line-items th:nth-child(1),
+        #line-items td:nth-child(1) { width: 32%; } /* Product */
+        #line-items th:nth-child(2),
+        #line-items td:nth-child(2) { width: 16%; } /* Color */
+        #line-items th:nth-child(3),
+        #line-items td:nth-child(3) { width: 12%; } /* Length */
+        #line-items th:nth-child(4),
+        #line-items td:nth-child(4) { width: 8%;  } /* Qty */
+        #line-items th:nth-child(5),
+        #line-items td:nth-child(5) { width: 18%; } /* Unit Price */
+        #line-items th:nth-child(6),
+        #line-items td:nth-child(6) { width: 10%; } /* Subtotal */
+        #line-items th:nth-child(7),
+        #line-items td:nth-child(7) { width: 4%;  } /* Actions */
+    }
+
     /* Mobile layout for line items */
     @media (max-width: 768px) {
         header.app-header {
@@ -477,7 +493,6 @@
 
 <div class="page-shell">
     <header class="app-header">
-        <!-- Rename your file to this path for simplicity -->
         <img src="colors/AmeriDex.png" alt="AmeriDex Logo">
         <h1>AmeriDex Order Form</h1>
         <p class="header-sub">
@@ -704,11 +719,10 @@ const PRODUCTS = {
 
 const COLORS = ["Driftwood","Khaki","Slate","Beachwood","Chestnut","Redwood","Hazelnut"];
 
-// Match these to the actual extensions in /colors
 const COLOR_IMAGES = {
     Driftwood: "Driftwood.png",
     Khaki: "Khaki.png",
-    Slate: "Slate.png",          // add when available
+    Slate: "Slate.png",          // add this file when ready
     Beachwood: "Beachwood.png",
     Chestnut: "Chestnut.png",
     Redwood: "Redwood.png",
@@ -842,7 +856,7 @@ function render() {
 
             csel.onchange = e => {
                 item.color = e.target.value;
-                applyImage();              // immediate update on any device
+                applyImage();              // immediate update on all devices
                 updateTotalAndFasteners();
             };
 
