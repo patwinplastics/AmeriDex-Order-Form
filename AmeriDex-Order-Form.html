@@ -104,92 +104,101 @@
     <header>
         <img src="https://via.placeholder.com/220x80/2563eb/ffffff?text=AmeriDex+Logo" alt="AmeriDex Logo">
         <h1>AmeriDex Order Form</h1>
+        <div class="dexerdry-info">
+            AmeriDex System Boards pricing includes integrated Dexerdry. Use standalone Dexerdry only for non-system applications.
+        </div>
     </header>
 
-    <section id="customer">
-        <h2>Customer Information</h2>
-        <label>Name *</label><input type="text" id="cust-name" required><div class="error" id="err-name"></div>
-        <label>Company *</label><input type="text" id="cust-company" required><div class="error" id="err-company"></div>
-        <label>Address *</label><textarea id="cust-address" required rows="3"></textarea><div class="error" id="err-address"></div>
-        <label>Phone *</label><input type="tel" id="cust-phone" required><div class="error" id="err-phone"></div>
-        <label>Email *</label><input type="email" id="cust-email" required><div class="error" id="err-email"></div>
-    </section>
+    <form id="order-form" onsubmit="event.preventDefault(); submitOrder();">
 
-    <section id="order">
-        <h2>Order Details</h2>
+        <section id="customer">
+            <h2>Customer Information</h2>
+            <label>Name *</label><input type="text" id="cust-name" required><div class="error" id="err-name"></div>
+            <label>Company *</label><input type="text" id="cust-company" required><div class="error" id="err-company"></div>
+            <label>Address *</label><textarea id="cust-address" required rows="3"></textarea><div class="error" id="err-address"></div>
+            <label>Phone *</label><input type="tel" id="cust-phone" required><div class="error" id="err-phone"></div>
+            <label>Email *</label><input type="email" id="cust-email" required><div class="error" id="err-email"></div>
+        </section>
 
-        <label><input type="checkbox" id="use-calc"> Use Deck Calculator (suggests AmeriDex System Boards)</label>
-        <div id="calc-panel" style="display:none; margin-top:1rem;">
-            <label>Deck Length (ft)</label><input type="number" id="deck-len" step="0.1" min="0">
-            <label>Deck Width (ft)</label><input type="number" id="deck-wid" step="0.1" min="0">
-            <label>Board Orientation</label>
-            <select id="orientation">
-                <option value="parallel">Parallel to Length</option>
-                <option value="perpendicular" selected>Perpendicular to Length</option>
-            </select>
-            <button type="button" id="calc-btn">Calculate & Suggest</button>
-            <div id="calc-result" style="margin-top:1rem; color:#1e40af;"></div>
-        </div>
+        <section id="order">
+            <h2>Order Details</h2>
 
-        <div style="margin:1.25rem 0;">
-            <label><input type="checkbox" id="pic-frame"> Picture Framing</label>
-            <div id="pic-frame-note" style="display:none; color:#d97706; font-size:0.9rem;">→ Manually add Solid Edge Boards for framing</div>
-        </div>
-        <div>
-            <label><input type="checkbox" id="stairs"> Stairs</label>
-            <div id="stairs-note" style="display:none; color:#d97706; font-size:0.9rem;">→ Manually add Solid Edge Boards for stairs</div>
-        </div>
+            <label><input type="checkbox" id="use-calc"> Use Deck Calculator (suggests AmeriDex System Boards)</label>
+            <div id="calc-panel" style="display:none; margin-top:1rem;">
+                <label>Deck Length (ft)</label><input type="number" id="deck-len" step="0.1" min="0">
+                <label>Deck Width (ft)</label><input type="number" id="deck-wid" step="0.1" min="0">
+                <label>Board Orientation</label>
+                <select id="orientation">
+                    <option value="parallel">Parallel to Length</option>
+                    <option value="perpendicular" selected>Perpendicular to Length</option>
+                </select>
+                <button type="button" id="calc-btn">Calculate & Suggest</button>
+                <div id="calc-result" style="margin-top:1rem; color:#1e40af;"></div>
+            </div>
 
-        <div id="fastener-hint" style="margin:1.25rem 0; padding:0.75rem; background:#eff6ff; border-radius:8px;"></div>
+            <div style="margin:1.25rem 0;">
+                <label><input type="checkbox" id="pic-frame"> Picture Framing</label>
+                <div id="pic-frame-note" style="display:none; color:#d97706; font-size:0.9rem;">→ Manually add Solid Edge Boards for framing</div>
+            </div>
+            <div>
+                <label><input type="checkbox" id="stairs"> Stairs</label>
+                <div id="stairs-note" style="display:none; color:#d97706; font-size:0.9rem;">→ Manually add Solid Edge Boards for stairs</div>
+            </div>
 
-        <table id="line-items">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Color</th>
-                    <th>Length (ft)</th>
-                    <th>Qty</th>
-                    <th>Unit Price</th>
-                    <th>Subtotal</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+            <div id="fastener-hint" style="margin:1.25rem 0; padding:0.75rem; background:#eff6ff; border-radius:8px;"></div>
 
-        <button type="button" id="add-row">+ Add Line Item</button>
+            <table id="line-items">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Color</th>
+                        <th>Length (ft)</th>
+                        <th>Qty</th>
+                        <th>Unit Price</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
 
-        <label style="margin-top:1.5rem;">Special Instructions / Notes for Production</label>
-        <textarea id="special-instr" rows="3"></textarea>
+            <button type="button" id="add-row">+ Add Line Item</button>
 
-        <label>Internal Sales Rep Notes</label>
-        <textarea id="internal-notes" rows="2"></textarea>
-    </section>
+            <label style="margin-top:1.5rem;">Special Instructions / Notes for Production</label>
+            <textarea id="special-instr" rows="3"></textarea>
 
-    <section>
-        <h2>Shipping & Delivery</h2>
-        <label>Shipping Address (if different)</label><textarea id="ship-addr" rows="3"></textarea>
-        <label>Preferred Delivery Date</label><input type="date" id="del-date">
-    </section>
+            <label>Internal Sales Rep Notes</label>
+            <textarea id="internal-notes" rows="2"></textarea>
+        </section>
 
-    <section>
-        <h2>Attachments (plans, sketches, etc.)</h2>
-        <input type="file" id="files" multiple accept="image/*,.pdf">
-        <div class="error" id="err-files"></div>
-    </section>
+        <section>
+            <h2>Shipping & Delivery</h2>
+            <label>Shipping Address (if different)</label><textarea id="ship-addr" rows="3"></textarea>
+            <label>Preferred Delivery Date</label><input type="date" id="del-date">
+        </section>
 
-    <section>
-        <div id="grand-total" class="total-line">Estimated Total: $0.00</div>
-    </section>
+        <section>
+            <h2>Attachments (plans, sketches, etc.)</h2>
+            <input type="file" id="files" multiple accept="image/*,.pdf">
+            <div class="error" id="err-files"></div>
+            <div style="font-size:0.85rem; color:#4b5563; margin-top:0.25rem;">
+                Attachments cannot be auto-attached via email link. After clicking Submit Order, attach files manually in your email client.
+            </div>
+        </section>
 
-    <section style="text-align:center; margin:2rem 0;">
-        <button id="reset">Reset Form</button>
-        <button id="pdf">Export PDF</button>
-        <button id="submit">Submit Order → Email</button>
-        <div id="success-msg" style="margin-top:1rem; color:#15803d; font-weight:600; display:none;">
-            Order email prepared! Don't forget to attach files in your email client if needed.
-        </div>
-    </section>
+        <section>
+            <div id="grand-total" class="total-line">Estimated Total: $0.00</div>
+        </section>
+
+        <section style="text-align:center; margin:2rem 0;">
+            <button type="button" id="reset">Reset Form</button>
+            <button type="button" id="pdf">Export PDF</button>
+            <button type="submit" id="submit">Submit Order - Email</button>
+            <div id="success-msg" style="margin-top:1rem; color:#15803d; font-weight:600; display:none;">
+                Order email prepared! Do not forget to attach files in your email client if needed.
+            </div>
+        </section>
+    </form>
 
     <!-- Color Preview Modal -->
     <div id="colorModal" class="modal">
@@ -206,18 +215,14 @@
 </footer>
 
 <script>
-// ──────────────────────────────────────────────────────────────────────────────
-// Constants & Configuration
-// ──────────────────────────────────────────────────────────────────────────────
-
 const PRODUCTS = {
-    'system':       { name: 'AmeriDex System Boards (Grooved + Dexerdry)',   price: 8.00,  isFt: true,  hasColor: true,  bundleDexerdry: true },
-    'grooved':      { name: 'Grooved Deck Boards (no Dexerdry)',             price: 6.00,  isFt: true,  hasColor: true,  bundleDexerdry: false },
-    'solid':        { name: 'Solid Edge Deck Boards',                         price: 6.00,  isFt: true,  hasColor: true,  bundleDexerdry: false },
-    'dexerdry':     { name: 'Dexerdry Seals (standalone)',                   price: 2.00,  isFt: true,  hasColor: false },
-    'screws':       { name: 'Epoxy-Coated Screws',                           price: 37,    isFt: false, hasColor: false },
-    'plugs':        { name: 'Color-Matching Plugs',                          price: 33.79, isFt: false, hasColor: false },
-    'custom':       { name: 'Custom / Manual Item',                          price: 0,     isFt: false, hasColor: false }
+    'system':       { name: 'AmeriDex System Boards (Grooved + Dexerdry included)',   price: 8.00,  isFt: true,  hasColor: true },
+    'grooved':      { name: 'Grooved Deck Boards (no Dexerdry)',                      price: 6.00,  isFt: true,  hasColor: true },
+    'solid':        { name: 'Solid Edge Deck Boards',                                 price: 6.00,  isFt: true,  hasColor: true },
+    'dexerdry':     { name: 'Dexerdry Seals (standalone - for non-system decks)',     price: 2.00,  isFt: true,  hasColor: false },
+    'screws':       { name: 'Epoxy-Coated Screws',                                    price: 37,    isFt: false, hasColor: false },
+    'plugs':        { name: 'Color-Matching Plugs',                                   price: 33.79, isFt: false, hasColor: false },
+    'custom':       { name: 'Custom / Manual Item',                                   price: 0,     isFt: false, hasColor: false }
 };
 
 const COLORS = ['Driftwood','Khaki','Slate','Beachwood','Chestnut','Redwood','Hazelnut'];
@@ -225,26 +230,20 @@ const STANDARD_LENGTHS = [12, 16, 20];
 
 const BOARD_WIDTH_INCH = 5.5;
 const GAP_INCH = 0.125;
-const EFFECTIVE_FT = (BOARD_WIDTH_INCH + GAP_INCH) / 12; // ≈ 0.46875 ft
-const WASTE = 1.10; // 10%
+const EFFECTIVE_FT = (BOARD_WIDTH_INCH + GAP_INCH) / 12;
+const WASTE = 1.10;
+const MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024;
+const SCREWS_PER_BOX = 375;
 
 let lineItems = [];
 let deckLengthFt = 0;
 let deckWidthFt = 0;
-
-// ──────────────────────────────────────────────────────────────────────────────
-// DOM Elements
-// ──────────────────────────────────────────────────────────────────────────────
 
 const tbody = document.querySelector('#line-items tbody');
 const modal = document.getElementById('colorModal');
 const modalImg = document.getElementById('colorLarge');
 const modalName = document.getElementById('colorName');
 const closeBtn = document.querySelector('.close');
-
-// ──────────────────────────────────────────────────────────────────────────────
-// Event Listeners – Top Level
-// ──────────────────────────────────────────────────────────────────────────────
 
 document.getElementById('use-calc').addEventListener('change', e => {
     document.getElementById('calc-panel').style.display = e.target.checked ? 'block' : 'none';
@@ -257,7 +256,16 @@ document.getElementById('use-calc').addEventListener('change', e => {
 });
 
 document.getElementById('add-row').onclick = () => {
-    lineItems.push({ type:'system', color:'', length:16, qty:1, priceOverride:null, customDesc:'', customUnitPrice:0, dexOverride:null });
+    lineItems.push({
+        type:'system',
+        color:'',
+        length:16,
+        qty:1,
+        priceOverride:null,
+        customDesc:'',
+        customUnitPrice:0,
+        dexOverride:null
+    });
     render();
     updateTotalAndFasteners();
 };
@@ -285,11 +293,10 @@ document.getElementById('reset').onclick = () => {
 };
 
 document.getElementById('pdf').onclick = generatePDF;
-document.getElementById('submit').onclick = submitOrder;
-
-// ──────────────────────────────────────────────────────────────────────────────
-// Core Functions
-// ──────────────────────────────────────────────────────────────────────────────
+document.getElementById('submit').onclick = (e) => {
+    e.preventDefault();
+    submitOrder();
+};
 
 function render() {
     tbody.innerHTML = '';
@@ -335,14 +342,14 @@ function render() {
             td.appendChild(csel);
 
             const prev = document.createElement('img');
-            prev.src = `colors/${item.color.toLowerCase()}.jpg`; // ← change path when you have real images
+            prev.src = `colors/${(item.color || COLORS[0]).toLowerCase()}.jpg`;
             prev.className = 'preview-img';
             prev.alt = 'preview';
             prev.title = 'Click to enlarge';
             prev.onerror = () => { prev.src = 'https://via.placeholder.com/48?text=?'; };
             prev.onclick = () => {
                 modalImg.src = prev.src;
-                modalName.textContent = item.color;
+                modalName.textContent = item.color || '';
                 modal.style.display = 'flex';
             };
             td.appendChild(prev);
@@ -373,12 +380,11 @@ function render() {
                     } else {
                         item.length = parseFloat(e.target.value);
                     }
-                    render(); // refresh to show new value
+                    render();
                     updateTotalAndFasteners();
                 };
                 td.appendChild(lsel);
             } else {
-                // dexerdry standalone
                 const inp = document.createElement('input');
                 inp.type = 'number'; inp.step = '0.1'; inp.min = '0';
                 inp.value = item.length || '';
@@ -444,7 +450,7 @@ function render() {
 
 function getItemPrice(item) {
     const prod = PRODUCTS[item.type] || PRODUCTS.custom;
-    if (item.priceOverride != null) return item.priceOverride;
+    if (item.priceOverride != null && !Number.isNaN(item.priceOverride)) return item.priceOverride;
     if (item.type === 'custom') return item.customUnitPrice || 0;
     return prod.price;
 }
@@ -461,36 +467,48 @@ function getItemSubtotal(item) {
 function updateTotalAndFasteners() {
     let total = 0;
     let totalGroovedBoards = 0;
+    let hasSystem = false;
+    let hasStandaloneDex = false;
 
     lineItems.forEach((item,i) => {
         const sub = getItemSubtotal(item);
         total += sub;
-        document.getElementById(`sub-${i}`).textContent = '$' + sub.toFixed(2);
+        const subCell = document.getElementById(`sub-${i}`);
+        if (subCell) subCell.textContent = '$' + sub.toFixed(2);
 
-        // Count grooved boards for fasteners (system & standalone grooved)
         if (['system','grooved'].includes(item.type)) {
             totalGroovedBoards += item.qty;
         }
+        if (item.type === 'system') hasSystem = true;
+        if (item.type === 'dexerdry') hasStandaloneDex = true;
     });
 
     document.getElementById('grand-total').textContent =
         `Estimated Total: $${total.toFixed(2)}`;
 
-    // Fastener hint
+    let hintHtml = '';
+
     if (totalGroovedBoards > 0 && deckLengthFt > 0) {
         const joistCount = Math.floor(deckLengthFt * 12 / 16) + 1;
         const intersections = totalGroovedBoards * joistCount;
         const screwsNeeded = intersections * 2;
-        const boxesScrews = Math.ceil(screwsNeeded / 375);
-        const boxesPlugs = boxesScrews; // same qty
+        const boxesScrews = Math.ceil(screwsNeeded / SCREWS_PER_BOX);
 
-        document.getElementById('fastener-hint').innerHTML =
-            `<strong>Fastener Suggestion (info only – add manually):</strong><br>` +
+        hintHtml +=
+            `<strong>Fastener Suggestion (info only - add manually):</strong><br>` +
             `≈ ${boxesScrews} boxes of screws<br>` +
-            `≈ ${boxesPlugs} boxes of plugs`;
-    } else {
-        document.getElementById('fastener-hint').innerHTML = '';
+            `≈ ${boxesScrews} boxes of plugs<br>`;
     }
+
+    if (hasSystem && hasStandaloneDex) {
+        hintHtml +=
+            `<span style="color:#b91c1c; font-size:0.9rem;"><br>` +
+            `Note: AmeriDex System Boards already include Dexerdry in the price. ` +
+            `Standalone Dexerdry is typically only needed for non-system decks.` +
+            `</span>`;
+    }
+
+    document.getElementById('fastener-hint').innerHTML = hintHtml;
 }
 
 function calculateAndSuggest() {
@@ -510,10 +528,10 @@ function calculateAndSuggest() {
     const dexerdryFt = (boardsNeeded - 1) * run * WASTE;
 
     const msg = `
-        <strong>Suggested AmeriDex System Boards:</strong><br>
+        <strong>Suggested AmeriDex System Boards (Dexerdry included in price):</strong><br>
         • ${boardsNeeded} boards @ ${run.toFixed(1)} ft each<br>
         • Total board ft: ${(boardsNeeded * run).toFixed(1)}<br>
-        • Dexerdry needed: ${dexerdryFt.toFixed(1)} ft<br><br>
+        • Integrated Dexerdry coverage (for reference): ${dexerdryFt.toFixed(1)} ft<br><br>
         (10% waste included)
     `;
 
@@ -522,11 +540,13 @@ function calculateAndSuggest() {
     if (confirm('Add suggested AmeriDex System Boards to the order?')) {
         lineItems.push({
             type: 'system',
-            color: 'Driftwood', // default – change as desired
-            length: Math.min(20, Math.round(run)), // prefer standard if close
+            color: 'Driftwood',
+            length: Math.min(20, Math.round(run)),
             qty: boardsNeeded,
             priceOverride: null,
-            dexOverride: null
+            dexOverride: null,
+            customDesc: '',
+            customUnitPrice: 0
         });
         render();
         updateTotalAndFasteners();
@@ -534,38 +554,21 @@ function calculateAndSuggest() {
 }
 
 function validateRequired() {
+    const form = document.getElementById('order-form');
+    if (form && !form.reportValidity()) {
+        return false;
+    }
+
     let ok = true;
-    const fields = [
-        {id:'cust-name',    msg:'Name is required'},
-        {id:'cust-company', msg:'Company is required'},
-        {id:'cust-address', msg:'Address is required'},
-        {id:'cust-phone',   msg:'Phone is required'},
-        {id:'cust-email',   msg:'Valid email is required'}
-    ];
 
-    fields.forEach(f => {
-        const el = document.getElementById(f.id);
-        const err = document.getElementById('err-' + f.id.replace('cust-',''));
-        if (!el.value.trim()) {
-            err.textContent = f.msg;
-            ok = false;
-        } else if (f.id === 'cust-email' && !/\S+@\S+\.\S+/.test(el.value)) {
-            err.textContent = 'Please enter a valid email';
-            ok = false;
-        } else {
-            err.textContent = '';
-        }
-    });
-
-    // File size check (≤10MB total)
     let totalBytes = 0;
     const files = document.getElementById('files').files;
     for (let file of files) totalBytes += file.size;
-    document.getElementById('err-files').textContent =
-        totalBytes > 10*1024*1024 ? 'Total attachments > 10 MB' : '';
-    if (totalBytes > 10*1024*1024) ok = false;
+    const fileErr = document.getElementById('err-files');
+    fileErr.textContent =
+        totalBytes > MAX_ATTACHMENT_BYTES ? 'Total attachments exceed 10 MB' : '';
+    if (totalBytes > MAX_ATTACHMENT_BYTES) ok = false;
 
-    // Basic line item sanity
     for (let item of lineItems) {
         if (item.qty < 1) {
             alert('All quantities must be at least 1');
@@ -598,7 +601,7 @@ function generateOrderText() {
     txt += `\nESTIMATED TOTAL: $${grand.toFixed(2)}\n\n`;
 
     txt += `SHIPPING:\n${document.getElementById('ship-addr').value.replace(/\n/g,' | ') || '(same as customer)'}\n`;
-    txt += `Preferred Date: ${document.getElementById('del-date').value || '—'}\n\n`;
+    txt += `Preferred Date: ${document.getElementById('del-date').value || '-'}\n\n`;
 
     const instr = document.getElementById('special-instr').value.trim();
     if (instr) txt += `SPECIAL INSTRUCTIONS:\n${instr}\n\n`;
@@ -614,12 +617,13 @@ function submitOrder() {
 
     const body = generateOrderText();
     const name = document.getElementById('cust-name').value.trim() || 'Customer';
-    const subject = `New AmeriDex Order – ${name}`;
+    const subject = `New AmeriDex Order - ${name}`;
 
     location.href = `mailto:sales@ameridex.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-    document.getElementById('success-msg').style.display = 'block';
-    setTimeout(() => document.getElementById('success-msg').style.display = 'none', 12000);
+    const msg = document.getElementById('success-msg');
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 12000);
 }
 
 function generatePDF() {
@@ -672,10 +676,6 @@ function generatePDF() {
 
     doc.save(`AmeriDex_Order_${new Date().toISOString().slice(0,10)}.pdf`);
 }
-
-// ──────────────────────────────────────────────────────────────────────────────
-// Init
-// ──────────────────────────────────────────────────────────────────────────────
 
 render();
 updateTotalAndFasteners();
