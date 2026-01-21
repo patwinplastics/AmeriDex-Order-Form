@@ -234,7 +234,7 @@
         border-radius: 6px;
     }
 
-    td .qty-input { max-width: 60px; }
+    td .qty-input { max-width: 70px; }
     td .len-input { max-width: 90px; }
     td .price-input { max-width: 140px; }
 
@@ -417,19 +417,19 @@
     /* Desktop column widths */
     @media (min-width: 769px) {
         #line-items th:nth-child(1),
-        #line-items td:nth-child(1) { width: 32%; } /* Product */
+        #line-items td:nth-child(1) { width: 30%; } /* Product */
         #line-items th:nth-child(2),
         #line-items td:nth-child(2) { width: 16%; } /* Color */
         #line-items th:nth-child(3),
         #line-items td:nth-child(3) { width: 12%; } /* Length */
         #line-items th:nth-child(4),
-        #line-items td:nth-child(4) { width: 8%;  } /* Qty */
+        #line-items td:nth-child(4) { width: 10%; } /* Qty */
         #line-items th:nth-child(5),
         #line-items td:nth-child(5) { width: 18%; } /* Unit Price */
         #line-items th:nth-child(6),
         #line-items td:nth-child(6) { width: 10%; } /* Subtotal */
         #line-items th:nth-child(7),
-        #line-items td:nth-child(7) { width: 4%;  } /* Actions */
+        #line-items td:nth-child(7) { width: 4%; }  /* Actions */
     }
 
     /* Mobile layout for line items */
@@ -651,25 +651,6 @@
                 </div>
             </section>
 
-            <!-- Attachments -->
-            <section class="card">
-                <div class="card-header">
-                    <h2 class="card-title">Attachments</h2>
-                    <p class="card-subtitle">Optional plans, sketches, or drawings to clarify your layout.</p>
-                </div>
-
-                <div class="form-grid">
-                    <div class="field">
-                        <label for="files">Attachments (plans, sketches, etc.)</label>
-                        <input type="file" id="files" multiple accept="image/*,.pdf">
-                        <div class="error" id="err-files"></div>
-                        <p class="hint">
-                            Attachments cannot be auto-attached via email link. After clicking Submit Order, attach files manually in your email client.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
             <!-- Total -->
             <section class="card">
                 <div class="total-bar">
@@ -733,7 +714,6 @@ const BOARD_WIDTH_INCH = 5.5;
 const GAP_INCH = 0.125;
 const EFFECTIVE_FT = (BOARD_WIDTH_INCH + GAP_INCH) / 12;
 const WASTE = 1.10;
-const MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024;
 const SCREWS_PER_BOX = 375;
 
 let lineItems = [];
@@ -783,7 +763,6 @@ document.getElementById("reset").onclick = () => {
     ["cust-name","cust-company","cust-address","cust-phone","cust-email","ship-addr","del-date","special-instr","internal-notes"].forEach(id => {
         document.getElementById(id).value = "";
     });
-    document.getElementById("files").value = "";
     document.getElementById("use-calc").checked = false;
     document.getElementById("calc-panel").style.display = "none";
     document.getElementById("pic-frame").checked = false;
@@ -856,7 +835,7 @@ function render() {
 
             csel.onchange = e => {
                 item.color = e.target.value;
-                applyImage();              // immediate update on all devices
+                applyImage();
                 updateTotalAndFasteners();
             };
 
@@ -909,6 +888,68 @@ function render() {
                     updateTotalAndFasteners();
                 };
                 td.appendChild(lsel);
+            } else if (item.type === "dexerdry") {
+                const lengthSelect = document.createElement("select");
+                const opts = [
+                    { value: "240", label: "240 ft coil" },
+                    { value: "50",  label: "50 ft coil" },
+                    { value: "custom", label: "Custom length" }
+                ];
+
+                opts.forEach(o => {
+                    const opt = document.createElement("option");
+                    opt.value = o.value;
+                    opt.textContent = o.label;
+                    if (!item.length && o.value === "240") opt.selected = true;
+                    else if (item.length && String(item.length) === o.value) opt.selected = true;
+                    lengthSelect.appendChild(opt);
+                });
+
+                const customInput = document.createElement("input");
+                customInput.type = "number";
+                customInput.step = "0.1";
+                customInput.min = "0";
+                customInput.placeholder = "Custom ft";
+                customInput.className = "len-input";
+                customInput.style.marginTop = "0.3rem";
+                customInput.style.display = "none";
+
+                function syncInputsFromItem() {
+                    if (item.length === 240 || item.length === 50) {
+                        lengthSelect.value = String(item.length);
+                        customInput.style.display = "none";
+                    } else if (item.length) {
+                        lengthSelect.value = "custom";
+                        customInput.style.display = "block";
+                        customInput.value = item.length;
+                    } else {
+                        lengthSelect.value = "240";
+                        customInput.style.display = "none";
+                        item.length = 240;
+                    }
+                }
+
+                lengthSelect.onchange = e => {
+                    const val = e.target.value;
+                    if (val === "240" || val === "50") {
+                        item.length = parseFloat(val);
+                        customInput.style.display = "none";
+                        updateTotalAndFasteners();
+                    } else {
+                        customInput.style.display = "block";
+                        customInput.focus();
+                    }
+                };
+
+                customInput.oninput = e => {
+                    item.length = parseFloat(e.target.value) || 0;
+                    updateTotalAndFasteners();
+                };
+
+                syncInputsFromItem();
+
+                td.appendChild(lengthSelect);
+                td.appendChild(customInput);
             } else {
                 const inp = document.createElement("input");
                 inp.type = "number";
@@ -959,7 +1000,7 @@ function render() {
         td = document.createElement("td");
         td.className = "numeric";
         td.setAttribute("data-label", "Unit Price");
-        if (prod.isFt || item.type === "custom") {
+        if ((prod.isFt && item.type !== "dexerdry") || item.type === "custom") {
             const p = document.createElement("input");
             p.type = "number";
             p.step = "0.01";
@@ -1000,7 +1041,9 @@ function render() {
 
 function getItemPrice(item) {
     const prod = PRODUCTS[item.type] || PRODUCTS.custom;
-    if (item.priceOverride != null && !Number.isNaN(item.priceOverride)) return item.priceOverride;
+    if (item.priceOverride != null && !Number.isNaN(item.priceOverride) && item.type !== "dexerdry") {
+        return item.priceOverride;
+    }
     if (item.type === "custom") return item.customUnitPrice || 0;
     return prod.price;
 }
@@ -1107,15 +1150,6 @@ function validateRequired() {
         return false;
     }
 
-    let ok = true;
-
-    let totalBytes = 0;
-    const files = document.getElementById("files").files;
-    for (let file of files) totalBytes += file.size;
-    const fileErr = document.getElementById("err-files");
-    fileErr.textContent = totalBytes > MAX_ATTACHMENT_BYTES ? "Total attachments exceed 10 MB." : "";
-    if (totalBytes > MAX_ATTACHMENT_BYTES) ok = false;
-
     for (let item of lineItems) {
         if (item.qty < 1) {
             alert("All quantities must be at least 1.");
@@ -1123,7 +1157,7 @@ function validateRequired() {
         }
     }
 
-    return ok;
+    return true;
 }
 
 function generateOrderText() {
@@ -1159,6 +1193,15 @@ function generateOrderText() {
     return txt;
 }
 
+function openMailto(url) {
+    const a = document.createElement("a");
+    a.href = url;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
 function submitOrder() {
     if (!validateRequired()) return;
 
@@ -1166,8 +1209,10 @@ function submitOrder() {
     const name = document.getElementById("cust-name").value.trim() || "Customer";
     const subject = "New AmeriDex Order - " + name;
 
-    location.href = "mailto:sales@ameridex.com?subject=" +
+    const mailtoUrl = "mailto:sales@ameridex.com?subject=" +
         encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+
+    openMailto(mailtoUrl);
 
     const msg = document.getElementById("success-msg");
     msg.style.display = "block";
