@@ -20,9 +20,7 @@
         --radius-field: 8px;
     }
 
-    * {
-        box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
         margin: 0;
@@ -69,9 +67,7 @@
         color: rgba(249, 250, 251, 0.9);
     }
 
-    main {
-        margin-top: 1.5rem;
-    }
+    main { margin-top: 1.5rem; }
 
     .card {
         background: var(--bg-card);
@@ -210,9 +206,7 @@
         font-size: 0.9rem;
     }
 
-    thead {
-        background-color: #f9fafb;
-    }
+    thead { background-color: #f9fafb; }
 
     th,
     td {
@@ -240,17 +234,9 @@
         border-radius: 6px;
     }
 
-    td .qty-input {
-        max-width: 70px;
-    }
-
-    td .len-input {
-        max-width: 90px;
-    }
-
-    td .price-input {
-        max-width: 110px;
-    }
+    td .qty-input { max-width: 70px; }
+    td .len-input { max-width: 90px; }
+    td .price-input { max-width: 110px; }
 
     .preview-img {
         width: 34px;
@@ -349,9 +335,7 @@
         box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
     }
 
-    .btn-primary:hover {
-        background-color: var(--primary-dark);
-    }
+    .btn-primary:hover { background-color: var(--primary-dark); }
 
     .btn-outline {
         background-color: #ffffff;
@@ -359,9 +343,7 @@
         border-color: var(--primary);
     }
 
-    .btn-outline:hover {
-        background-color: #eff6ff;
-    }
+    .btn-outline:hover { background-color: #eff6ff; }
 
     .btn-ghost {
         background-color: transparent;
@@ -369,9 +351,7 @@
         border-color: #d1d5db;
     }
 
-    .btn-ghost:hover {
-        background-color: #f9fafb;
-    }
+    .btn-ghost:hover { background-color: #f9fafb; }
 
     .success-banner {
         margin-top: 0.85rem;
@@ -420,9 +400,7 @@
         color: #6b7280;
     }
 
-    .modal-close:hover {
-        color: #111827;
-    }
+    .modal-close:hover { color: #111827; }
 
     footer.app-footer {
         text-align: center;
@@ -436,19 +414,15 @@
         text-decoration: none;
     }
 
-    footer.app-footer a:hover {
-        text-decoration: underline;
-    }
+    footer.app-footer a:hover { text-decoration: underline; }
 
-    /* Mobile layout for table */
+    /* Mobile layout for line items */
     @media (max-width: 768px) {
         header.app-header {
             border-radius: 0 0 10px 10px;
             padding-inline: 1.25rem;
         }
-        .card {
-            padding-inline: 1.2rem;
-        }
+        .card { padding-inline: 1.2rem; }
 
         #line-items,
         #line-items thead,
@@ -459,46 +433,42 @@
             display: block;
         }
 
-        #line-items thead {
-            display: none;
-        }
+        #line-items thead { display: none; }
 
         #line-items tr {
-            margin-bottom: 0.9rem;
+            margin-bottom: 1.1rem;
             border: 1px solid var(--border-subtle);
-            border-radius: 10px;
+            border-radius: 12px;
             background-color: #ffffff;
-            padding: 0.4rem 0.65rem;
+            padding: 0.55rem 0.85rem 0.7rem;
         }
 
         #line-items td {
             border: none;
-            padding: 0.25rem 0;
+            padding: 0.28rem 0;
             text-align: left;
         }
 
         #line-items td::before {
             content: attr(data-label);
-            display: inline-block;
-            min-width: 90px;
+            display: block;
             font-weight: 600;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             color: #6b7280;
-            margin-right: 0.25rem;
+            margin-bottom: 0.05rem;
         }
 
-        #line-items td.numeric {
-            text-align: left;
-        }
+        #line-items td.numeric { text-align: left; }
 
         .table-actions-cell {
             text-align: right;
-            margin-top: 0.35rem;
+            margin-top: 0.45rem;
         }
 
-        .preview-img {
-            margin-top: 0.35rem;
-        }
+        .preview-img { margin-top: 0.35rem; }
+
+        td input,
+        td select { width: 100%; }
     }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -507,7 +477,7 @@
 
 <div class="page-shell">
     <header class="app-header">
-        <!-- Rename your file to colors/AmeriDex-logo.png for simplicity -->
+        <!-- Rename your file to this path for simplicity -->
         <img src="colors/AmeriDex-logo.png" alt="AmeriDex Logo">
         <h1>AmeriDex Order Form</h1>
         <p class="header-sub">
@@ -533,8 +503,8 @@
                             <div class="error" id="err-name"></div>
                         </div>
                         <div class="field">
-                            <label for="cust-company">Company<span class="required-indicator">*</span></label>
-                            <input type="text" id="cust-company" required>
+                            <label for="cust-company">Company</label>
+                            <input type="text" id="cust-company">
                             <div class="error" id="err-company"></div>
                         </div>
                     </div>
@@ -734,11 +704,11 @@ const PRODUCTS = {
 
 const COLORS = ["Driftwood","Khaki","Slate","Beachwood","Chestnut","Redwood","Hazelnut"];
 
-// Adjust extensions here to match your real files (.jpg or .png)
+// Match these to the actual extensions in /colors
 const COLOR_IMAGES = {
     Driftwood: "Driftwood.jpg",
     Khaki: "Khaki.jpg",
-    Slate: "Slate.jpg",          // add when ready
+    Slate: "Slate.jpg",          // add when available
     Beachwood: "Beachwood.jpg",
     Chestnut: "Chestnut.jpg",
     Redwood: "Redwood.jpg",
@@ -863,19 +833,23 @@ function render() {
             });
 
             const prev = document.createElement("img");
-            const applyImage = () => {
+
+            function applyImage() {
                 const colorName = item.color || COLORS[0];
                 const imgFile = COLOR_IMAGES[colorName] || COLOR_IMAGES.Driftwood;
                 prev.src = "colors/" + imgFile;
-            };
+            }
 
             csel.onchange = e => {
                 item.color = e.target.value;
-                applyImage();          // update immediately when color changes
+                applyImage();              // immediate update on any device
                 updateTotalAndFasteners();
             };
 
             td.appendChild(csel);
+
+            item.color = item.color || COLORS[0];
+            applyImage();
 
             prev.className = "preview-img";
             prev.alt = "preview";
@@ -886,9 +860,6 @@ function render() {
                 modalName.textContent = item.color || COLORS[0];
                 modal.style.display = "flex";
             };
-
-            item.color = item.color || COLORS[0];
-            applyImage();
 
             td.appendChild(prev);
         }
@@ -1144,7 +1115,7 @@ function validateRequired() {
 function generateOrderText() {
     let txt = "AmeriDex Order\n\nCUSTOMER:\n";
     txt += "Name:     " + document.getElementById("cust-name").value + "\n";
-    txt += "Company:  " + document.getElementById("cust-company").value + "\n";
+    txt += "Company:  " + (document.getElementById("cust-company").value || "") + "\n";
     txt += "Address:  " + document.getElementById("cust-address").value.replace(/\n/g," | ") + "\n";
     txt += "Phone:    " + document.getElementById("cust-phone").value + "\n";
     txt += "Email:    " + document.getElementById("cust-email").value + "\n\n";
