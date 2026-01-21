@@ -18,7 +18,6 @@
         --shadow-soft: 0 10px 25px rgba(15, 23, 42, 0.08);
         --radius-card: 14px;
         --radius-field: 8px;
-        --spacing-section: 1.75rem;
     }
 
     * {
@@ -77,7 +76,7 @@
     .card {
         background: var(--bg-card);
         border-radius: var(--radius-card);
-        padding: var(--spacing-section);
+        padding: 1.75rem;
         margin-bottom: 1.25rem;
         box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
         border: 1px solid rgba(148, 163, 184, 0.18);
@@ -204,24 +203,6 @@
         color: #b45309;
     }
 
-    .info-banner {
-        padding: 0.6rem 0.75rem;
-        background-color: var(--primary-soft);
-        border-radius: 999px;
-        font-size: 0.84rem;
-        color: #1d4ed8;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-    }
-
-    .info-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 999px;
-        background-color: #1d4ed8;
-    }
-
     table {
         width: 100%;
         border-collapse: collapse;
@@ -337,10 +318,6 @@
         border: 1px dashed #bfdbfe;
         font-size: 0.85rem;
         color: #1d4ed8;
-    }
-
-    .fastener-block strong {
-        font-weight: 600;
     }
 
     .fastener-warning {
@@ -485,7 +462,8 @@
 
 <div class="page-shell">
     <header class="app-header">
-        <img src="https://via.placeholder.com/220x80/2563eb/ffffff?text=AmeriDex+Logo" alt="AmeriDex Logo">
+        <!-- If you keep AmeriDex (1).png instead of renaming, use src="colors/AmeriDex%20%281%29.png" -->
+        <img src="colors/AmeriDex-logo.png" alt="AmeriDex Logo">
         <h1>AmeriDex Order Form</h1>
         <p class="header-sub">
             AmeriDex System Boards pricing includes integrated Dexerdry. Use standalone Dexerdry only for non-system applications.
@@ -495,10 +473,11 @@
     <main>
         <form id="order-form">
 
+            <!-- Customer -->
             <section class="card" id="customer">
                 <div class="card-header">
                     <h2 class="card-title">Customer Information</h2>
-                    <p class="card-subtitle">Tell us where this order will be used and who we should contact.</p>
+                    <p class="card-subtitle">Where this order will be used and who we should contact.</p>
                 </div>
 
                 <div class="form-grid">
@@ -536,10 +515,11 @@
                 </div>
             </section>
 
+            <!-- Order -->
             <section class="card" id="order">
                 <div class="card-header">
                     <h2 class="card-title">Order Details</h2>
-                    <p class="card-subtitle">Specify the deck layout, boards, and any special requirements.</p>
+                    <p class="card-subtitle">Deck layout, boards, and special requirements.</p>
                 </div>
 
                 <div class="inline-checks">
@@ -549,7 +529,7 @@
                     </div>
                 </div>
 
-                <div id="calc-panel" style="display:none; margin-bottom: 0.9rem;">
+                <div id="calc-panel" style="display:none; margin-bottom:0.9rem;">
                     <div class="field-row-2">
                         <div class="field">
                             <label for="deck-len">Deck Length (ft)</label>
@@ -622,10 +602,11 @@
                 </div>
             </section>
 
+            <!-- Shipping -->
             <section class="card">
                 <div class="card-header">
                     <h2 class="card-title">Shipping & Delivery</h2>
-                    <p class="card-subtitle">Provide delivery details if different from the customer information.</p>
+                    <p class="card-subtitle">Delivery details if different from the customer information.</p>
                 </div>
 
                 <div class="form-grid">
@@ -640,6 +621,7 @@
                 </div>
             </section>
 
+            <!-- Attachments -->
             <section class="card">
                 <div class="card-header">
                     <h2 class="card-title">Attachments</h2>
@@ -658,6 +640,7 @@
                 </div>
             </section>
 
+            <!-- Total -->
             <section class="card">
                 <div class="total-bar">
                     <span class="total-label">Estimated Total</span>
@@ -665,6 +648,7 @@
                 </div>
             </section>
 
+            <!-- Actions -->
             <section class="card" style="text-align:center;">
                 <div class="actions-row">
                     <button type="button" class="btn btn-ghost" id="reset">Reset Form</button>
@@ -678,6 +662,7 @@
         </form>
     </main>
 
+    <!-- Color preview modal -->
     <div id="colorModal" class="modal">
         <div class="modal-content">
             <span class="modal-close" id="modal-close">&times;</span>
@@ -703,7 +688,17 @@ const PRODUCTS = {
 };
 
 const COLORS = ["Driftwood","Khaki","Slate","Beachwood","Chestnut","Redwood","Hazelnut"];
-const STANDARD_LENGTHS = [12, 16, 20];
+
+// Map of color names to GitHub-served image files
+const COLOR_IMAGES = {
+    Driftwood: "Driftwood.png",
+    Khaki: "Khaki.png",
+    Slate: "Slate.png",          // when you add it
+    Beachwood: "Beachwood.png",
+    Chestnut: "Chestnut.png",
+    Redwood: "Redwood.png",
+    Hazelnut: "Hazelnut.png"
+};
 
 const BOARD_WIDTH_INCH = 5.5;
 const GAP_INCH = 0.125;
@@ -766,8 +761,9 @@ document.getElementById("reset").onclick = () => {
     document.getElementById("stairs").checked = false;
     document.getElementById("pic-frame-note").style.display = "none";
     document.getElementById("stairs-note").style.display = "none";
-    document.getElementById("fastener-hint").style.display = "none";
-    document.getElementById("fastener-hint").innerHTML = "";
+    const hintEl = document.getElementById("fastener-hint");
+    hintEl.style.display = "none";
+    hintEl.innerHTML = "";
     document.getElementById("success-msg").style.display = "none";
 };
 
@@ -784,6 +780,7 @@ function render() {
         const prod = PRODUCTS[item.type] || PRODUCTS.custom;
         const row = document.createElement("tr");
 
+        // Product
         let td = document.createElement("td");
         const sel = document.createElement("select");
         Object.keys(PRODUCTS).forEach(k => {
@@ -806,6 +803,7 @@ function render() {
         td.appendChild(sel);
         row.appendChild(td);
 
+        // Color
         td = document.createElement("td");
         if (prod.hasColor) {
             const csel = document.createElement("select");
@@ -821,7 +819,8 @@ function render() {
 
             const prev = document.createElement("img");
             const colorName = item.color || COLORS[0];
-            prev.src = `colors/${colorName.toLowerCase()}.jpg`;
+            const imgFile = COLOR_IMAGES[colorName] || COLOR_IMAGES.Driftwood;
+            prev.src = "colors/" + imgFile;
             prev.className = "preview-img";
             prev.alt = "preview";
             prev.title = "Click to enlarge";
@@ -835,11 +834,12 @@ function render() {
         }
         row.appendChild(td);
 
+        // Length
         td = document.createElement("td");
         if (prod.isFt) {
             if (["system","grooved","solid"].includes(item.type)) {
                 const lsel = document.createElement("select");
-                STANDARD_LENGTHS.forEach(l => {
+                [12,16,20].forEach(l => {
                     const o = document.createElement("option");
                     o.value = l;
                     o.text = l + " ft";
@@ -849,7 +849,7 @@ function render() {
                 const custOpt = document.createElement("option");
                 custOpt.value = "custom";
                 custOpt.text = "Custom";
-                if (!STANDARD_LENGTHS.includes(item.length)) custOpt.selected = true;
+                if (![12,16,20].includes(item.length)) custOpt.selected = true;
                 lsel.appendChild(custOpt);
 
                 lsel.onchange = e => {
@@ -876,6 +876,7 @@ function render() {
         }
         row.appendChild(td);
 
+        // Qty and custom extras
         td = document.createElement("td");
         td.className = "numeric";
         const q = document.createElement("input");
@@ -886,6 +887,7 @@ function render() {
         q.value = item.qty;
         q.oninput = e => { item.qty = Math.max(1, parseInt(e.target.value) || 1); updateTotalAndFasteners(); };
         td.appendChild(q);
+
         if (item.type === "custom") {
             const d = document.createElement("input");
             d.type = "text";
@@ -906,6 +908,7 @@ function render() {
         }
         row.appendChild(td);
 
+        // Unit price
         td = document.createElement("td");
         td.className = "numeric";
         if (prod.isFt || item.type === "custom") {
@@ -915,7 +918,7 @@ function render() {
             p.min = "0";
             p.className = "price-input";
             const defPrice = item.type === "custom" ? item.customUnitPrice : prod.price;
-            p.placeholder = `default $${defPrice.toFixed(2)}`;
+            p.placeholder = "default $" + defPrice.toFixed(2);
             p.value = item.priceOverride ?? "";
             p.oninput = e => { item.priceOverride = parseFloat(e.target.value); updateTotalAndFasteners(); };
             td.appendChild(p);
@@ -924,11 +927,13 @@ function render() {
         }
         row.appendChild(td);
 
+        // Subtotal
         td = document.createElement("td");
         td.className = "numeric";
-        td.id = `sub-${i}`;
+        td.id = "sub-" + i;
         row.appendChild(td);
 
+        // Remove
         td = document.createElement("td");
         td.className = "table-actions-cell";
         const rm = document.createElement("button");
@@ -968,7 +973,7 @@ function updateTotalAndFasteners() {
     lineItems.forEach((item, i) => {
         const sub = getItemSubtotal(item);
         total += sub;
-        const subCell = document.getElementById(`sub-${i}`);
+        const subCell = document.getElementById("sub-" + i);
         if (subCell) subCell.textContent = "$" + sub.toFixed(2);
 
         if (["system","grooved"].includes(item.type)) {
@@ -989,13 +994,13 @@ function updateTotalAndFasteners() {
         const screwsNeeded = intersections * 2;
         const boxesScrews = Math.ceil(screwsNeeded / SCREWS_PER_BOX);
 
-        hintHtml += `<strong>Fastener suggestion (reference only):</strong><br>` +
-            `≈ ${boxesScrews} boxes of screws<br>` +
-            `≈ ${boxesScrews} boxes of plugs`;
+        hintHtml += "<strong>Fastener suggestion (reference only):</strong><br>" +
+            "≈ " + boxesScrews + " boxes of screws<br>" +
+            "≈ " + boxesScrews + " boxes of plugs";
     }
 
     if (hasSystem && hasStandaloneDex) {
-        hintHtml += `<div class="fastener-warning">AmeriDex System Boards already include Dexerdry in the price. Standalone Dexerdry is typically only needed for non-system decks.</div>`;
+        hintHtml += '<div class="fastener-warning">AmeriDex System Boards already include Dexerdry in the price. Standalone Dexerdry is typically only needed for non-system decks.</div>';
     }
 
     if (hintHtml) {
@@ -1023,13 +1028,12 @@ function calculateAndSuggest() {
     const boardsNeeded = Math.ceil((span / EFFECTIVE_FT) * WASTE);
     const dexerdryFt = (boardsNeeded - 1) * run * WASTE;
 
-    const msg = `
-        <strong>Suggested AmeriDex System Boards (Dexerdry included in price)</strong><br>
-        • ${boardsNeeded} boards @ ${run.toFixed(1)} ft each<br>
-        • Total board ft: ${(boardsNeeded * run).toFixed(1)}<br>
-        • Integrated Dexerdry coverage (for reference): ${dexerdryFt.toFixed(1)} ft<br><br>
-        (10% waste included)
-    `;
+    const msg =
+        "<strong>Suggested AmeriDex System Boards (Dexerdry included in price)</strong><br>" +
+        "• " + boardsNeeded + " boards @ " + run.toFixed(1) + " ft each<br>" +
+        "• Total board ft: " + (boardsNeeded * run).toFixed(1) + "<br>" +
+        "• Integrated Dexerdry coverage (for reference): " + dexerdryFt.toFixed(1) + " ft<br><br>" +
+        "(10% waste included)";
     document.getElementById("calc-result").innerHTML = msg;
 
     if (confirm("Add suggested AmeriDex System Boards to the order?")) {
