@@ -938,7 +938,28 @@
     <!-- Order Details: 3D-generated + Manual Line Items -->
     <section class="card">
         <h2 class="card-title">Order Details</h2>
-        <p class="card-subtitle">3D design fills in starter lines. You can freely add, edit, or remove line items below.</p>
+        <p class="card-subtitle">Add products from dropdown, or manually enter custom items. You can edit or remove any line.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+            <div class="field">
+                <label>Select Product</label>
+                <select id="product-select" class="line-select">
+                    <option value="">-- Choose Product --</option>
+                    <option value="system">AmeriDex System Boards (ft)</option>
+                    <option value="solid">Solid Edge Deck Boards (ft)</option>
+                    <option value="screws">Epoxy-Coated Screws (box)</option>
+                    <option value="plugs">Color-Matching Plugs (box)</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Quantity</label>
+                <input type="number" id="product-qty" class="line-input" value="1" min="0.1" step="0.1">
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-outline" id="btn-add-preset" style="margin-bottom: 1rem; width: 100%;">
+            + Add Selected Product
+        </button>
 
         <table class="order-table" id="order-table">
             <thead>
@@ -955,14 +976,14 @@
             <tbody id="order-tbody">
                 <tr>
                     <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">
-                        Design your deck above and click "Apply to Order Form" or add your own line items below.
+                        Design your deck above and click "Apply to Order Form" or add items from the dropdown.
                     </td>
                 </tr>
             </tbody>
         </table>
 
-        <button type="button" class="btn btn-outline btn-add-row" id="btn-add-row">
-            + Add Line Item
+        <button type="button" class="btn btn-ghost btn-add-row" id="btn-add-row">
+            + Add Manual Line Item
         </button>
 
         <div class="total-bar">
@@ -1066,12 +1087,6 @@ const PRODUCTS = {
         price: 33.79,
         isFt: false,
         hasColor: true
-    },
-    custom: {
-        name: "Custom Manual Item",
-        price: 0,
-        isFt: false,
-        hasColor: false
     }
 };
 
@@ -1084,6 +1099,8 @@ const BOARD_THICK = BOARD_THICKNESS_INCH / 12;
 const EFFECTIVE_WIDTH = (BOARD_WIDTH_INCH + GAP_INCH) / 12;
 const WASTE_FACTOR = 1.1;
 const SCREWS_PER_BOX = 375;
+const STAIR_RISE = 7.5 / 12; // 7.5 inches = 0.625 ft
+const STAIR_RUN = 10.5 / 12; // 10.5 inches = 0.875 ft
 
 // 3D State
 let state = {
@@ -1442,170 +1459,167 @@ function buildDeck() {
                 }
                 railPost.castShadow = true;
                 deckGroup.add(railPost);
-            }
 
-            const topRailGeo =
-                side.axis === "x"
-                    ? new THREE.BoxGeometry(side.range, 0.15, 0.25)
-                    : new THREE.BoxGeometry(0.25, 0.15, side.range);
-            const topRail = new THREE.Mesh(topRailGeo, railMat);
-            if (side.axis === "x") {
-                topRail.position.set(0, height + railHeight, side.pos);
-            } else {
-                topRail.position.set(side.pos, height + railHeight, 0);
+                if (i < numPosts - 1) {
+                    const railGeo = new THREE.BoxGeometry(
+                        side.axis === "x" ? side.range / (numPosts - 1) : 0.08,
+                        2.5,
+                        side.axis === "z" ? side.range / (numPosts - 1) : 0.08
+                    );
+                    const rail = new THREE.Mesh(railGeo, railMat);
+                    if (side.axis === "x") {
+                        rail.position.set(
+                            offset + side.range / (2 * (numPosts - 1)),
+                            height + 1.5,
+                            side.pos
+                        );
+                    } else {
+                        rail.position.set(
+                            side.pos,
+                            height + 1.5,
+                            offset + side.range / (2 * (numPosts - 1))
+                        );
+                    }
+                    rail.castShadow = true;
+                    deckGroup.add(rail);
+                }
             }
-            topRail.castShadow = true;
-            deckGroup.add(topRail);
         });
     }
 
-    Object.entries(stairs).forEach(([side, hasStairs]) => {
-        if (!hasStairs) return;
-
-        const numSteps = Math.ceil(height / 0.75);
-        const stepRise = height / numSteps;
-        const stepRun = 1;
-
-        for (let s = 0; s < numSteps; s++) {
-            const stepGeo = new THREE.BoxGeometry(
-                side === "left" || side === "right" ? stepRun : stairWidth,
-                BOARD_THICK,
-                side === "left" || side === "right" ? stairWidth : stepRun
-            );
-            const stepMat = createDeckMaterial(color);
-            const step = new THREE.Mesh(stepGeo, stepMat);
-
-            const stepY = height - (s + 1) * stepRise + BOARD_THICK / 2;
-            let stepX = 0;
-            let stepZ = 0;
-
-            if (side === "front")
-                stepZ = width / 2 + (s + 1) * stepRun - stepRun / 2;
-            if (side === "back")
-                stepZ = -width / 2 - (s + 1) * stepRun + stepRun / 2;
-            if (side === "left")
-                stepX = -length / 2 - (s + 1) * stepRun + stepRun / 2;
-            if (side === "right")
-                stepX = length / 2 + (s + 1) * stepRun - stepRun / 2;
-
-            step.position.set(stepX, stepY, stepZ);
-            step.castShadow = true;
-            step.receiveShadow = true;
-            deckGroup.add(step);
-        }
-
-        const stringerLen = numSteps * stepRun;
-        const stringerGeo = new THREE.BoxGeometry(
-            side === "left" || side === "right" ? stringerLen : 0.125,
-            0.75,
-            side === "left" || side === "right" ? 0.125 : stringerLen
+    // Build stairs
+    if (stairs.front || stairs.back || stairs.left || stairs.right) {
+        buildStairs(
+            stairs.front ? "front" : stairs.back ? "back" : stairs.left ? "left" : "right",
+            stairWidth,
+            height
         );
+    }
 
-        [-stairWidth / 2 + 0.15, stairWidth / 2 - 0.15].forEach(offset => {
-            const stringer = new THREE.Mesh(stringerGeo, supportMat);
-            if (side === "front")
-                stringer.position.set(
-                    offset,
-                    height / 2,
-                    width / 2 + stringerLen / 2
-                );
-            if (side === "back")
-                stringer.position.set(
-                    offset,
-                    height / 2,
-                    -width / 2 - stringerLen / 2
-                );
-            if (side === "left")
-                stringer.position.set(
-                    -length / 2 - stringerLen / 2,
-                    height / 2,
-                    offset
-                );
-            if (side === "right")
-                stringer.position.set(
-                    length / 2 + stringerLen / 2,
-                    height / 2,
-                    offset
-                );
-            stringer.castShadow = true;
-            deckGroup.add(stringer);
-        });
-    });
-
-    controls.target.set(0, height / 2, 0);
-    updateEstimates();
+    updateMaterialEstimates();
 }
 
-// Material estimates
-function updateEstimates() {
-    const {
-        length,
-        width,
-        height,
-        boardLength,
-        stairs,
-        border,
-        includePlugs
-    } = state;
-
-    const deckArea = length * width;
-    const boardsNeeded = Math.ceil(length / EFFECTIVE_WIDTH);
-    const totalBoardFeet = boardsNeeded * width;
-    const numStockBoards = Math.ceil(
-        (totalBoardFeet * WASTE_FACTOR) / boardLength
-    );
-
-    let borderBoards = 0;
-    if (border) {
-        const perimeter = 2 * (length + width);
-        borderBoards = Math.ceil((perimeter * WASTE_FACTOR) / boardLength);
-    }
-
-    let stairTreads = 0;
-    Object.values(stairs).forEach(hasStairs => {
-        if (hasStairs) {
-            const numSteps = Math.ceil(height / 0.75);
-            stairTreads += numSteps;
-        }
+// Fixed stair builder
+function buildStairs(side, stairWidth, deckHeight) {
+    const stairMat = createDeckMaterial(state.color);
+    const stringerMat = new THREE.MeshStandardMaterial({
+        color: 0xA0826D,
+        roughness: 0.8
     });
 
-    const screwCount = Math.ceil(deckArea * 2);
-    const screwBoxes = Math.ceil(screwCount / SCREWS_PER_BOX);
-    const plugBoxes = screwBoxes;
+    const numSteps = Math.ceil(deckHeight / STAIR_RISE);
+    const stairDepth = numSteps * STAIR_RUN;
 
-    document.getElementById("plugs-hint").textContent =
-        "(" + plugBoxes + " box" + (plugBoxes !== 1 ? "es" : "") + ")";
+    let startX, startZ, direction;
 
-    const plugsRow = document.getElementById("plugs-row");
-    if (includePlugs) {
-        plugsRow.style.display = "flex";
-        document.getElementById("mat-plugs").textContent =
-            plugBoxes + " box" + (plugBoxes !== 1 ? "es" : "");
+    if (side === "front") {
+        startX = 0;
+        startZ = state.width / 2;
+        direction = { x: 0, z: 1, rise: -1 };
+    } else if (side === "back") {
+        startX = 0;
+        startZ = -state.width / 2;
+        direction = { x: 0, z: -1, rise: -1 };
+    } else if (side === "left") {
+        startX = -state.length / 2;
+        startZ = 0;
+        direction = { x: -1, z: 0, rise: -1 };
     } else {
-        plugsRow.style.display = "none";
+        startX = state.length / 2;
+        startZ = 0;
+        direction = { x: 1, z: 0, rise: -1 };
     }
 
-    const boardCost =
-        numStockBoards * boardLength * PRODUCTS.system.price;
-    const borderCost =
-        borderBoards * boardLength * PRODUCTS.solid.price;
-    const stairCost =
-        stairTreads * 4 * PRODUCTS.solid.price;
-    const screwCost = screwBoxes * PRODUCTS.screws.price;
-    const plugCost = includePlugs ? plugBoxes * PRODUCTS.plugs.price : 0;
-    const total = boardCost + borderCost + stairCost + screwCost + plugCost;
+    // Build stringer (support beam)
+    const stringerThick = 1.5 / 12;
+    const stringerHeight = deckHeight + 1;
 
-    document.getElementById("mat-boards").textContent =
-        numStockBoards + " @ " + boardLength + "ft";
-    document.getElementById("mat-border").textContent = border
-        ? borderBoards + " @ " + boardLength + "ft"
-        : "None";
-    document.getElementById("mat-stairs").textContent =
-        stairTreads > 0 ? stairTreads + " treads" : "None";
-    document.getElementById("mat-screws").textContent =
-        screwBoxes + " box" + (screwBoxes !== 1 ? "es" : "");
-    document.getElementById("mat-total").textContent =
-        "$" + total.toFixed(2);
+    const stringerGeo = new THREE.BoxGeometry(
+        side === "left" || side === "right" ? stringerThick : stairWidth,
+        stringerHeight,
+        side === "left" || side === "right" ? stairDepth : stringerThick
+    );
+
+    const stringer1Pos = {
+        x: startX + direction.x * stairDepth / 2 + (side === "front" || side === "back" ? -stairWidth / 3 : 0),
+        y: deckHeight / 2 - 0.5,
+        z: startZ + direction.z * stairDepth / 2 + (side === "left" || side === "right" ? -stairWidth / 3 : 0)
+    };
+
+    const stringer1 = new THREE.Mesh(stringerGeo, stringerMat);
+    stringer1.position.set(stringer1Pos.x, stringer1Pos.y, stringer1Pos.z);
+    stringer1.castShadow = true;
+    deckGroup.add(stringer1);
+
+    const stringer2Pos = {
+        x: startX + direction.x * stairDepth / 2 + (side === "front" || side === "back" ? stairWidth / 3 : 0),
+        y: deckHeight / 2 - 0.5,
+        z: startZ + direction.z * stairDepth / 2 + (side === "left" || side === "right" ? stairWidth / 3 : 0)
+    };
+
+    const stringer2 = new THREE.Mesh(stringerGeo, stringerMat);
+    stringer2.position.set(stringer2Pos.x, stringer2Pos.y, stringer2Pos.z);
+    stringer2.castShadow = true;
+    deckGroup.add(stringer2);
+
+    // Build treads
+    const treadThick = BOARD_THICK;
+
+    for (let i = 0; i < numSteps; i++) {
+        const treadY = state.height + (numSteps - i - 1) * STAIR_RISE - treadThick / 2;
+        const progressDown = (i + 1) * STAIR_RUN;
+
+        const treadGeo = new THREE.BoxGeometry(
+            side === "front" || side === "back" ? stairWidth : treadThick,
+            treadThick,
+            side === "left" || side === "right" ? stairWidth : treadThick
+        );
+
+        const treadMat = createDeckMaterial(state.color);
+        if (treadMat.map) {
+            treadMat.map = treadMat.map.clone();
+            treadMat.needsUpdate = true;
+        }
+
+        const tread = new THREE.Mesh(treadGeo, treadMat);
+
+        if (side === "front") {
+            tread.position.set(0, treadY, startZ + progressDown * direction.z);
+        } else if (side === "back") {
+            tread.position.set(0, treadY, startZ + progressDown * direction.z);
+        } else if (side === "left") {
+            tread.position.set(startX + progressDown * direction.x, treadY, 0);
+        } else {
+            tread.position.set(startX + progressDown * direction.x, treadY, 0);
+        }
+
+        tread.castShadow = true;
+        tread.receiveShadow = true;
+        deckGroup.add(tread);
+    }
+}
+
+// Calculate material estimates
+function updateMaterialEstimates() {
+    const { length, width, height, boardLength, stairs, stairWidth, border, includePlugs } = state;
+
+    let numStockBoards = Math.ceil((length * width * WASTE_FACTOR) / (BOARD_WIDTH * boardLength));
+    let borderBoards = border ? Math.ceil(((length + width) * 2 * WASTE_FACTOR) / boardLength) : 0;
+
+    const numSteps = Math.ceil(height / STAIR_RISE);
+    let stairTreads = 0;
+    if (stairs.front) stairTreads += numSteps;
+    if (stairs.back) stairTreads += numSteps;
+    if (stairs.left) stairTreads += numSteps;
+    if (stairs.right) stairTreads += numSteps;
+
+    const surfaceArea = length * width + (stairTreads > 0 ? stairTreads * stairWidth * 0.5 : 0);
+    const screwBoxes = Math.ceil((surfaceArea * 8) / SCREWS_PER_BOX);
+    let plugBoxes = 0;
+
+    if (includePlugs) {
+        plugBoxes = Math.ceil(screwBoxes * 0.3);
+    }
 
     state.estimates = {
         numStockBoards,
@@ -1613,190 +1627,131 @@ function updateEstimates() {
         stairTreads,
         screwBoxes,
         plugBoxes,
-        total
+        total: numStockBoards * 8 + borderBoards * 6 + stairTreads * 12 + screwBoxes * 37 + plugBoxes * 33.79
     };
 
-    recalcOrderTotal();
-}
+    document.getElementById("mat-boards").textContent = numStockBoards;
+    document.getElementById("mat-border").textContent = borderBoards;
+    document.getElementById("mat-stairs").textContent = stairTreads;
+    document.getElementById("mat-screws").textContent = screwBoxes;
+    document.getElementById("mat-plugs").textContent = plugBoxes;
+    document.getElementById("mat-total").textContent = "$" + state.estimates.total.toFixed(2);
+    document.getElementById("plugs-hint").textContent = `(${plugBoxes} boxes)`;
 
-// Camera presets
-function setView(view) {
-    const { length, width, height } = state;
-    const maxDim = Math.max(length, width) * 1.2;
-
-    if (view === "top") {
-        camera.position.set(0, maxDim * 1.5, 0.01);
-    } else if (view === "front") {
-        camera.position.set(0, height + 5, maxDim);
-    } else if (view === "side") {
-        camera.position.set(maxDim, height + 5, 0);
+    const plugsRow = document.getElementById("plugs-row");
+    if (includePlugs) {
+        plugsRow.style.display = "flex";
     } else {
-        camera.position.set(maxDim * 0.8, maxDim * 0.6, maxDim * 0.8);
+        plugsRow.style.display = "none";
     }
-
-    controls.target.set(0, height / 2, 0);
-    camera.lookAt(0, height / 2, 0);
 }
 
-// UI init
-function initUI() {
-    const colorGrid = document.getElementById("color-grid");
-    COLORS.forEach(colorName => {
-        const card = document.createElement("div");
-        card.className =
-            "color-card" + (colorName === state.color ? " selected" : "");
-        card.dataset.color = colorName;
+// DOM Event Handlers
 
-        const img = document.createElement("img");
-        img.src = "colors/" + COLOR_IMAGES[colorName];
-        img.alt = colorName;
-        img.onerror = () => {
-            img.style.background =
-                "#" +
-                COLOR_HEX_FALLBACK[colorName]
-                    .toString(16)
-                    .padStart(6, "0");
-        };
+// Input change handlers
+document.getElementById("deck-length").addEventListener("input", e => {
+    state.length = parseFloat(e.target.value);
+    buildDeck();
+});
 
-        const label = document.createElement("div");
-        label.className = "color-card-label";
-        label.textContent = colorName;
+document.getElementById("deck-width").addEventListener("input", e => {
+    state.width = parseFloat(e.target.value);
+    buildDeck();
+});
 
-        card.appendChild(img);
-        card.appendChild(label);
+document.getElementById("deck-height").addEventListener("input", e => {
+    state.height = parseFloat(e.target.value);
+    buildDeck();
+});
 
-        card.onclick = () => {
-            document
-                .querySelectorAll(".color-card")
-                .forEach(c => c.classList.remove("selected"));
-            card.classList.add("selected");
-            state.color = colorName;
-            updateColorPreviews();
-            loadColorTexture(colorName)
-                .then(buildDeck)
-                .catch(buildDeck);
-        };
+document.getElementById("board-length").addEventListener("change", e => {
+    state.boardLength = parseFloat(e.target.value);
+    updateMaterialEstimates();
+});
 
-        card.ondblclick = () => {
-            showColorModal(colorName);
-        };
+document.getElementById("stair-width").addEventListener("input", e => {
+    state.stairWidth = parseFloat(e.target.value);
+    buildDeck();
+});
 
-        colorGrid.appendChild(card);
+document.getElementById("add-railing").addEventListener("change", e => {
+    state.railing = e.target.checked;
+    buildDeck();
+});
+
+document.getElementById("add-border").addEventListener("change", e => {
+    state.border = e.target.checked;
+    buildDeck();
+});
+
+document.getElementById("add-plugs").addEventListener("change", e => {
+    state.includePlugs = e.target.checked;
+    updateMaterialEstimates();
+});
+
+// Color grid
+const colorGrid = document.getElementById("color-grid");
+COLORS.forEach((color, idx) => {
+    const card = document.createElement("div");
+    card.className = "color-card";
+    if (idx === 0) card.classList.add("selected");
+    card.innerHTML = `
+        <img src="colors/${COLOR_IMAGES[color]}" alt="${color}">
+        <div class="color-card-label">${color}</div>
+    `;
+    card.addEventListener("click", () => selectColor(color));
+    colorGrid.appendChild(card);
+});
+
+function selectColor(colorName) {
+    COLORS.forEach((c, idx) => {
+        colorGrid.children[idx].classList.toggle("selected", c === colorName);
     });
+    state.color = colorName;
+    document.getElementById("preview-color-1").src = "colors/" + COLOR_IMAGES[colorName];
+    document.getElementById("preview-name-1").textContent = colorName;
+    document.getElementById("viewport-color-img").src = "colors/" + COLOR_IMAGES[colorName];
+    document.getElementById("viewport-color-name").textContent = colorName;
+    loadColorTexture(colorName).catch(buildDeck);
+    buildDeck();
+}
 
-    updateColorPreviews();
-
-    document.getElementById("deck-length").oninput = e => {
-        state.length = parseFloat(e.target.value) || 6;
+// Stair buttons
+document.querySelectorAll(".stair-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const side = btn.dataset.side;
+        state.stairs[side] = !state.stairs[side];
+        btn.classList.toggle("active", state.stairs[side]);
         buildDeck();
-    };
-    document.getElementById("deck-width").oninput = e => {
-        state.width = parseFloat(e.target.value) || 6;
-        buildDeck();
-    };
-    document.getElementById("deck-height").oninput = e => {
-        state.height = parseFloat(e.target.value) || 1;
-        buildDeck();
-    };
-
-    document.getElementById("board-length").onchange = e => {
-        state.boardLength = parseInt(e.target.value);
-        updateEstimates();
-    };
-
-    document.getElementById("stair-width").oninput = e => {
-        state.stairWidth = parseFloat(e.target.value) || 3;
-        buildDeck();
-    };
-
-    document.querySelectorAll(".stair-btn").forEach(btn => {
-        btn.onclick = () => {
-            const side = btn.dataset.side;
-            state.stairs[side] = !state.stairs[side];
-            btn.classList.toggle("active", state.stairs[side]);
-            buildDeck();
-        };
     });
+});
 
-    document.getElementById("add-railing").onchange = e => {
-        state.railing = e.target.checked;
-        buildDeck();
-    };
-    document.getElementById("add-border").onchange = e => {
-        state.border = e.target.checked;
-        buildDeck();
-    };
-    document.getElementById("add-plugs").onchange = e => {
-        state.includePlugs = e.target.checked;
-        updateEstimates();
-    };
+// Color comparison dropdown
+document.getElementById("preview-color-1").addEventListener("click", () => {
+    const modal = document.getElementById("colorModal");
+    document.getElementById("modal-color-img").src = document.getElementById("preview-color-1").src;
+    document.getElementById("modal-color-name").textContent = document.getElementById("preview-name-1").textContent;
+    modal.classList.add("active");
+});
 
-    document.querySelectorAll(".view-btn").forEach(btn => {
-        btn.onclick = () => {
-            document
-                .querySelectorAll(".view-btn")
-                .forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-            setView(btn.dataset.view);
-        };
-    });
+document.getElementById("preview-color-2").addEventListener("click", () => {
+    const modal = document.getElementById("colorModal");
+    const current = document.getElementById("preview-name-1").textContent;
+    const nextIdx = (COLORS.indexOf(current) + 1) % COLORS.length;
+    const nextColor = COLORS[nextIdx];
+    document.getElementById("preview-color-2").src = "colors/" + COLOR_IMAGES[nextColor];
+    document.getElementById("preview-name-2").textContent = nextColor;
+    document.getElementById("modal-color-img").src = "colors/" + COLOR_IMAGES[nextColor];
+    document.getElementById("modal-color-name").textContent = nextColor;
+    modal.classList.add("active");
+});
 
-    document.getElementById("apply-order").onclick = applyDesignToOrder;
-    document.getElementById("reset-builder").onclick = resetBuilder;
+document.getElementById("modal-close").addEventListener("click", () => {
+    document.getElementById("colorModal").classList.remove("active");
+});
 
-    document.getElementById("btn-add-row").onclick = () => {
-        addManualLine();
-    };
-
-    document.getElementById("btn-reset-form").onclick = () => {
-        if (!confirm("Clear entire form and all line items?")) return;
-        orderLines = [];
-        renderOrderTable();
-        document.getElementById("cust-name").value = "";
-        document.getElementById("cust-company").value = "";
-        document.getElementById("cust-phone").value = "";
-        document.getElementById("cust-email").value = "";
-        document.getElementById("cust-address").value = "";
-        document.getElementById("special-notes").value = "";
-        recalcOrderTotal();
-    };
-
-    document.getElementById("btn-submit").onclick = submitOrder;
-    document.getElementById("btn-pdf").onclick = generatePDF;
-
-    document.getElementById("modal-close").onclick = () => {
-        document.getElementById("colorModal").classList.remove("active");
-    };
-    document.getElementById("colorModal").onclick = e => {
-        if (e.target.id === "colorModal") {
-            document.getElementById("colorModal").classList.remove("active");
-        }
-    };
-}
-
-function updateColorPreviews() {
-    const idx = COLORS.indexOf(state.color);
-    const compare = COLORS[(idx + 1) % COLORS.length];
-    document.getElementById("preview-color-1").src =
-        "colors/" + COLOR_IMAGES[state.color];
-    document.getElementById("preview-name-1").textContent = state.color;
-    document.getElementById("preview-color-2").src =
-        "colors/" + COLOR_IMAGES[compare];
-    document.getElementById("preview-name-2").textContent = compare;
-    document.getElementById("viewport-color-img").src =
-        "colors/" + COLOR_IMAGES[state.color];
-    document.getElementById("viewport-color-name").textContent =
-        state.color;
-}
-
-function showColorModal(colorName) {
-    document.getElementById("modal-color-img").src =
-        "colors/" + COLOR_IMAGES[colorName];
-    document.getElementById("modal-color-name").textContent = colorName;
-    document.getElementById("colorModal").classList.add("active");
-}
-
-function resetBuilder() {
+// Reset builder
+document.getElementById("reset-builder").addEventListener("click", () => {
     state = {
         length: 16,
         width: 12,
@@ -1808,407 +1763,165 @@ function resetBuilder() {
         railing: false,
         border: false,
         includePlugs: false,
-        estimates: state.estimates
+        estimates: { numStockBoards: 0, borderBoards: 0, stairTreads: 0, screwBoxes: 0, plugBoxes: 0, total: 0 }
     };
     document.getElementById("deck-length").value = 16;
     document.getElementById("deck-width").value = 12;
     document.getElementById("deck-height").value = 3;
-    document.getElementById("board-length").value = 16;
     document.getElementById("stair-width").value = 4;
     document.getElementById("add-railing").checked = false;
     document.getElementById("add-border").checked = false;
     document.getElementById("add-plugs").checked = false;
-    document
-        .querySelectorAll(".stair-btn")
-        .forEach(b => b.classList.remove("active"));
-    document
-        .querySelectorAll(".color-card")
-        .forEach(c => c.classList.toggle("selected", c.dataset.color === "Driftwood"));
-    updateColorPreviews();
+    document.querySelectorAll(".stair-btn").forEach(btn => btn.classList.remove("active"));
+    selectColor("Driftwood");
     buildDeck();
-    setView("3d");
+});
+
+// Order form functions
+function createTableRow(product, color, length, qty, unitPrice) {
+    const subtotal = qty * unitPrice;
+    const productName = PRODUCTS[product]?.name || product;
+    const hasColorField = PRODUCTS[product]?.hasColor || false;
+
+    const colorImg = hasColorField ? `<img src="colors/${COLOR_IMAGES[color] || "Driftwood.png"}" alt="${color}">` : "";
+    const colorText = hasColorField ? `<span>${color}</span>` : "<span>N/A</span>";
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+        <td data-label="Product">${productName}</td>
+        <td data-label="Color" class="color-cell">${colorImg}${colorText}</td>
+        <td data-label="Length">${length || "N/A"}</td>
+        <td data-label="Qty" class="numeric">${qty.toFixed(1)}</td>
+        <td data-label="Unit Price" class="numeric">$${unitPrice.toFixed(2)}</td>
+        <td data-label="Subtotal" class="numeric">$${subtotal.toFixed(2)}</td>
+        <td data-label="Actions">
+            <button type="button" class="btn-remove-row">×</button>
+        </td>
+    `;
+    tr.querySelector(".btn-remove-row").addEventListener("click", () => {
+        tr.remove();
+        recalculateTotal();
+    });
+    return tr;
 }
 
-// ORDER LOGIC
+function addLineItem() {
+    const product = document.getElementById("product-select").value;
+    const qty = parseFloat(document.getElementById("product-qty").value);
 
-// Add design-derived lines to orderLines (does not remove existing manual lines)
-function applyDesignToOrder() {
-    const { color, boardLength, estimates, border, includePlugs } = state;
-
-    // Remove previous "auto" lines but keep manual
-    orderLines = orderLines.filter(l => !l.autoFromDesign);
-
-    if (estimates.numStockBoards > 0) {
-        orderLines.push({
-            autoFromDesign: true,
-            type: "system",
-            product: PRODUCTS.system.name,
-            color: color,
-            length: boardLength,
-            qty: estimates.numStockBoards,
-            unitPrice: PRODUCTS.system.price * boardLength
-        });
-    }
-    if (border && estimates.borderBoards > 0) {
-        orderLines.push({
-            autoFromDesign: true,
-            type: "solid",
-            product: PRODUCTS.solid.name + " (Border)",
-            color: color,
-            length: boardLength,
-            qty: estimates.borderBoards,
-            unitPrice: PRODUCTS.solid.price * boardLength
-        });
-    }
-    if (estimates.stairTreads > 0) {
-        orderLines.push({
-            autoFromDesign: true,
-            type: "solid",
-            product: PRODUCTS.solid.name + " (Stairs)",
-            color: color,
-            length: 4,
-            qty: estimates.stairTreads,
-            unitPrice: PRODUCTS.solid.price * 4
-        });
-    }
-    if (estimates.screwBoxes > 0) {
-        orderLines.push({
-            autoFromDesign: true,
-            type: "screws",
-            product: PRODUCTS.screws.name,
-            color: null,
-            length: null,
-            qty: estimates.screwBoxes,
-            unitPrice: PRODUCTS.screws.price
-        });
-    }
-    if (includePlugs && estimates.plugBoxes > 0) {
-        orderLines.push({
-            autoFromDesign: true,
-            type: "plugs",
-            product: PRODUCTS.plugs.name,
-            color: color,
-            length: null,
-            qty: estimates.plugBoxes,
-            unitPrice: PRODUCTS.plugs.price
-        });
+    if (!product || qty <= 0) {
+        alert("Please select a product and enter a quantity");
+        return;
     }
 
-    renderOrderTable();
-    const btn = document.getElementById("apply-order");
-    btn.textContent = "Applied!";
-    btn.classList.add("btn-success");
-    setTimeout(() => {
-        btn.textContent = "Apply to Order Form";
-        btn.classList.remove("btn-success");
-    }, 2000);
-}
+    const productData = PRODUCTS[product];
+    if (!productData) {
+        alert("Invalid product selected");
+        return;
+    }
 
-// Manual line item helper
-function makeBlankManualLine() {
-    return {
-        autoFromDesign: false,
-        type: "custom",
-        product: "",
-        color: "",
-        length: "",
-        qty: 1,
-        unitPrice: 0
-    };
-}
+    const length = productData.isFt ? (productData.hasColor ? "1-16" : "Box") : "";
+    const color = productData.hasColor ? state.color : "";
+    const row = createTableRow(product, color, length, qty, productData.price);
 
-function addManualLine() {
-    orderLines.push(makeBlankManualLine());
-    renderOrderTable();
-}
-
-function renderOrderTable() {
     const tbody = document.getElementById("order-tbody");
-    tbody.innerHTML = "";
+    if (tbody.rows.length === 1 && tbody.rows[0].cells[0].colSpan === 7) {
+        tbody.innerHTML = "";
+    }
+    tbody.appendChild(row);
 
-    if (orderLines.length === 0) {
-        const tr = document.createElement("tr");
-        const td = document.createElement("td");
-        td.colSpan = 7;
-        td.style.textAlign = "center";
-        td.style.color = "var(--text-muted)";
-        td.style.padding = "2rem";
-        td.textContent =
-            'Design your deck above and click "Apply to Order Form" or add your own line items below.';
-        tr.appendChild(td);
-        tbody.appendChild(tr);
-        recalcOrderTotal();
-        return;
+    document.getElementById("product-select").value = "";
+    document.getElementById("product-qty").value = "1";
+    recalculateTotal();
+}
+
+document.getElementById("btn-add-preset").addEventListener("click", addLineItem);
+
+document.getElementById("btn-add-row").addEventListener("click", () => {
+    const tbody = document.getElementById("order-tbody");
+    const row = createTableRow("", "", "", 1, 0);
+    if (tbody.rows.length === 1 && tbody.rows[0].cells[0].colSpan === 7) {
+        tbody.innerHTML = "";
+    }
+    tbody.appendChild(row);
+});
+
+document.getElementById("apply-order").addEventListener("click", () => {
+    const tbody = document.getElementById("order-tbody");
+    if (tbody.rows.length === 1 && tbody.rows[0].cells[0].colSpan === 7) {
+        tbody.innerHTML = "";
     }
 
-    orderLines.forEach((line, index) => {
-        const tr = document.createElement("tr");
+    const { numStockBoards, borderBoards, stairTreads, screwBoxes, plugBoxes } = state.estimates;
 
-        // Product
-        const tdProd = document.createElement("td");
-        tdProd.setAttribute("data-label", "Product");
-        const prodInput = document.createElement("input");
-        prodInput.className = "line-input";
-        prodInput.value = line.product || "";
-        prodInput.oninput = e => {
-            line.product = e.target.value;
-        };
-        tdProd.appendChild(prodInput);
-        tr.appendChild(tdProd);
-
-        // Color
-        const tdColor = document.createElement("td");
-        tdColor.setAttribute("data-label", "Color");
-        const colorSelect = document.createElement("select");
-        colorSelect.className = "line-select";
-        const optNone = document.createElement("option");
-        optNone.value = "";
-        optNone.textContent = "None";
-        colorSelect.appendChild(optNone);
-        COLORS.forEach(c => {
-            const opt = document.createElement("option");
-            opt.value = c;
-            opt.textContent = c;
-            if (c === line.color) opt.selected = true;
-            colorSelect.appendChild(opt);
-        });
-        colorSelect.onchange = e => {
-            line.color = e.target.value || "";
-        };
-        tdColor.appendChild(colorSelect);
-        tr.appendChild(tdColor);
-
-        // Length
-        const tdLen = document.createElement("td");
-        tdLen.setAttribute("data-label", "Length");
-        const lenInput = document.createElement("input");
-        lenInput.type = "number";
-        lenInput.step = "0.1";
-        lenInput.min = "0";
-        lenInput.className = "line-input";
-        lenInput.value = line.length || "";
-        lenInput.oninput = e => {
-            line.length = e.target.value ? parseFloat(e.target.value) : "";
-            recalcOrderTotal();
-        };
-        tdLen.appendChild(lenInput);
-        tr.appendChild(tdLen);
-
-        // Qty
-        const tdQty = document.createElement("td");
-        tdQty.className = "numeric";
-        tdQty.setAttribute("data-label", "Qty");
-        const qtyInput = document.createElement("input");
-        qtyInput.type = "number";
-        qtyInput.min = "1";
-        qtyInput.step = "1";
-        qtyInput.className = "line-input";
-        qtyInput.value = line.qty || 1;
-        qtyInput.oninput = e => {
-            line.qty = Math.max(
-                1,
-                e.target.value ? parseInt(e.target.value) : 1
-            );
-            qtyInput.value = line.qty;
-            recalcOrderTotal();
-        };
-        tdQty.appendChild(qtyInput);
-        tr.appendChild(tdQty);
-
-        // Unit price
-        const tdPrice = document.createElement("td");
-        tdPrice.className = "numeric";
-        tdPrice.setAttribute("data-label", "Unit Price");
-        const priceInput = document.createElement("input");
-        priceInput.type = "number";
-        priceInput.step = "0.01";
-        priceInput.min = "0";
-        priceInput.className = "line-input";
-        priceInput.value = line.unitPrice || 0;
-        priceInput.oninput = e => {
-            line.unitPrice = e.target.value ? parseFloat(e.target.value) : 0;
-            recalcOrderTotal();
-        };
-        tdPrice.appendChild(priceInput);
-        tr.appendChild(tdPrice);
-
-        // Subtotal
-        const tdSub = document.createElement("td");
-        tdSub.className = "numeric";
-        tdSub.setAttribute("data-label", "Subtotal");
-        tdSub.textContent = "$" + calcLineSubtotal(line).toFixed(2);
-        tr.appendChild(tdSub);
-
-        // Actions
-        const tdAct = document.createElement("td");
-        tdAct.setAttribute("data-label", "Actions");
-        const rmBtn = document.createElement("button");
-        rmBtn.type = "button";
-        rmBtn.className = "btn-remove-row";
-        rmBtn.textContent = "×";
-        rmBtn.onclick = () => {
-            orderLines.splice(index, 1);
-            renderOrderTable();
-        };
-        tdAct.appendChild(rmBtn);
-        tr.appendChild(tdAct);
-
-        // Keep subtotal updated
-        const observer = () => {
-            tdSub.textContent = "$" + calcLineSubtotal(line).toFixed(2);
-        };
-        priceInput.addEventListener("input", observer);
-        qtyInput.addEventListener("input", observer);
-        lenInput.addEventListener("input", observer);
-
-        tbody.appendChild(tr);
-    });
-
-    recalcOrderTotal();
-}
-
-function calcLineSubtotal(line) {
-    const qty = line.qty || 0;
-    const unit = line.unitPrice || 0;
-    return qty * unit;
-}
-
-function recalcOrderTotal() {
-    const total = orderLines.reduce(
-        (sum, line) => sum + calcLineSubtotal(line),
-        0
-    );
-    document.getElementById("grand-total").textContent =
-        "$" + total.toFixed(2);
-}
-
-// Submit via mailto summary
-function submitOrder() {
-    const name = document.getElementById("cust-name").value || "Customer";
-    const email = document.getElementById("cust-email").value || "";
-    const phone = document.getElementById("cust-phone").value || "";
-    const addr =
-        document.getElementById("cust-address").value || "";
-    const notes =
-        document.getElementById("special-notes").value || "";
-    const total = document.getElementById("grand-total").textContent;
-
-    let body = "AmeriDex Order%0A%0A";
-    body += "Customer: " + name + "%0A";
-    body += "Company: " +
-        (document.getElementById("cust-company").value || "") +
-        "%0A";
-    body += "Phone: " + phone + "%0A";
-    body += "Email: " + email + "%0A";
-    body += "Address: " + addr.replace(/\n/g, " ") + "%0A%0A";
-
-    body += "Order Lines:%0A";
-    orderLines.forEach((line, i) => {
-        let lineTxt = (i + 1) + ". " + (line.product || "Item");
-        if (line.color) lineTxt += " - " + line.color;
-        if (line.length) lineTxt += " - " + line.length + "ft";
-        lineTxt += " x " + (line.qty || 0);
-        lineTxt += " @ $" + (line.unitPrice || 0).toFixed(2);
-        lineTxt +=
-            " = $" + calcLineSubtotal(line).toFixed(2);
-        body += lineTxt + "%0A";
-    });
-
-    body += "%0ATotal: " + total + "%0A%0A";
-    if (notes) {
-        body += "Special Instructions: " + notes.replace(/\n/g, " ") + "%0A";
+    if (numStockBoards > 0) {
+        const row = createTableRow("system", state.color, "16", numStockBoards, 8.0);
+        tbody.appendChild(row);
+    }
+    if (borderBoards > 0) {
+        const row = createTableRow("system", state.color, "16", borderBoards, 8.0);
+        tbody.appendChild(row);
+    }
+    if (stairTreads > 0) {
+        const row = createTableRow("system", state.color, "12", stairTreads, 12.0);
+        tbody.appendChild(row);
+    }
+    if (screwBoxes > 0) {
+        const row = createTableRow("screws", "", "", screwBoxes, 37.0);
+        tbody.appendChild(row);
+    }
+    if (plugBoxes > 0) {
+        const row = createTableRow("plugs", state.color, "", plugBoxes, 33.79);
+        tbody.appendChild(row);
     }
 
-    const subject = "AmeriDex Order - " + name;
-    window.location.href =
-        "mailto:sales@ameridex.com?subject=" +
-        encodeURIComponent(subject) +
-        "&body=" +
-        body;
-}
+    recalculateTotal();
+});
 
-// Simple PDF summary
-function generatePDF() {
-    if (!window.jspdf) {
-        alert("PDF generation requires jsPDF to be loaded.");
-        return;
-    }
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    doc.setFontSize(18);
-    doc.text("AmeriDex Order", 105, 20, { align: "center" });
-
-    let y = 35;
-    doc.setFontSize(12);
-    doc.text(
-        "Customer: " +
-            (document.getElementById("cust-name").value || "N/A"),
-        20,
-        y
-    );
-    y += 8;
-    doc.text(
-        "Email: " +
-            (document.getElementById("cust-email").value || "N/A"),
-        20,
-        y
-    );
-    y += 8;
-    doc.text(
-        "Phone: " +
-            (document.getElementById("cust-phone").value || "N/A"),
-        20,
-        y
-    );
-    y += 8;
-    doc.text(
-        "Address: " +
-            (document.getElementById("cust-address").value || "")
-                .replace(/\n/g, " "),
-        20,
-        y
-    );
-    y += 15;
-
-    doc.setFontSize(14);
-    doc.text("Order Lines:", 20, y);
-    y += 10;
-
-    doc.setFontSize(10);
-    orderLines.forEach((line, i) => {
-        let lineTxt = (i + 1) + ". " + (line.product || "Item");
-        if (line.color) lineTxt += " - " + line.color;
-        if (line.length) lineTxt += " - " + line.length + "ft";
-        lineTxt += " x " + (line.qty || 0);
-        lineTxt +=
-            " @ $" + (line.unitPrice || 0).toFixed(2);
-        lineTxt +=
-            " = $" + calcLineSubtotal(line).toFixed(2);
-        doc.text(lineTxt, 20, y);
-        y += 7;
-        if (y > 270) {
-            doc.addPage();
-            y = 20;
+function recalculateTotal() {
+    let total = 0;
+    const rows = document.getElementById("order-tbody").querySelectorAll("tr");
+    rows.forEach(row => {
+        const subtotalCell = row.cells[5];
+        if (subtotalCell) {
+            const subtotal = parseFloat(subtotalCell.textContent.replace("$", "")) || 0;
+            total += subtotal;
         }
     });
-
-    y += 10;
-    doc.setFontSize(14);
-    doc.text(
-        "Total: " + document.getElementById("grand-total").textContent,
-        20,
-        y
-    );
-
-    doc.save("ameridex-order.pdf");
+    document.getElementById("grand-total").textContent = "$" + total.toFixed(2);
 }
 
-// Init
+// Form handlers
+document.getElementById("btn-reset-form").addEventListener("click", () => {
+    document.getElementById("cust-name").value = "";
+    document.getElementById("cust-company").value = "";
+    document.getElementById("cust-phone").value = "";
+    document.getElementById("cust-email").value = "";
+    document.getElementById("cust-address").value = "";
+    document.getElementById("special-notes").value = "";
+});
+
+document.getElementById("btn-submit").addEventListener("click", () => {
+    const name = document.getElementById("cust-name").value.trim();
+    const phone = document.getElementById("cust-phone").value.trim();
+    const email = document.getElementById("cust-email").value.trim();
+    const address = document.getElementById("cust-address").value.trim();
+
+    if (!name || !phone || !email || !address) {
+        alert("Please fill in all required fields (Name, Phone, Email, Address)");
+        return;
+    }
+
+    alert("Order submitted!\n\nCustomer: " + name + "\nEmail: " + email + "\nTotal: " + document.getElementById("grand-total").textContent);
+});
+
+document.getElementById("btn-pdf").addEventListener("click", () => {
+    alert("PDF export feature coming soon. For now, use your browser's Print to PDF function.");
+});
+
+// Initialize 3D scene
 initScene();
-initUI();
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 </html>
