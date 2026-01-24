@@ -610,6 +610,238 @@
         line-height: 1.3;
     }
 
+    /* Deck Visualizer Modal */
+    .deck-visualizer-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background-color: rgba(15, 23, 42, 0.85);
+        z-index: 100;
+        justify-content: center;
+        align-items: center;
+        padding: 0.75rem;
+        overflow: hidden;
+    }
+
+    .deck-visualizer-modal.active {
+        display: flex;
+    }
+
+    .visualizer-container {
+        background: #ffffff;
+        border-radius: 12px;
+        width: 95%;
+        height: 90vh;
+        max-width: 1200px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: var(--shadow-soft);
+        position: relative;
+    }
+
+    .visualizer-header {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border-subtle);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-shrink: 0;
+    }
+
+    .visualizer-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0;
+    }
+
+    .visualizer-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #6b7280;
+        transition: color 0.12s ease;
+        padding: 0.4rem;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .visualizer-close:hover { color: #111827; }
+
+    .visualizer-body {
+        flex: 1;
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+        overflow: hidden;
+    }
+
+    .canvas-wrapper {
+        flex: 1;
+        background: linear-gradient(135deg, #f0f4f8, #e8eef5);
+        border-radius: 10px;
+        border: 1px solid var(--border-subtle);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        width: 100%;
+        height: 100%;
+        display: block;
+        cursor: grab;
+    }
+
+        cursor: grabbing;
+    }
+
+    .visualizer-controls {
+        width: 280px;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        overflow-y: auto;
+        padding-right: 0.5rem;
+    }
+
+    .control-group {
+        background: var(--primary-soft);
+        border: 1px solid #bfdbfe;
+        border-radius: 10px;
+        padding: 1rem;
+    }
+
+    .control-group h3 {
+        margin: 0 0 0.75rem 0;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    .control-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .control-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .control-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-main);
+    }
+
+    .control-value {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+    }
+
+    .control-stat {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        line-height: 1.4;
+    }
+
+    .zoom-controls {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .zoom-btn {
+        flex: 1;
+        padding: 0.5rem;
+        border: 1px solid var(--primary);
+        background: white;
+        color: var(--primary);
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.12s ease;
+    }
+
+    .zoom-btn:hover {
+        background: var(--primary-soft);
+    }
+
+    .zoom-btn:active {
+        background: #dbeafe;
+    }
+
+    .reset-view-btn {
+        width: 100%;
+        padding: 0.6rem;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.12s ease;
+    }
+
+    .reset-view-btn:hover { background: var(--primary-dark); }
+
+    .visualizer-actions {
+        padding: 1rem;
+        border-top: 1px solid var(--border-subtle);
+        display: flex;
+        gap: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    .visualizer-actions button {
+        flex: 1;
+    }
+
+    .info-message {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        line-height: 1.4;
+        padding: 0.75rem;
+        background: #f9fafb;
+        border-radius: 6px;
+        border-left: 3px solid var(--primary);
+    }
+
+    @media (max-width: 768px) {
+        .visualizer-body {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .visualizer-controls {
+            width: 100%;
+            max-height: 200px;
+            flex-direction: row;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding-right: 0;
+        }
+
+        .control-group {
+            flex-shrink: 0;
+            min-width: 250px;
+        }
+
+        .visualizer-container {
+            height: 95vh;
+        }
+    }
+
     .actions-row {
         display: flex;
         flex-direction: column;
@@ -877,8 +1109,9 @@
                             </select>
                             <div class="help-text">Direction boards run across deck</div>
                         </div>
-                        <div class="field" style="align-self:flex-end;">
+                        <div class="field" style="align-self:flex-end; display:flex; gap:0.5rem;">
                             <button type="button" class="btn btn-outline" id="calc-btn">Calculate & Suggest</button>
+                            <button type="button" class="btn btn-outline" id="visualizer-btn">View 3D Deck</button>
                         </div>
                     </div>
 
@@ -1076,6 +1309,77 @@
             <button type="button" class="modal-close" id="modal-close" aria-label="Close">&times;</button>
             <img id="colorLarge" src="" alt="Color Preview">
             <div id="colorName" style="margin-top:0.75rem;font-weight:600;"></div>
+        </div>
+    </div>
+
+    <!-- Deck Visualizer Modal -->
+    <div id="deckVisualizerModal" class="deck-visualizer-modal" role="dialog" aria-modal="true">
+        <div class="visualizer-container">
+            <div class="visualizer-header">
+                <h2 class="visualizer-title">3D Deck Visualizer</h2>
+                <button type="button" class="visualizer-close" id="visualizer-close-btn" aria-label="Close">&times;</button>
+            </div>
+            
+            <div class="visualizer-body">
+                <div class="canvas-wrapper">
+                    <canvas id="deckCanvas"></canvas>
+                </div>
+                
+                <div class="visualizer-controls">
+                    <div class="control-group">
+                        <h3>Deck Dimensions</h3>
+                        <div class="control-item">
+                            <span class="control-label">Length</span>
+                            <span class="control-value" id="viz-length">0 ft</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="control-label">Width</span>
+                            <span class="control-value" id="viz-width">0 ft</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="control-label">Orientation</span>
+                            <span class="control-value" id="viz-orientation">Perpendicular</span>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <h3>Board Information</h3>
+                        <div class="control-item">
+                            <span class="control-label">Estimated Boards</span>
+                            <span class="control-value" id="viz-board-count">0</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="control-label">Board Width</span>
+                            <span class="control-stat">5.5 inches</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="control-label">Gap Size</span>
+                            <span class="control-stat">1/8 inch (Dexerdry)</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="control-label">Selected Color</span>
+                            <span class="control-value" id="viz-color">Driftwood</span>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <h3>View Controls</h3>
+                        <div class="zoom-controls">
+                            <button type="button" class="zoom-btn" id="zoom-in-btn">+ Zoom In</button>
+                            <button type="button" class="zoom-btn" id="zoom-out-btn">Zoom Out</button>
+                        </div>
+                        <button type="button" class="reset-view-btn" id="reset-view-btn" style="margin-top: 0.5rem;">Reset View</button>
+                        <div class="info-message" style="margin-top: 0.75rem;">
+                            Scroll to zoom. Click and drag to pan the view.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="visualizer-actions">
+                <button type="button" class="btn btn-ghost" id="visualizer-cancel">Cancel</button>
+                <button type="button" class="btn btn-primary" id="visualizer-add">Add to Order</button>
+            </div>
         </div>
     </div>
 
@@ -2088,6 +2392,435 @@ function submitOrder() {
     window.location.href = mailto;
     document.getElementById("success-msg").style.display = "block";
 }
+
+// Deck Visualizer Class
+class DeckVisualizer {
+    constructor(canvasId, deckLength, deckWidth, orientation, selectedColor) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.deckLength = deckLength;
+        this.deckWidth = deckWidth;
+        this.orientation = orientation;
+        this.selectedColor = selectedColor;
+        this.scale = 40;
+        this.zoom = 1;
+        this.panX = 0;
+        this.panY = 0;
+        this.isDragging = false;
+        this.dragStartX = 0;
+        this.dragStartY = 0;
+        this.boardWidthInches = 5.5;
+        this.boardGapInches = 0.125;
+        this.joistSpacing = 16;
+        this.colorMap = {
+            'Driftwood': '#8b7355', 'Khaki': '#c9b76e', 'Slate': '#6b7a8b',
+            'Beachwood': '#a0826d', 'Chestnut': '#9d6e3a', 'Redwood': '#7d3a2a',
+            'Hazelnut': '#8b6f47'
+        };
+        this.boardColor = this.colorMap[selectedColor] || '#8b7355';
+        this.setupEventListeners();
+        this.resizeCanvas();
+        this.render();
+    }
+
+    setupEventListeners() {
+        this.canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomSpeed = 0.1;
+            const oldZoom = this.zoom;
+            this.zoom += e.deltaY > 0 ? -zoomSpeed : zoomSpeed;
+            this.zoom = Math.max(0.5, Math.min(3, this.zoom));
+            const rect = this.canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            this.panX = mouseX - (mouseX - this.panX) * (this.zoom / oldZoom);
+            this.panY = mouseY - (mouseY - this.panY) * (this.zoom / oldZoom);
+            this.render();
+        });
+
+        this.canvas.addEventListener('mousedown', (e) => {
+            this.isDragging = true;
+            this.dragStartX = e.clientX;
+            this.dragStartY = e.clientY;
+            this.canvas.classList.add('grabbing');
+        });
+
+        this.canvas.addEventListener('mousemove', (e) => {
+            if (this.isDragging) {
+                const deltaX = e.clientX - this.dragStartX;
+                const deltaY = e.clientY - this.dragStartY;
+                this.panX += deltaX;
+                this.panY += deltaY;
+                this.dragStartX = e.clientX;
+                this.dragStartY = e.clientY;
+                this.render();
+            }
+        });
+
+        this.canvas.addEventListener('mouseup', () => {
+            this.isDragging = false;
+            this.canvas.classList.remove('grabbing');
+        });
+
+        this.canvas.addEventListener('mouseleave', () => {
+            this.isDragging = false;
+            this.canvas.classList.remove('grabbing');
+        });
+
+        this.canvas.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                this.isDragging = true;
+                this.dragStartX = e.touches[0].clientX;
+                this.dragStartY = e.touches[0].clientY;
+            }
+        });
+
+        this.canvas.addEventListener('touchmove', (e) => {
+            if (this.isDragging && e.touches.length === 1) {
+                const deltaX = e.touches[0].clientX - this.dragStartX;
+                const deltaY = e.touches[0].clientY - this.dragStartY;
+                this.panX += deltaX;
+                this.panY += deltaY;
+                this.dragStartX = e.touches[0].clientX;
+                this.dragStartY = e.touches[0].clientY;
+                this.render();
+            }
+        });
+
+        this.canvas.addEventListener('touchend', () => {
+            this.isDragging = false;
+        });
+    }
+
+    resizeCanvas() {
+        const rect = this.canvas.parentElement.getBoundingClientRect();
+        this.canvas.width = rect.width;
+        this.canvas.height = rect.height;
+    }
+
+    projectToIsometric(x, y, z) {
+        const angle = Math.PI / 4;
+        const isoX = (x - y) * Math.cos(angle);
+        const isoY = (x + y) * Math.sin(angle) - z;
+        return { isoX, isoY };
+    }
+
+    createWoodGrain(color) {
+        const patternCanvas = document.createElement('canvas');
+        patternCanvas.width = 200;
+        patternCanvas.height = 200;
+        const pCtx = patternCanvas.getContext('2d');
+        pCtx.fillStyle = color;
+        pCtx.fillRect(0, 0, 200, 200);
+        pCtx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+        pCtx.lineWidth = 2;
+        for (let i = 0; i < 200; i += 8) {
+            pCtx.beginPath();
+            pCtx.moveTo(i, 0);
+            pCtx.quadraticCurveTo(i + 20, 100, i, 200);
+            pCtx.stroke();
+        }
+        pCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        pCtx.lineWidth = 1;
+        for (let i = 0; i < 200; i += 12) {
+            pCtx.beginPath();
+            pCtx.moveTo(i + 2, 0);
+            pCtx.quadraticCurveTo(i + 18, 100, i + 2, 200);
+            pCtx.stroke();
+        }
+        return this.ctx.createPattern(patternCanvas, 'repeat');
+    }
+
+    render() {
+        const width = this.canvas.width;
+        const height = this.canvas.height;
+        this.ctx.fillStyle = '#ffffff';
+        this.ctx.fillRect(0, 0, width, height);
+        const centerX = width / 2 + this.panX;
+        const centerY = height / 2 + this.panY;
+        this.ctx.save();
+        this.ctx.translate(centerX, centerY);
+        this.ctx.scale(this.zoom, this.zoom);
+        this.drawGrid();
+        const { boardCount } = this.calculateBoards();
+        const boardRunLength = this.orientation === 'perpendicular' ? this.deckWidth : this.deckLength;
+        this.drawJoists(boardRunLength);
+        this.drawBoards(boardCount, boardRunLength);
+        this.drawDexerdrySeals(boardCount);
+        this.ctx.restore();
+        this.drawInfoOverlay(boardCount);
+    }
+
+    calculateBoards() {
+        const boardWidthFt = this.boardWidthInches / 12;
+        const gapFt = this.boardGapInches / 12;
+        const effectiveWidthFt = boardWidthFt + gapFt;
+        const isPerp = this.orientation === 'perpendicular';
+        const spanFt = isPerp ? this.deckLength : this.deckWidth;
+        const runFt = isPerp ? this.deckWidth : this.deckLength;
+        const boardCount = Math.ceil(spanFt / effectiveWidthFt) + 1;
+        return { boardCount, boardRunLength: runFt, boardSpanWidth: this.deckWidth, isPerp };
+    }
+
+    drawGrid() {
+        this.ctx.strokeStyle = 'rgba(200, 200, 200, 0.1)';
+        this.ctx.lineWidth = 0.5;
+        const gridSize = 5 * this.scale;
+        for (let x = -this.canvas.width; x < this.canvas.width; x += gridSize) {
+            this.ctx.beginPath();
+            this.ctx.moveTo(x, -this.canvas.height);
+            this.ctx.lineTo(x, this.canvas.height);
+            this.ctx.stroke();
+        }
+    }
+
+    drawJoists(runLength) {
+        const joistSpacingFt = this.joistSpacing / 12;
+        const joistCount = Math.ceil(runLength / joistSpacingFt) + 1;
+        const joistColor = '#5a4a3a';
+        const joistPattern = this.createWoodGrain(joistColor);
+        for (let i = 0; i < joistCount; i++) {
+            const joistPos = i * joistSpacingFt;
+            const joistDepth = 0.75;
+            const p1 = this.projectToIsometric(-this.deckWidth / 2, joistPos, 0);
+            const p2 = this.projectToIsometric(this.deckWidth / 2, joistPos, 0);
+            const p3 = this.projectToIsometric(this.deckWidth / 2, joistPos, joistDepth);
+            const p4 = this.projectToIsometric(-this.deckWidth / 2, joistPos, joistDepth);
+            this.ctx.fillStyle = joistPattern;
+            this.ctx.beginPath();
+            this.ctx.moveTo(p1.isoX * this.scale, p1.isoY * this.scale);
+            this.ctx.lineTo(p2.isoX * this.scale, p2.isoY * this.scale);
+            this.ctx.lineTo(p3.isoX * this.scale, p3.isoY * this.scale);
+            this.ctx.lineTo(p4.isoX * this.scale, p4.isoY * this.scale);
+            this.ctx.fill();
+            this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+            this.ctx.lineWidth = 1;
+            this.ctx.stroke();
+        }
+    }
+
+    drawBoards(boardCount, boardRunLength) {
+        const boardWidthFt = this.boardWidthInches / 12;
+        const gapFt = this.boardGapInches / 12;
+        const effectiveWidthFt = boardWidthFt + gapFt;
+        const boardThickness = 0.75;
+        const boardPattern = this.createWoodGrain(this.boardColor);
+        const isPerp = this.orientation === 'perpendicular';
+
+        for (let i = 0; i < boardCount; i++) {
+            const boardPos = i * effectiveWidthFt - (boardCount * effectiveWidthFt) / 2;
+            if (isPerp) {
+                const x1 = boardPos;
+                const x2 = boardPos + boardWidthFt;
+                const y1 = -boardRunLength / 2;
+                const y2 = boardRunLength / 2;
+                const corners = [
+                    this.projectToIsometric(x1, y1, 0),
+                    this.projectToIsometric(x2, y1, 0),
+                    this.projectToIsometric(x2, y2, 0),
+                    this.projectToIsometric(x1, y2, 0)
+                ];
+                this.ctx.fillStyle = boardPattern;
+                this.ctx.beginPath();
+                corners.forEach((c, idx) => {
+                    if (idx === 0) this.ctx.moveTo(c.isoX * this.scale, c.isoY * this.scale);
+                    else this.ctx.lineTo(c.isoX * this.scale, c.isoY * this.scale);
+                });
+                this.ctx.closePath();
+                this.ctx.fill();
+                this.drawBoardEdge(corners, boardThickness);
+                this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
+                this.ctx.lineWidth = 0.5;
+                this.ctx.stroke();
+            } else {
+                const y1 = boardPos;
+                const y2 = boardPos + boardWidthFt;
+                const x1 = -this.deckWidth / 2;
+                const x2 = this.deckWidth / 2;
+                const corners = [
+                    this.projectToIsometric(x1, y1, 0),
+                    this.projectToIsometric(x2, y1, 0),
+                    this.projectToIsometric(x2, y2, 0),
+                    this.projectToIsometric(x1, y2, 0)
+                ];
+                this.ctx.fillStyle = boardPattern;
+                this.ctx.beginPath();
+                corners.forEach((c, idx) => {
+                    if (idx === 0) this.ctx.moveTo(c.isoX * this.scale, c.isoY * this.scale);
+                    else this.ctx.lineTo(c.isoX * this.scale, c.isoY * this.scale);
+                });
+                this.ctx.closePath();
+                this.ctx.fill();
+                this.drawBoardEdge(corners, boardThickness);
+                this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
+                this.ctx.lineWidth = 0.5;
+                this.ctx.stroke();
+            }
+        }
+    }
+
+    drawBoardEdge(corners, thickness) {
+        const p1 = this.projectToIsometric(
+            (corners[1].isoX + corners[0].isoX) / 2,
+            (corners[1].isoY + corners[0].isoY) / 2,
+            thickness
+        );
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        this.ctx.beginPath();
+        this.ctx.moveTo(corners[0].isoX * this.scale, corners[0].isoY * this.scale);
+        this.ctx.lineTo(corners[1].isoX * this.scale, corners[1].isoY * this.scale);
+        this.ctx.lineTo(
+            (corners[1].isoX + (p1.isoX - corners[1].isoX) * 0.15) * this.scale,
+            (corners[1].isoY + (p1.isoY - corners[1].isoY) * 0.15) * this.scale
+        );
+        this.ctx.lineTo(
+            (corners[0].isoX + (p1.isoX - corners[0].isoX) * 0.15) * this.scale,
+            (corners[0].isoY + (p1.isoY - corners[0].isoY) * 0.15) * this.scale
+        );
+        this.ctx.fill();
+    }
+
+    drawDexerdrySeals(boardCount) {
+        const boardWidthFt = this.boardWidthInches / 12;
+        const gapFt = this.boardGapInches / 12;
+        const effectiveWidthFt = boardWidthFt + gapFt;
+        const isPerp = this.orientation === 'perpendicular';
+        const boardRunLength = isPerp ? this.deckWidth : this.deckLength;
+        this.ctx.strokeStyle = 'rgba(100, 150, 200, 0.4)';
+        this.ctx.lineWidth = 2;
+        for (let i = 1; i < boardCount; i++) {
+            const boardPos = i * effectiveWidthFt - (boardCount * effectiveWidthFt) / 2;
+            if (isPerp) {
+                const y1 = -boardRunLength / 2;
+                const y2 = boardRunLength / 2;
+                const p1 = this.projectToIsometric(boardPos, y1, 0);
+                const p2 = this.projectToIsometric(boardPos, y2, 0);
+                this.ctx.beginPath();
+                this.ctx.moveTo(p1.isoX * this.scale, p1.isoY * this.scale);
+                this.ctx.lineTo(p2.isoX * this.scale, p2.isoY * this.scale);
+                this.ctx.stroke();
+            } else {
+                const x1 = -this.deckWidth / 2;
+                const x2 = this.deckWidth / 2;
+                const p1 = this.projectToIsometric(x1, boardPos, 0);
+                const p2 = this.projectToIsometric(x2, boardPos, 0);
+                this.ctx.beginPath();
+                this.ctx.moveTo(p1.isoX * this.scale, p1.isoY * this.scale);
+                this.ctx.lineTo(p2.isoX * this.scale, p2.isoY * this.scale);
+                this.ctx.stroke();
+            }
+        }
+    }
+
+    drawInfoOverlay(boardCount) {
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        this.ctx.fillRect(10, 10, 200, 80);
+        this.ctx.fillStyle = '#ffffff';
+        this.ctx.font = 'bold 12px sans-serif';
+        this.ctx.fillText('Deck Overview', 20, 30);
+        this.ctx.font = '11px sans-serif';
+        this.ctx.fillText(`Boards: ${boardCount}`, 20, 50);
+        this.ctx.fillText(`Zoom: ${this.zoom.toFixed(1)}x`, 20, 65);
+        this.ctx.fillText('Scroll to zoom, drag to pan', 20, 80);
+    }
+}
+
+// Visualizer control functions
+function openDeckVisualizer() {
+    const deckLen = parseFloat(document.getElementById("deck-len").value);
+    const deckWid = parseFloat(document.getElementById("deck-wid").value);
+    const orientation = document.getElementById("orientation").value;
+    const color = selectedColor1;
+
+    if (deckLen <= 0 || deckWid <= 0) {
+        alert("Please enter deck dimensions first.");
+        return;
+    }
+
+    const modal = document.getElementById("deckVisualizerModal");
+    modal.classList.add("active");
+    
+    document.getElementById("viz-length").textContent = deckLen + " ft";
+    document.getElementById("viz-width").textContent = deckWid + " ft";
+    document.getElementById("viz-orientation").textContent = orientation === 'perpendicular' ? 'Perpendicular' : 'Parallel';
+    document.getElementById("viz-color").textContent = color;
+
+    setTimeout(() => {
+        if (!window.deckViz) {
+            window.deckViz = new DeckVisualizer("deckCanvas", deckLen, deckWid, orientation, color);
+        } else {
+            window.deckViz.deckLength = deckLen;
+            window.deckViz.deckWidth = deckWid;
+            window.deckViz.orientation = orientation;
+            window.deckViz.selectedColor = color;
+            window.deckViz.boardColor = window.deckViz.colorMap[color] || '#8b7355';
+            window.deckViz.resizeCanvas();
+            window.deckViz.render();
+        }
+        
+        const { boardCount } = window.deckViz.calculateBoards();
+        document.getElementById("viz-board-count").textContent = boardCount;
+    }, 50);
+}
+
+function closeDeckVisualizer() {
+    const modal = document.getElementById("deckVisualizerModal");
+    modal.classList.remove("active");
+}
+
+function zoomDeckVisualizer(direction) {
+    if (window.deckViz) {
+        const zoomAmount = 0.3;
+        window.deckViz.zoom += direction === 'in' ? zoomAmount : -zoomAmount;
+        window.deckViz.zoom = Math.max(0.5, Math.min(3, window.deckViz.zoom));
+        window.deckViz.render();
+    }
+}
+
+function resetDeckView() {
+    if (window.deckViz) {
+        window.deckViz.zoom = 1;
+        window.deckViz.panX = 0;
+        window.deckViz.panY = 0;
+        window.deckViz.render();
+    }
+}
+
+function addDeckToOrder() {
+    if (!window.deckViz) return;
+    const { boardCount, boardRunLength } = window.deckViz.calculateBoards();
+    const avgBoardLength = Math.min(20, Math.max(12, Math.round(boardRunLength)));
+    lineItems.push({
+        type: "system",
+        color: window.deckViz.selectedColor,
+        length: avgBoardLength,
+        qty: boardCount,
+        priceOverride: null,
+        customDesc: "",
+        customUnitPrice: 0
+    });
+    deletedItems = [];
+    render();
+    updateTotalAndFasteners();
+    updateUndoButton();
+    closeDeckVisualizer();
+}
+
+// Initialize event listeners for visualizer controls
+document.getElementById("visualizer-btn").addEventListener("click", openDeckVisualizer);
+document.getElementById("visualizer-close-btn").addEventListener("click", closeDeckVisualizer);
+document.getElementById("visualizer-cancel").addEventListener("click", closeDeckVisualizer);
+document.getElementById("visualizer-add").addEventListener("click", addDeckToOrder);
+document.getElementById("zoom-in-btn").addEventListener("click", () => zoomDeckVisualizer('in'));
+document.getElementById("zoom-out-btn").addEventListener("click", () => zoomDeckVisualizer('out'));
+document.getElementById("reset-view-btn").addEventListener("click", resetDeckView);
+
+window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+        const vizModal = document.getElementById("deckVisualizerModal");
+        if (vizModal.classList.contains("active")) closeDeckVisualizer();
+    }
+});
 
 // Initialize on load
 initColorGrid();
