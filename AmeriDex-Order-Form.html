@@ -337,17 +337,17 @@
     td .len-input { max-width: 90px; }
     td .price-input { max-width: 140px; }
 
+    /* Mobile items container - hidden by default, shown by JS on small screens */
+    #mobile-items-container {
+        display: none;
+    }
+
     .line-item-card {
         background: white;
         border: 1px solid var(--border-subtle);
         border-radius: 10px;
         padding: 1rem;
         margin-bottom: 1rem;
-        display: none;
-    }
-
-    .line-item-card.mobile-visible {
-        display: block;
     }
 
     .line-item-card h4 {
@@ -639,12 +639,8 @@
         }
         .card { padding-inline: 1.2rem; }
 
-        #line-items {
+        #desktop-table-container {
             display: none;
-        }
-
-        .line-item-card.mobile-visible {
-            display: block;
         }
 
         .btn { padding: 0.6rem 1.2rem; font-size: 0.85rem; }
@@ -666,7 +662,7 @@
     <main>
         <form id="order-form">
 
-            <!-- Deck Calculator (MOVED TO TOP, DEFAULT VISIBLE) -->
+            <!-- Deck Calculator -->
             <section class="card" id="calculator">
                 <div class="card-header">
                     <div>
@@ -938,7 +934,7 @@
 </div>
 
 <script>
-// Product Configuration (refactored for maintainability)
+// Product Configuration
 const PRODUCT_CONFIG = {
     categories: {
         decking: {
@@ -1053,6 +1049,11 @@ const modalImg = document.getElementById("colorLarge");
 const modalName = document.getElementById("colorName");
 const closeBtn = document.getElementById("modal-close");
 const reviewCloseBtn = document.getElementById("review-close");
+
+// Responsive breakpoint detection
+function isMobileView() {
+    return window.innerWidth <= 768;
+}
 
 // Initialize color grid
 function initColorGrid() {
@@ -1197,9 +1198,19 @@ document.getElementById("review-back").onclick = () => {
     });
 });
 
+// UPDATED: Responsive render function
 function render() {
     renderDesktop();
-    renderMobile();
+    
+    // Only render mobile view if screen is mobile width
+    if (isMobileView()) {
+        renderMobile();
+        document.getElementById("mobile-items-container").style.display = "block";
+    } else {
+        // Clear mobile container on desktop/tablet
+        document.getElementById("mobile-items-container").innerHTML = "";
+        document.getElementById("mobile-items-container").style.display = "none";
+    }
 }
 
 function renderDesktop() {
@@ -1294,184 +1305,99 @@ function renderDesktop() {
         // Length
         td = document.createElement("td");
         td.setAttribute("data-label", "Length (ft)");
+        td.className = "numeric";
         if (prod.isFt) {
-            if (["system", "grooved", "solid"].includes(item.type)) {
-                const lsel = document.createElement("select");
-                [12, 16, 20].forEach(l => {
-                    const o = document.createElement("option");
-                    o.value = l;
-                    o.text = l + " ft";
-                    if (l === item.length) o.selected = true;
-                    lsel.appendChild(o);
-                });
-                const custOpt = document.createElement("option");
-                custOpt.value = "custom";
-                custOpt.text = "Custom";
-                if (![12, 16, 20].includes(item.length)) custOpt.selected = true;
-                lsel.appendChild(custOpt);
-
-                lsel.onchange = e => {
-                    if (e.target.value === "custom") {
-                        const val = prompt("Custom length (ft):", item.length || "");
-                        item.length = parseFloat(val) || 16;
-                    } else {
-                        item.length = parseFloat(e.target.value);
-                    }
-                    render();
-                    updateTotalAndFasteners();
-                };
-                td.appendChild(lsel);
-            } else if (item.type === "dexerdry") {
-                const lengthSelect = document.createElement("select");
-                const opts = [
-                    { value: "240", label: "240 ft coil" },
-                    { value: "50", label: "50 ft coil" },
-                    { value: "custom", label: "Custom length" }
-                ];
-                opts.forEach(o => {
-                    const opt = document.createElement("option");
-                    opt.value = o.value;
-                    opt.textContent = o.label;
-                    if (!item.length && o.value === "240") opt.selected = true;
-                    else if (item.length && String(item.length) === o.value) opt.selected = true;
-                    lengthSelect.appendChild(opt);
-                });
-
-                const customInput = document.createElement("input");
-                customInput.type = "number";
-                customInput.step = "0.1";
-                customInput.min = "0";
-                customInput.placeholder = "Custom ft";
-                customInput.className = "len-input";
-                customInput.style.marginTop = "0.3rem";
-                customInput.style.display = "none";
-
-                function syncInputsFromItem() {
-                    if (item.length === 240 || item.length === 50) {
-                        lengthSelect.value = String(item.length);
-                        customInput.style.display = "none";
-                    } else if (item.length) {
-                        lengthSelect.value = "custom";
-                        customInput.style.display = "block";
-                        customInput.value = item.length;
-                    } else {
-                        lengthSelect.value = "240";
-                        customInput.style.display = "none";
-                        item.length = 240;
-                    }
-                }
-
-                lengthSelect.onchange = e => {
-                    const val = e.target.value;
-                    if (val === "240" || val === "50") {
-                        item.length = parseFloat(val);
-                        customInput.style.display = "none";
-                        updateTotalAndFasteners();
-                    } else {
-                        customInput.style.display = "block";
-                        customInput.focus();
-                    }
-                };
-
-                customInput.oninput = e => {
-                    item.length = parseFloat(e.target.value) || 0;
-                    updateTotalAndFasteners();
-                };
-
-                syncInputsFromItem();
-
-                td.appendChild(lengthSelect);
-                td.appendChild(customInput);
-            } else {
-                const inp = document.createElement("input");
-                inp.type = "number";
-                inp.step = "0.1";
-                inp.min = "0";
-                inp.className = "len-input";
-                inp.value = item.length || "";
-                inp.oninput = e => { item.length = parseFloat(e.target.value) || 0; updateTotalAndFasteners(); };
-                td.appendChild(inp);
-            }
+            const lenInput = document.createElement("input");
+            lenInput.type = "number";
+            lenInput.className = "len-input";
+            lenInput.value = item.length || "";
+            lenInput.step = "0.1";
+            lenInput.min = "0";
+            lenInput.oninput = e => {
+                item.length = parseFloat(e.target.value) || 0;
+                updateTotalAndFasteners();
+            };
+            td.appendChild(lenInput);
         }
         row.appendChild(td);
 
         // Qty
         td = document.createElement("td");
-        td.className = "numeric";
         td.setAttribute("data-label", "Qty");
-        const q = document.createElement("input");
-        q.type = "number";
-        q.min = "1";
-        q.step = "1";
-        q.className = "qty-input";
-        q.value = item.qty;
-        q.oninput = e => { item.qty = Math.max(1, parseInt(e.target.value) || 1); updateTotalAndFasteners(); };
-        td.appendChild(q);
-
-        if (item.type === "custom") {
-            const d = document.createElement("input");
-            d.type = "text";
-            d.placeholder = "Description";
-            d.style.marginTop = "0.3rem";
-            d.value = item.customDesc || "";
-            d.oninput = e => item.customDesc = e.target.value;
-            td.appendChild(d);
-
-            const up = document.createElement("input");
-            up.type = "number";
-            up.step = "0.01";
-            up.placeholder = "Unit $";
-            up.style.marginTop = "0.25rem";
-            up.value = item.customUnitPrice || "";
-            up.oninput = e => { item.customUnitPrice = parseFloat(e.target.value) || 0; updateTotalAndFasteners(); };
-            td.appendChild(up);
-        }
+        td.className = "numeric";
+        const qtyInput = document.createElement("input");
+        qtyInput.type = "number";
+        qtyInput.className = "qty-input";
+        qtyInput.value = item.qty;
+        qtyInput.min = "1";
+        qtyInput.step = "1";
+        qtyInput.oninput = e => {
+            item.qty = Math.max(1, parseInt(e.target.value) || 1);
+            updateTotalAndFasteners();
+        };
+        td.appendChild(qtyInput);
         row.appendChild(td);
 
-        // Unit price
+        // Unit Price
         td = document.createElement("td");
-        td.className = "numeric";
         td.setAttribute("data-label", "Unit Price");
-        if ((prod.isFt && item.type !== "dexerdry") || item.type === "custom") {
-            const p = document.createElement("input");
-            p.type = "number";
-            p.step = "0.01";
-            p.min = "0";
-            p.className = "price-input";
-            const defPrice = item.type === "custom" ? item.customUnitPrice : prod.price;
-            p.placeholder = "default $" + defPrice.toFixed(2);
-            p.value = item.priceOverride ?? "";
-            p.oninput = e => { item.priceOverride = parseFloat(e.target.value); updateTotalAndFasteners(); };
-            td.appendChild(p);
-        } else {
+        td.className = "numeric";
+        
+        if (item.type === "custom") {
+            const customPriceInput = document.createElement("input");
+            customPriceInput.type = "number";
+            customPriceInput.className = "price-input";
+            customPriceInput.placeholder = "Enter price";
+            customPriceInput.value = item.customUnitPrice || "";
+            customPriceInput.step = "0.01";
+            customPriceInput.min = "0";
+            customPriceInput.oninput = e => {
+                item.customUnitPrice = parseFloat(e.target.value) || 0;
+                updateTotalAndFasteners();
+            };
+            td.appendChild(customPriceInput);
+        } else if (item.type === "dexerdry") {
             td.textContent = "$" + prod.price.toFixed(2);
+        } else {
+            const priceInput = document.createElement("input");
+            priceInput.type = "number";
+            priceInput.className = "price-input";
+            priceInput.placeholder = "default $" + prod.price.toFixed(2);
+            priceInput.value = item.priceOverride != null ? item.priceOverride : "";
+            priceInput.step = "0.01";
+            priceInput.min = "0";
+            priceInput.oninput = e => {
+                const val = e.target.value.trim();
+                item.priceOverride = val === "" ? null : parseFloat(val) || 0;
+                updateTotalAndFasteners();
+            };
+            td.appendChild(priceInput);
         }
         row.appendChild(td);
 
         // Subtotal
         td = document.createElement("td");
+        td.setAttribute("data-label", "Subtotal");
         td.className = "numeric";
         td.id = "sub-" + i;
-        td.setAttribute("data-label", "Subtotal");
         row.appendChild(td);
 
         // Remove
         td = document.createElement("td");
         td.className = "table-actions-cell";
-        td.setAttribute("data-label", "Actions");
-        const rm = document.createElement("button");
-        rm.type = "button";
-        rm.textContent = "×";
-        rm.className = "btn-remove-row";
-        rm.title = "Delete this line item";
-        rm.onclick = () => {
+        const rmBtn = document.createElement("button");
+        rmBtn.type = "button";
+        rmBtn.className = "btn-remove-row";
+        rmBtn.innerHTML = "&times;";
+        rmBtn.title = "Remove item";
+        rmBtn.onclick = () => {
             deletedItems.push(JSON.parse(JSON.stringify(item)));
             lineItems.splice(i, 1);
             render();
             updateTotalAndFasteners();
             updateUndoButton();
         };
-        td.appendChild(rm);
+        td.appendChild(rmBtn);
         row.appendChild(td);
 
         tbody.appendChild(row);
@@ -1484,7 +1410,7 @@ function renderMobile() {
     lineItems.forEach((item, i) => {
         const prod = PRODUCTS[item.type] || PRODUCTS.custom;
         const card = document.createElement("div");
-        card.className = "line-item-card mobile-visible";
+        card.className = "line-item-card";
 
         const title = document.createElement("h4");
         title.textContent = `Item ${i + 1}: ${prod.name}`;
@@ -1638,9 +1564,9 @@ function getItemSubtotal(item) {
     const prod = PRODUCTS[item.type] || PRODUCTS.custom;
     const price = getItemPrice(item);
     if (prod.isFt || (item.type === "custom" && item.length)) {
-        return item.qty * (item.length || 0) * price;
+        return (item.length || 0) * (item.qty || 0) * price;
     }
-    return item.qty * price;
+    return (item.qty || 0) * price;
 }
 
 function updateTotalAndFasteners() {
@@ -1773,106 +1699,33 @@ function generateOrderText() {
 
     txt += "\nTOTAL: $" + document.getElementById("grand-total").textContent + "\n";
 
-    if (document.getElementById("special-instr").value) {
-        txt += "\nSPECIAL INSTRUCTIONS:\n" + document.getElementById("special-instr").value + "\n";
-    }
+    if (document.getElementById("pic-frame").checked) txt += "\nPicture Framing: Yes\n";
+    if (document.getElementById("stairs").checked) txt += "Stairs: Yes\n";
 
-    if (document.getElementById("del-date").value) {
-        txt += "\nPREFERRED DELIVERY DATE: " + document.getElementById("del-date").value + "\n";
-    }
+    const special = document.getElementById("special-instr").value;
+    if (special) txt += "\nSpecial Instructions:\n" + special + "\n";
+
+    const internal = document.getElementById("internal-notes").value;
+    if (internal) txt += "\nInternal Notes:\n" + internal + "\n";
+
+    const ship = document.getElementById("ship-addr").value;
+    if (ship) txt += "\nShipping Address:\n" + ship + "\n";
+
+    const delDate = document.getElementById("del-date").value;
+    if (delDate) txt += "\nPreferred Delivery: " + delDate + "\n";
 
     return txt;
 }
 
-function generatePDF() {
+function submitOrder() {
     if (!validateRequired()) return;
 
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    let yPosition = 10;
+    const txt = generateOrderText();
+    const subject = "AmeriDex Order - " + document.getElementById("cust-name").value;
+    const mailto = "mailto:orders@ameridex.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(txt);
 
-    doc.setFontSize(18);
-    doc.text("AmeriDex Order Form", pageWidth / 2, yPosition, { align: "center" });
-    yPosition += 10;
-
-    doc.setFontSize(12);
-    doc.text("Customer Information", 10, yPosition);
-    yPosition += 8;
-
-    doc.setFontSize(10);
-    const name = document.getElementById("cust-name").value;
-    const company = document.getElementById("cust-company").value || "N/A";
-    const address = document.getElementById("cust-address").value.replace(/\n/g, ", ");
-    const phone = document.getElementById("cust-phone").value;
-    const email = document.getElementById("cust-email").value;
-
-    doc.text(`Name: ${name}`, 10, yPosition);
-    yPosition += 6;
-    doc.text(`Company: ${company}`, 10, yPosition);
-    yPosition += 6;
-    doc.text(`Address: ${address}`, 10, yPosition);
-    yPosition += 6;
-    doc.text(`Phone: ${phone}`, 10, yPosition);
-    yPosition += 6;
-    doc.text(`Email: ${email}`, 10, yPosition);
-    yPosition += 12;
-
-    doc.setFontSize(12);
-    doc.text("Line Items", 10, yPosition);
-    yPosition += 8;
-
-    doc.setFontSize(9);
-    const headers = ["Product", "Color", "Length", "Qty", "Price", "Subtotal"];
-    const widths = [50, 25, 20, 15, 25, 30];
-    let xPos = 10;
-
-    headers.forEach((h, i) => {
-        doc.text(h, xPos, yPosition);
-        xPos += widths[i];
-    });
-    yPosition += 7;
-
-    doc.setFontSize(8);
-    lineItems.forEach(item => {
-        const prod = PRODUCTS[item.type] || PRODUCTS.custom;
-        const price = getItemPrice(item);
-        const sub = getItemSubtotal(item);
-
-        let desc = prod.name.substring(0, 25);
-        let color = item.color || "";
-        let length = item.length ? item.length.toString() : "N/A";
-        let qty = item.qty.toString();
-        let priceStr = "$" + price.toFixed(2);
-        let subStr = "$" + sub.toFixed(2);
-
-        xPos = 10;
-        doc.text(desc, xPos, yPosition);
-        xPos += widths[0];
-        doc.text(color, xPos, yPosition);
-        xPos += widths[1];
-        doc.text(length, xPos, yPosition);
-        xPos += widths[2];
-        doc.text(qty, xPos, yPosition);
-        xPos += widths[3];
-        doc.text(priceStr, xPos, yPosition);
-        xPos += widths[4];
-        doc.text(subStr, xPos, yPosition);
-
-        yPosition += 6;
-
-        if (yPosition > pageHeight - 20) {
-            doc.addPage();
-            yPosition = 10;
-        }
-    });
-
-    yPosition += 6;
-    doc.setFontSize(11);
-    doc.text(`Total: ${document.getElementById("grand-total").textContent}`, 10, yPosition, { style: "bold" });
-
-    doc.save("AmeriDex-Order.pdf");
+    window.location.href = mailto;
+    document.getElementById("success-msg").style.display = "block";
 }
 
 function showReview() {
@@ -1886,16 +1739,15 @@ function showReview() {
     reviewItems.innerHTML = "";
     lineItems.forEach((item, i) => {
         const prod = PRODUCTS[item.type] || PRODUCTS.custom;
-        const price = getItemPrice(item);
         const sub = getItemSubtotal(item);
-
+        let desc = prod.name;
+        if (prod.hasColor && item.color) desc += " (" + item.color + ")";
+        
         const itemDiv = document.createElement("div");
-        itemDiv.style.marginBottom = "0.75rem";
+        itemDiv.className = "review-item";
         itemDiv.innerHTML = `
-            <strong>${prod.name}</strong><br>
-            ${item.color ? 'Color: ' + item.color + '<br>' : ''}
-            ${item.length ? 'Length: ' + item.length + ' ft | ' : ''}
-            Qty: ${item.qty} @ $${price.toFixed(2)} = <strong>$${sub.toFixed(2)}</strong>
+            <span class="review-item-label">${i + 1}. ${desc}</span>
+            <span>$${sub.toFixed(2)}</span>
         `;
         reviewItems.appendChild(itemDiv);
     });
@@ -1904,17 +1756,61 @@ function showReview() {
     reviewModal.classList.add("active");
 }
 
-function submitOrder() {
-    const orderText = generateOrderText();
-    const mailto = `mailto:${document.getElementById("cust-email").value}?subject=AmeriDex Order Confirmation&body=${encodeURIComponent(orderText)}`;
-    window.location.href = mailto;
-    document.getElementById("success-msg").style.display = "block";
+function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    let y = 20;
+    doc.setFontSize(18);
+    doc.text("AmeriDex Order", 20, y);
+    y += 10;
+
+    doc.setFontSize(12);
+    doc.text("Customer Information", 20, y);
+    y += 7;
+    doc.setFontSize(10);
+    doc.text("Name: " + document.getElementById("cust-name").value, 20, y);
+    y += 5;
+    doc.text("Email: " + document.getElementById("cust-email").value, 20, y);
+    y += 5;
+    doc.text("Phone: " + document.getElementById("cust-phone").value, 20, y);
+    y += 10;
+
+    doc.setFontSize(12);
+    doc.text("Line Items", 20, y);
+    y += 7;
+    doc.setFontSize(10);
+
+    lineItems.forEach((item, i) => {
+        const prod = PRODUCTS[item.type] || PRODUCTS.custom;
+        const sub = getItemSubtotal(item);
+        let desc = prod.name;
+        if (prod.hasColor && item.color) desc += " (" + item.color + ")";
+        doc.text(`${i + 1}. ${desc} - $${sub.toFixed(2)}`, 20, y);
+        y += 5;
+    });
+
+    y += 5;
+    doc.setFontSize(14);
+    doc.text("Total: " + document.getElementById("grand-total").textContent, 20, y);
+
+    doc.save("ameridex-order.pdf");
 }
 
-// Initialize on load
+// Debounced resize listener for responsive behavior
+let resizeTimeout;
+window.addEventListener("resize", () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        render();
+    }, 250);
+});
+
+// Initialize
 initColorGrid();
 updateColorSelection();
-updateColorComparison();
+render();
+updateTotalAndFasteners();
 updateCustomerProgress();
 </script>
 
