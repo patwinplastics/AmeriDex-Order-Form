@@ -38,6 +38,7 @@
         padding: 1.5rem 1.25rem 2.5rem;
     }
 
+    /* MODIFICATION 1: Removed sticky positioning */
     header.app-header {
         background: linear-gradient(135deg, #2563eb, #1e40af);
         color: #fff;
@@ -45,9 +46,7 @@
         border-radius: 0 0 var(--radius-card) var(--radius-card);
         box-shadow: var(--shadow-soft);
         text-align: center;
-        position: sticky;
-        top: 0;
-        z-index: 5;
+        /* Removed: position: sticky; top: 0; z-index: 5; */
     }
 
     header.app-header img {
@@ -500,6 +499,13 @@
 
     .btn-ghost:hover { background-color: #f9fafb; }
 
+    .btn-success {
+        background-color: var(--success);
+        color: #ffffff;
+    }
+
+    .btn-success:hover { background-color: #15803d; }
+
     .btn-sm {
         padding: 0.4rem 0.8rem;
         font-size: 0.8rem;
@@ -644,6 +650,119 @@
         }
 
         .btn { padding: 0.6rem 1.2rem; font-size: 0.85rem; }
+    }
+
+    /* Print Styles */
+    @media print {
+        body {
+            background: white;
+            font-size: 11pt;
+        }
+        
+        .page-shell {
+            max-width: 100%;
+            padding: 0;
+        }
+        
+        header.app-header {
+            background: white !important;
+            color: black !important;
+            box-shadow: none;
+            padding: 1rem;
+            border-bottom: 2px solid #2563eb;
+        }
+        
+        header.app-header h1 {
+            color: #2563eb;
+        }
+        
+        header.app-header p.header-sub {
+            color: #666;
+        }
+        
+        .card {
+            box-shadow: none;
+            border: 1px solid #ddd;
+            page-break-inside: avoid;
+        }
+        
+        .btn, .btn-add-row, .btn-undo, .btn-remove-row,
+        #calculator, #colors, .actions-row,
+        .no-print {
+            display: none !important;
+        }
+        
+        #desktop-table-container {
+            display: block !important;
+        }
+        
+        #mobile-items-container {
+            display: none !important;
+        }
+        
+        .modal {
+            display: none !important;
+        }
+        
+        footer.app-footer {
+            margin-top: 2rem;
+            border-top: 1px solid #ddd;
+            padding-top: 1rem;
+        }
+    }
+
+    /* Customer Quote Print - hide internal notes */
+    @media print {
+        body.print-customer-quote #internal-notes,
+        body.print-customer-quote label[for="internal-notes"],
+        body.print-customer-quote .internal-only {
+            display: none !important;
+        }
+    }
+
+    /* Dropdown menu for print options */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: white;
+        min-width: 200px;
+        box-shadow: 0 -8px 16px rgba(0,0,0,0.15);
+        border-radius: 10px;
+        z-index: 10;
+        margin-bottom: 8px;
+        overflow: hidden;
+    }
+
+    .dropdown-content button {
+        width: 100%;
+        padding: 12px 16px;
+        border: none;
+        background: white;
+        text-align: left;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: var(--text-main);
+        transition: background-color 0.15s;
+    }
+
+    .dropdown-content button:hover {
+        background-color: var(--primary-soft);
+    }
+
+    .dropdown-content button:first-child {
+        border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .dropdown.active .dropdown-content {
+        display: block;
     }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -829,7 +948,7 @@
                         <label for="special-instr">Special Instructions / Notes for Production</label>
                         <textarea id="special-instr" rows="3"></textarea>
                     </div>
-                    <div class="field">
+                    <div class="field internal-only">
                         <label for="internal-notes">Internal Sales Rep Notes</label>
                         <textarea id="internal-notes" rows="2"></textarea>
                     </div>
@@ -869,11 +988,21 @@
             <section class="card" style="text-align:center;">
                 <div class="actions-row">
                     <button type="button" class="btn btn-ghost" id="reset">Reset Form</button>
-                    <button type="button" class="btn btn-outline" id="pdf">Export PDF</button>
-                    <button type="button" class="btn btn-primary" id="review-btn">Review Order</button>
+                    
+                    <!-- Print Dropdown -->
+                    <div class="dropdown" id="print-dropdown">
+                        <button type="button" class="btn btn-outline" id="print-btn">Print / Export</button>
+                        <div class="dropdown-content">
+                            <button type="button" id="print-customer">Customer Quote</button>
+                            <button type="button" id="print-internal">Internal Order Form</button>
+                            <button type="button" id="export-pdf">Export as PDF</button>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary" id="review-btn">Review & Send</button>
                 </div>
                 <div id="success-msg" class="success-banner" style="display:none;">
-                    Order email prepared. Remember to attach any files in your email client before sending.
+                    Order email prepared. Check your email client to review and send.
                 </div>
             </section>
         </form>
@@ -921,9 +1050,10 @@
                 </div>
             </div>
 
-            <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem; justify-content: center;">
+            <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem; justify-content: center; flex-wrap: wrap;">
                 <button type="button" class="btn btn-ghost" id="review-back">Back to Edit</button>
-                <button type="button" class="btn btn-primary" id="review-submit">Proceed to Email</button>
+                <button type="button" class="btn btn-outline" id="review-copy">Copy to Clipboard</button>
+                <button type="button" class="btn btn-primary" id="review-submit">Open in Email</button>
             </div>
         </div>
     </div>
@@ -1151,12 +1281,20 @@ window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
         if (modal.classList.contains("active")) modal.classList.remove("active");
         if (reviewModal.classList.contains("active")) reviewModal.classList.remove("active");
+        // Close print dropdown
+        document.getElementById("print-dropdown").classList.remove("active");
     }
 });
 
 window.addEventListener("click", (e) => {
     if (e.target === modal) modal.classList.remove("active");
     if (e.target === reviewModal) reviewModal.classList.remove("active");
+    
+    // Close print dropdown when clicking outside
+    const dropdown = document.getElementById("print-dropdown");
+    if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove("active");
+    }
 });
 
 document.getElementById("reset").onclick = () => {
@@ -1179,17 +1317,61 @@ document.getElementById("reset").onclick = () => {
     document.getElementById("success-msg").style.display = "none";
 };
 
-document.getElementById("pdf").onclick = generatePDF;
+// Print dropdown toggle
+document.getElementById("print-btn").onclick = (e) => {
+    e.stopPropagation();
+    document.getElementById("print-dropdown").classList.toggle("active");
+};
+
+// Print customer quote (hides internal notes)
+document.getElementById("print-customer").onclick = () => {
+    document.getElementById("print-dropdown").classList.remove("active");
+    document.body.classList.add("print-customer-quote");
+    window.print();
+    setTimeout(() => {
+        document.body.classList.remove("print-customer-quote");
+    }, 500);
+};
+
+// Print internal order form (shows everything)
+document.getElementById("print-internal").onclick = () => {
+    document.getElementById("print-dropdown").classList.remove("active");
+    window.print();
+};
+
+// Export PDF
+document.getElementById("export-pdf").onclick = () => {
+    document.getElementById("print-dropdown").classList.remove("active");
+    generatePDF();
+};
 
 document.getElementById("review-btn").onclick = showReview;
 
 document.getElementById("review-submit").onclick = () => {
-    reviewModal.classList.remove("active");
     submitOrder();
 };
 
 document.getElementById("review-back").onclick = () => {
     reviewModal.classList.remove("active");
+};
+
+// Copy to clipboard functionality
+document.getElementById("review-copy").onclick = () => {
+    const orderText = generateOrderText();
+    navigator.clipboard.writeText(orderText).then(() => {
+        const btn = document.getElementById("review-copy");
+        const originalText = btn.textContent;
+        btn.textContent = "Copied!";
+        btn.classList.add("btn-success");
+        btn.classList.remove("btn-outline");
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.classList.remove("btn-success");
+            btn.classList.add("btn-outline");
+        }, 2000);
+    }).catch(err => {
+        alert("Failed to copy. Please try again or manually select and copy.");
+    });
 };
 
 ["pic-frame", "stairs"].forEach(id => {
@@ -1198,7 +1380,7 @@ document.getElementById("review-back").onclick = () => {
     });
 });
 
-// UPDATED: Responsive render function
+// Responsive render function
 function render() {
     renderDesktop();
     
@@ -1307,17 +1489,20 @@ function renderDesktop() {
         td.setAttribute("data-label", "Length (ft)");
         td.className = "numeric";
         if (prod.isFt) {
-            const lenInput = document.createElement("input");
-            lenInput.type = "number";
-            lenInput.className = "len-input";
-            lenInput.value = item.length || "";
-            lenInput.step = "0.1";
-            lenInput.min = "0";
-            lenInput.oninput = e => {
-                item.length = parseFloat(e.target.value) || 0;
+            const lenSel = document.createElement("select");
+            lenSel.className = "len-input";
+            [8, 10, 12, 14, 16, 18, 20].forEach(len => {
+                const o = document.createElement("option");
+                o.value = len;
+                o.textContent = len + " ft";
+                if (len === item.length) o.selected = true;
+                lenSel.appendChild(o);
+            });
+            lenSel.onchange = e => {
+                item.length = parseInt(e.target.value) || 16;
                 updateTotalAndFasteners();
             };
-            td.appendChild(lenInput);
+            td.appendChild(lenSel);
         }
         row.appendChild(td);
 
@@ -1481,15 +1666,18 @@ function renderMobile() {
         if (prod.isFt) {
             const lengthLabel = document.createElement("label");
             lengthLabel.textContent = "Length (ft)";
-            const lengthInput = document.createElement("input");
-            lengthInput.type = "number";
-            lengthInput.value = item.length || "";
-            lengthInput.step = "0.1";
-            lengthInput.min = "0";
-            lengthInput.oninput = e => { item.length = parseFloat(e.target.value) || 0; updateTotalAndFasteners(); };
+            const lengthSel = document.createElement("select");
+            [8, 10, 12, 14, 16, 18, 20].forEach(len => {
+                const o = document.createElement("option");
+                o.value = len;
+                o.textContent = len + " ft";
+                if (len === item.length) o.selected = true;
+                lengthSel.appendChild(o);
+            });
+            lengthSel.onchange = e => { item.length = parseInt(e.target.value) || 16; updateTotalAndFasteners(); };
             const lengthDiv = document.createElement("div");
             lengthDiv.appendChild(lengthLabel);
-            lengthDiv.appendChild(lengthInput);
+            lengthDiv.appendChild(lengthSel);
             lengthQtyRow.appendChild(lengthDiv);
         }
 
@@ -1662,8 +1850,33 @@ function calculateAndSuggest() {
 }
 
 function validateRequired() {
-    const form = document.getElementById("order-form");
-    if (form && !form.reportValidity()) {
+    const name = document.getElementById("cust-name").value.trim();
+    const email = document.getElementById("cust-email").value.trim();
+    const phone = document.getElementById("cust-phone").value.trim();
+    const address = document.getElementById("cust-address").value.trim();
+
+    if (!name) {
+        alert("Please enter customer name.");
+        document.getElementById("cust-name").focus();
+        return false;
+    }
+    if (!email) {
+        alert("Please enter customer email.");
+        document.getElementById("cust-email").focus();
+        return false;
+    }
+    if (!phone) {
+        alert("Please enter customer phone.");
+        document.getElementById("cust-phone").focus();
+        return false;
+    }
+    if (!address) {
+        alert("Please enter customer address.");
+        document.getElementById("cust-address").focus();
+        return false;
+    }
+    if (lineItems.length === 0) {
+        alert("Please add at least one line item.");
         return false;
     }
 
@@ -1677,15 +1890,30 @@ function validateRequired() {
     return true;
 }
 
-function generateOrderText() {
-    let txt = "AmeriDex Order\n\nCUSTOMER:\n";
+function generateOrderText(includeInternal = true) {
+    const today = new Date().toLocaleDateString();
+    let txt = "═══════════════════════════════════════════\n";
+    txt += "          AMERIDEX ORDER / QUOTE\n";
+    txt += "═══════════════════════════════════════════\n";
+    txt += "Date: " + today + "\n\n";
+    
+    txt += "CUSTOMER INFORMATION\n";
+    txt += "───────────────────────────────────────────\n";
     txt += "Name:     " + document.getElementById("cust-name").value + "\n";
-    txt += "Company:  " + (document.getElementById("cust-company").value || "") + "\n";
-    txt += "Address:  " + document.getElementById("cust-address").value.replace(/\n/g, " | ") + "\n";
+    const company = document.getElementById("cust-company").value;
+    if (company) txt += "Company:  " + company + "\n";
+    txt += "Address:  " + document.getElementById("cust-address").value.replace(/\n/g, "\n          ") + "\n";
     txt += "Phone:    " + document.getElementById("cust-phone").value + "\n";
     txt += "Email:    " + document.getElementById("cust-email").value + "\n\n";
 
-    txt += "PRODUCTS:\n";
+    txt += "ORDER DETAILS\n";
+    txt += "───────────────────────────────────────────\n";
+    
+    if (document.getElementById("pic-frame").checked) txt += "☑ Picture Framing Required\n";
+    if (document.getElementById("stairs").checked) txt += "☑ Stairs Required\n";
+    if (document.getElementById("pic-frame").checked || document.getElementById("stairs").checked) txt += "\n";
+
+    txt += "LINE ITEMS:\n\n";
     lineItems.forEach((item, i) => {
         const prod = PRODUCTS[item.type] || PRODUCTS.custom;
         const price = getItemPrice(item);
@@ -1693,26 +1921,46 @@ function generateOrderText() {
         let desc = prod.name;
         if (item.type === "custom") desc = item.customDesc || desc;
         if (prod.hasColor && item.color) desc += " (" + item.color + ")";
+        
         txt += (i + 1) + ". " + desc + "\n";
-        txt += "   Length: " + (item.length || "N/A") + " ft, Qty: " + item.qty + ", Price: $" + price.toFixed(2) + ", Subtotal: $" + sub.toFixed(2) + "\n";
+        if (prod.isFt) {
+            txt += "   Length: " + item.length + " ft | Qty: " + item.qty + " | @ $" + price.toFixed(2) + "/ft\n";
+        } else {
+            txt += "   Qty: " + item.qty + " | @ $" + price.toFixed(2) + " each\n";
+        }
+        txt += "   Subtotal: $" + sub.toFixed(2) + "\n\n";
     });
 
-    txt += "\nTOTAL: $" + document.getElementById("grand-total").textContent + "\n";
-
-    if (document.getElementById("pic-frame").checked) txt += "\nPicture Framing: Yes\n";
-    if (document.getElementById("stairs").checked) txt += "Stairs: Yes\n";
+    txt += "───────────────────────────────────────────\n";
+    txt += "ESTIMATED TOTAL: " + document.getElementById("grand-total").textContent + "\n";
+    txt += "───────────────────────────────────────────\n\n";
 
     const special = document.getElementById("special-instr").value;
-    if (special) txt += "\nSpecial Instructions:\n" + special + "\n";
+    if (special) {
+        txt += "SPECIAL INSTRUCTIONS:\n" + special + "\n\n";
+    }
 
-    const internal = document.getElementById("internal-notes").value;
-    if (internal) txt += "\nInternal Notes:\n" + internal + "\n";
+    if (includeInternal) {
+        const internal = document.getElementById("internal-notes").value;
+        if (internal) {
+            txt += "INTERNAL NOTES (Sales Rep):\n" + internal + "\n\n";
+        }
+    }
 
     const ship = document.getElementById("ship-addr").value;
-    if (ship) txt += "\nShipping Address:\n" + ship + "\n";
+    if (ship) {
+        txt += "SHIPPING ADDRESS:\n" + ship.replace(/\n/g, "\n") + "\n\n";
+    }
 
     const delDate = document.getElementById("del-date").value;
-    if (delDate) txt += "\nPreferred Delivery: " + delDate + "\n";
+    if (delDate) {
+        txt += "PREFERRED DELIVERY DATE: " + delDate + "\n\n";
+    }
+
+    txt += "═══════════════════════════════════════════\n";
+    txt += "Thank you for choosing AmeriDex!\n";
+    txt += "www.ameridex.com\n";
+    txt += "═══════════════════════════════════════════\n";
 
     return txt;
 }
@@ -1720,12 +1968,28 @@ function generateOrderText() {
 function submitOrder() {
     if (!validateRequired()) return;
 
-    const txt = generateOrderText();
-    const subject = "AmeriDex Order - " + document.getElementById("cust-name").value;
-    const mailto = "mailto:orders@ameridex.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(txt);
-
-    window.location.href = mailto;
+    const orderText = generateOrderText(true);
+    const customerName = document.getElementById("cust-name").value;
+    const customerEmail = document.getElementById("cust-email").value;
+    const subject = "AmeriDex Quote - " + customerName;
+    
+    // Create mailto link
+    const mailto = "mailto:" + encodeURIComponent(customerEmail) + 
+                   "?subject=" + encodeURIComponent(subject) + 
+                   "&body=" + encodeURIComponent(orderText);
+    
+    // Try to open mailto
+    const mailWindow = window.open(mailto, '_blank');
+    
+    // Show success message
     document.getElementById("success-msg").style.display = "block";
+    reviewModal.classList.remove("active");
+    
+    // If mailto didn't work well (some browsers), provide fallback
+    if (!mailWindow || mailWindow.closed || typeof mailWindow.closed === 'undefined') {
+        // Fallback: try window.location
+        window.location.href = mailto;
+    }
 }
 
 function showReview() {
@@ -1757,44 +2021,120 @@ function showReview() {
 }
 
 function generatePDF() {
+    if (!validateRequired()) return;
+    
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 20;
     let y = 20;
-    doc.setFontSize(18);
-    doc.text("AmeriDex Order", 20, y);
-    y += 10;
 
-    doc.setFontSize(12);
-    doc.text("Customer Information", 20, y);
-    y += 7;
-    doc.setFontSize(10);
-    doc.text("Name: " + document.getElementById("cust-name").value, 20, y);
-    y += 5;
-    doc.text("Email: " + document.getElementById("cust-email").value, 20, y);
-    y += 5;
-    doc.text("Phone: " + document.getElementById("cust-phone").value, 20, y);
+    // Header
+    doc.setFontSize(20);
+    doc.setTextColor(37, 99, 235);
+    doc.text("AmeriDex Quote", pageWidth / 2, y, { align: "center" });
     y += 10;
-
-    doc.setFontSize(12);
-    doc.text("Line Items", 20, y);
-    y += 7;
+    
     doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text("Date: " + new Date().toLocaleDateString(), pageWidth / 2, y, { align: "center" });
+    y += 15;
+
+    // Customer Info
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.setFont(undefined, "bold");
+    doc.text("Customer Information", margin, y);
+    y += 7;
+    
+    doc.setFont(undefined, "normal");
+    doc.setFontSize(10);
+    doc.text("Name: " + document.getElementById("cust-name").value, margin, y);
+    y += 5;
+    doc.text("Email: " + document.getElementById("cust-email").value, margin, y);
+    y += 5;
+    doc.text("Phone: " + document.getElementById("cust-phone").value, margin, y);
+    y += 5;
+    
+    const address = document.getElementById("cust-address").value;
+    const addressLines = doc.splitTextToSize("Address: " + address, pageWidth - 2 * margin);
+    doc.text(addressLines, margin, y);
+    y += addressLines.length * 5 + 10;
+
+    // Line Items
+    doc.setFontSize(12);
+    doc.setFont(undefined, "bold");
+    doc.text("Order Items", margin, y);
+    y += 7;
+
+    doc.setFontSize(10);
+    doc.setFont(undefined, "normal");
 
     lineItems.forEach((item, i) => {
+        if (y > 260) {
+            doc.addPage();
+            y = 20;
+        }
+        
         const prod = PRODUCTS[item.type] || PRODUCTS.custom;
         const sub = getItemSubtotal(item);
         let desc = prod.name;
         if (prod.hasColor && item.color) desc += " (" + item.color + ")";
-        doc.text(`${i + 1}. ${desc} - $${sub.toFixed(2)}`, 20, y);
-        y += 5;
+        
+        const descLines = doc.splitTextToSize((i + 1) + ". " + desc, pageWidth - 2 * margin - 40);
+        doc.text(descLines, margin, y);
+        doc.text("$" + sub.toFixed(2), pageWidth - margin, y, { align: "right" });
+        y += descLines.length * 5;
+        
+        if (prod.isFt) {
+            doc.setTextColor(100);
+            doc.text("   " + item.length + " ft x " + item.qty + " @ $" + getItemPrice(item).toFixed(2) + "/ft", margin, y);
+            doc.setTextColor(0);
+        } else {
+            doc.setTextColor(100);
+            doc.text("   Qty: " + item.qty + " @ $" + getItemPrice(item).toFixed(2) + " each", margin, y);
+            doc.setTextColor(0);
+        }
+        y += 8;
     });
 
+    // Total
     y += 5;
+    doc.setDrawColor(37, 99, 235);
+    doc.setLineWidth(0.5);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 8;
+    
     doc.setFontSize(14);
-    doc.text("Total: " + document.getElementById("grand-total").textContent, 20, y);
+    doc.setFont(undefined, "bold");
+    doc.setTextColor(37, 99, 235);
+    doc.text("Estimated Total: " + document.getElementById("grand-total").textContent, pageWidth - margin, y, { align: "right" });
+    
+    // Special Instructions
+    const special = document.getElementById("special-instr").value;
+    if (special) {
+        y += 15;
+        doc.setFontSize(11);
+        doc.setTextColor(0);
+        doc.setFont(undefined, "bold");
+        doc.text("Special Instructions:", margin, y);
+        y += 6;
+        doc.setFont(undefined, "normal");
+        doc.setFontSize(10);
+        const specialLines = doc.splitTextToSize(special, pageWidth - 2 * margin);
+        doc.text(specialLines, margin, y);
+    }
 
-    doc.save("ameridex-order.pdf");
+    // Footer
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(150);
+        doc.text("www.ameridex.com", pageWidth / 2, 290, { align: "center" });
+    }
+
+    doc.save("AmeriDex-Quote-" + document.getElementById("cust-name").value.replace(/\s+/g, "-") + ".pdf");
 }
 
 // Debounced resize listener for responsive behavior
@@ -1809,6 +2149,7 @@ window.addEventListener("resize", () => {
 // Initialize
 initColorGrid();
 updateColorSelection();
+updateColorComparison();
 render();
 updateTotalAndFasteners();
 updateCustomerProgress();
