@@ -205,6 +205,46 @@
         text-overflow: ellipsis;
     }
 
+    /* Pattern Grid */
+    .pattern-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+    }
+
+    .pattern-card {
+        border: 2px solid var(--border-subtle);
+        border-radius: 8px;
+        padding: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: white;
+        text-align: center;
+    }
+
+    .pattern-card:hover {
+        border-color: var(--primary);
+        background: var(--primary-soft);
+    }
+
+    .pattern-card.selected {
+        border-color: var(--primary);
+        background: var(--primary-soft);
+        box-shadow: 0 0 0 2px white, 0 0 0 4px var(--primary);
+    }
+
+    .pattern-card svg {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 0.25rem;
+    }
+
+    .pattern-card-label {
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: var(--text-main);
+    }
+
     /* Color Preview Panel */
     .color-preview-panel {
         display: grid;
@@ -349,6 +389,33 @@
         color: #92400e;
     }
 
+    /* Quick Stats Bar */
+    .quick-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+        padding: 0.75rem;
+        background: linear-gradient(135deg, var(--primary-soft), #e0e7ff);
+        border-radius: 8px;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-item .stat-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+    }
+
+    .stat-item .stat-label {
+        font-size: 0.65rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+    }
+
     /* Buttons */
     .btn {
         display: inline-flex;
@@ -397,6 +464,11 @@
     .btn-ghost:hover {
         border-color: var(--danger);
         color: var(--danger);
+    }
+
+    .btn-sm {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.75rem;
     }
 
     /* 3D Viewport */
@@ -463,7 +535,7 @@
         z-index: 10;
     }
 
-    .viewport-color-indicator {
+    .viewport-info {
         position: absolute;
         top: 12px;
         right: 12px;
@@ -474,12 +546,18 @@
         font-weight: 600;
         z-index: 10;
         display: flex;
-        align-items: center;
-        gap: 0.5rem;
+        flex-direction: column;
+        gap: 0.4rem;
         border: 1px solid var(--border-subtle);
     }
 
-    .viewport-color-indicator img {
+    .viewport-info-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .viewport-info img {
         width: 24px;
         height: 24px;
         border-radius: 4px;
@@ -518,7 +596,28 @@
         to { transform: rotate(360deg); }
     }
 
-    /* Order table with manual line items */
+    /* Quote Header */
+    .quote-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background: var(--primary-soft);
+        border-radius: 8px;
+    }
+
+    @media (max-width: 768px) {
+        .quote-header {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .quote-header .field {
+        margin-bottom: 0;
+    }
+
+    /* Order table with editable line items */
     .order-table {
         width: 100%;
         border-collapse: collapse;
@@ -528,15 +627,17 @@
 
     .order-table th,
     .order-table td {
-        padding: 0.6rem;
+        padding: 0.5rem;
         border: 1px solid var(--border-subtle);
         text-align: left;
+        vertical-align: middle;
     }
 
     .order-table th {
         background: #f9fafb;
         font-weight: 600;
         color: #4b5563;
+        font-size: 0.75rem;
     }
 
     .order-table td.numeric {
@@ -563,6 +664,7 @@
         font-size: 0.8rem;
         border-radius: 6px;
         border: 1px solid var(--border-subtle);
+        background: white;
     }
 
     .line-input:focus {
@@ -571,12 +673,27 @@
         box-shadow: 0 0 0 1px rgba(37,99,235,0.2);
     }
 
+    .line-input.narrow {
+        width: 70px;
+    }
+
+    .line-input.price {
+        width: 80px;
+        text-align: right;
+    }
+
     .line-select {
         width: 100%;
         padding: 0.35rem 0.4rem;
         font-size: 0.8rem;
         border-radius: 6px;
         border: 1px solid var(--border-subtle);
+        background: white;
+    }
+
+    .line-select:focus {
+        outline: none;
+        border-color: var(--primary);
     }
 
     .btn-remove-row {
@@ -593,28 +710,61 @@
         background-color: #fecaca;
     }
 
+    .btn-edit-row {
+        background-color: #e0e7ff;
+        color: var(--primary);
+        border-radius: 999px;
+        border: none;
+        padding: 0.18rem 0.55rem;
+        font-size: 0.8rem;
+        cursor: pointer;
+        margin-right: 0.25rem;
+    }
+
+    .btn-edit-row:hover {
+        background-color: #c7d2fe;
+    }
+
     .btn-add-row {
         margin-top: 0.75rem;
         font-size: 0.85rem;
     }
 
-    .total-bar {
+    .subtotal-display {
+        font-weight: 600;
+        color: var(--primary-dark);
+    }
+
+    /* Totals Section */
+    .totals-section {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #f9fafb;
+        border-radius: 8px;
+        border: 1px solid var(--border-subtle);
+    }
+
+    .totals-row {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        padding: 1rem;
-        background: var(--primary-soft);
-        border-radius: 8px;
-        margin-top: 1rem;
+        padding: 0.4rem 0;
+        font-size: 0.9rem;
     }
 
-    .total-bar .label {
-        font-weight: 600;
-        color: #4b5563;
+    .totals-row.subtotal {
+        border-bottom: 1px dashed var(--border-subtle);
     }
 
-    .total-bar .value {
-        font-size: 1.25rem;
+    .totals-row.discount input {
+        width: 80px;
+        text-align: right;
+    }
+
+    .totals-row.grand-total {
+        border-top: 2px solid var(--primary);
+        margin-top: 0.5rem;
+        padding-top: 0.75rem;
+        font-size: 1.2rem;
         font-weight: 700;
         color: var(--primary-dark);
     }
@@ -721,114 +871,8 @@
         color: #111827;
     }
 
-    /* NEW: Pattern Selector Styles */
-    .pattern-selector {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.5rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .pattern-btn {
-        padding: 0.5rem;
-        font-size: 0.7rem;
-        font-weight: 600;
-        border: 2px solid #d1d5db;
-        background: white;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: all 0.15s ease;
-        text-align: center;
-    }
-
-    .pattern-btn:hover {
-        border-color: var(--success);
-        background: #f0fdf4;
-    }
-
-    .pattern-btn.active {
-        background: var(--success);
-        color: white;
-        border-color: var(--success);
-    }
-
-    .pattern-btn .pattern-icon {
-        font-size: 1.1rem;
-        display: block;
-        margin-bottom: 0.15rem;
-    }
-
-    /* NEW: BOM Optimizer Styles */
-    .bom-optimizer {
-        background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
-        border: 1px solid #86efac;
-        border-radius: 8px;
-        padding: 0.75rem;
-        margin-top: 0.75rem;
-    }
-
-    .bom-optimizer h4 {
-        margin: 0 0 0.5rem 0;
-        color: #166534;
-        font-size: 0.8rem;
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-    }
-
-    .bom-optimizer h4::before {
-        content: "💡";
-    }
-
-    .optimization-result {
-        font-size: 0.75rem;
-        line-height: 1.4;
-    }
-
-    .optimization-result .savings {
-        color: var(--success);
-        font-weight: 700;
-    }
-
-    .optimization-result .waste-info {
-        color: var(--warning);
-        font-weight: 600;
-    }
-
-    /* NEW: Custom Product Form Styles */
-    .custom-product-form {
-        background: #fefce8;
-        border: 1px solid #fde047;
-        border-radius: 8px;
-        padding: 1rem;
-        margin-top: 1rem;
-        display: none;
-    }
-
-    .custom-product-form.active {
-        display: block;
-    }
-
-    .custom-product-form h4 {
-        margin: 0 0 0.75rem 0;
-        color: #854d0e;
-        font-size: 0.9rem;
-    }
-
-    .custom-form-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr 1fr;
-        gap: 0.5rem;
-    }
-
-    @media (max-width: 768px) {
-        .custom-form-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-    }
-
     /* Mobile tweaks for order table */
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
         .order-table, .order-table thead, .order-table tbody, .order-table th, .order-table td, .order-table tr {
             display: block;
         }
@@ -840,24 +884,35 @@
             border: 1px solid var(--border-subtle);
             border-radius: 10px;
             background-color: #ffffff;
-            padding: 0.5rem 0.75rem;
+            padding: 0.75rem;
         }
         .order-table td {
             border: none;
-            padding: 0.25rem 0;
+            padding: 0.35rem 0;
             text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .order-table td.numeric {
             text-align: left;
         }
         .order-table td::before {
             content: attr(data-label);
-            display: block;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #6b7280;
-            margin-bottom: 0.05rem;
+            min-width: 80px;
         }
+    }
+
+    /* Edit mode highlighting */
+    tr.editing {
+        background-color: #fef3c7 !important;
+    }
+
+    tr.editing td {
+        background-color: #fef3c7;
     }
 </style>
 </head>
@@ -867,7 +922,7 @@
     <header class="app-header">
         <img src="colors/AmeriDex.png" alt="AmeriDex Logo" class="logo">
         <h1>AmeriDex 3D Deck Builder & Order Form</h1>
-        <p>Design your deck in 3D, then fine-tune the order with manual line items</p>
+        <p>Design your deck in 3D with realistic board patterns, then customize your quote</p>
     </header>
 
     <!-- 3D Builder -->
@@ -891,6 +946,27 @@
                     <div class="field">
                         <label>Height (ft)</label>
                         <input type="number" id="deck-height" value="3" min="1" max="10" step="0.5">
+                    </div>
+                    <div class="quick-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="stat-sqft">192</div>
+                            <div class="stat-label">Sq Ft</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="stat-perimeter">56</div>
+                            <div class="stat-label">Perimeter</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="stat-cost-sqft">$0.00</div>
+                            <div class="stat-label">$/Sq Ft</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <div class="control-section-title">Board Pattern</div>
+                    <div class="pattern-grid" id="pattern-grid">
+                        <!-- Patterns will be inserted by JS -->
                     </div>
                 </div>
 
@@ -922,29 +998,6 @@
                     </div>
                 </div>
 
-                <!-- NEW: Decking Pattern Section -->
-                <div class="control-section">
-                    <div class="control-section-title">Decking Pattern</div>
-                    <div class="pattern-selector" id="pattern-selector">
-                        <button type="button" class="pattern-btn active" data-pattern="standard">
-                            <span class="pattern-icon">═══</span>
-                            Standard
-                        </button>
-                        <button type="button" class="pattern-btn" data-pattern="diagonal">
-                            <span class="pattern-icon">╱╱╱</span>
-                            Diagonal
-                        </button>
-                        <button type="button" class="pattern-btn" data-pattern="herringbone">
-                            <span class="pattern-icon">⋘⋙</span>
-                            Herringbone
-                        </button>
-                        <button type="button" class="pattern-btn" data-pattern="chevron">
-                            <span class="pattern-icon">∧∧∧</span>
-                            Chevron
-                        </button>
-                    </div>
-                </div>
-
                 <div class="control-section">
                     <div class="control-section-title">Add Stairs</div>
                     <div class="stair-grid">
@@ -968,11 +1021,6 @@
                     <div class="check-row">
                         <input type="checkbox" id="add-border">
                         <label for="add-border">Picture Frame Border</label>
-                    </div>
-                    <div class="check-row">
-                        <input type="checkbox" id="add-dexerdry">
-                        <label for="add-dexerdry">Add DexerDry Seal</label>
-                        <span class="hint" id="dexerdry-hint">(0 ft)</span>
                     </div>
                     <div class="check-row" style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border-subtle);">
                         <input type="checkbox" id="add-plugs">
@@ -999,10 +1047,6 @@
                         <span>Screw Boxes:</span>
                         <span id="mat-screws">0</span>
                     </div>
-                    <div class="material-row optional" id="dexerdry-row" style="display: none;">
-                        <span>DexerDry Seal:</span>
-                        <span id="mat-dexerdry">0 ft ($0.00)</span>
-                    </div>
                     <div class="material-row optional" id="plugs-row" style="display: none;">
                         <span>Plug Boxes (optional):</span>
                         <span id="mat-plugs">0</span>
@@ -1010,14 +1054,6 @@
                     <div class="material-row">
                         <span>Estimated Total:</span>
                         <span id="mat-total">$0.00</span>
-                    </div>
-                </div>
-
-                <!-- NEW: BOM Optimizer -->
-                <div class="bom-optimizer" id="bom-optimizer">
-                    <h4>Material Optimization</h4>
-                    <div class="optimization-result" id="optimization-result">
-                        <p>Select dimensions to see optimization suggestions.</p>
                     </div>
                 </div>
 
@@ -1034,9 +1070,15 @@
                 <div class="viewport-instructions">
                     Drag to rotate | Scroll to zoom
                 </div>
-                <div class="viewport-color-indicator">
-                    <img id="viewport-color-img" src="colors/Driftwood.png" alt="Color">
-                    <span id="viewport-color-name">Driftwood</span>
+                <div class="viewport-info">
+                    <div class="viewport-info-row">
+                        <img id="viewport-color-img" src="colors/Driftwood.png" alt="Color">
+                        <span id="viewport-color-name">Driftwood</span>
+                    </div>
+                    <div class="viewport-info-row">
+                        <span style="font-size: 0.7rem; color: var(--text-muted);">Pattern:</span>
+                        <span id="viewport-pattern-name" style="font-size: 0.75rem;">Standard</span>
+                    </div>
                 </div>
                 <div class="texture-loading" id="texture-loading">
                     <div class="spinner"></div>
@@ -1080,110 +1122,77 @@
         </div>
     </section>
 
-    <!-- Order Details -->
+    <!-- Order Details: Fully Editable Line Items -->
     <section class="card">
         <h2 class="card-title">Order Details</h2>
-        <p class="card-subtitle">Add products from dropdown, enter custom items, or edit any line directly.</p>
+        <p class="card-subtitle">Each line item is fully editable. Use dropdowns to select products and colors, or type custom values.</p>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+        <!-- Quote Info -->
+        <div class="quote-header">
             <div class="field">
-                <label>Select Product</label>
-                <select id="product-select" class="line-select">
-                    <option value="">-- Choose Product --</option>
-                    <optgroup label="Deck Boards">
-                        <option value="system">AmeriDex System Boards (per ft)</option>
-                        <option value="solid">Solid Edge Deck Boards (per ft)</option>
-                    </optgroup>
-                    <optgroup label="DexerDry Seal ($2.00/ft)">
-                        <option value="dexerdry-50">DexerDry Seal - 50 ft Box ($100)</option>
-                        <option value="dexerdry-100">DexerDry Seal - 100 ft Box ($200)</option>
-                        <option value="dexerdry-240">DexerDry Seal - 240 ft Box ($480)</option>
-                    </optgroup>
-                    <optgroup label="Hardware">
-                        <option value="screws">Epoxy-Coated Screws (box of 375)</option>
-                        <option value="plugs">Color-Matching Plugs (box)</option>
-                    </optgroup>
-                    <optgroup label="Custom">
-                        <option value="custom">+ Add Custom Product</option>
-                    </optgroup>
-                </select>
+                <label>Quote #</label>
+                <input type="text" id="quote-number" placeholder="Auto-generated">
             </div>
             <div class="field">
-                <label>Quantity</label>
-                <input type="number" id="product-qty" class="line-input" value="1" min="0.1" step="0.1">
+                <label>Quote Date</label>
+                <input type="date" id="quote-date">
+            </div>
+            <div class="field">
+                <label>Valid Until</label>
+                <input type="date" id="quote-valid">
             </div>
         </div>
-
-        <!-- NEW: Custom Product Entry Form -->
-        <div class="custom-product-form" id="custom-product-form">
-            <h4>Custom Product Entry</h4>
-            <div class="custom-form-grid">
-                <div class="field">
-                    <label>Product Name *</label>
-                    <input type="text" id="custom-product-name" class="line-input" placeholder="Enter product name">
-                </div>
-                <div class="field">
-                    <label>Unit Price ($) *</label>
-                    <input type="number" id="custom-unit-price" class="line-input" value="0" min="0" step="0.01">
-                </div>
-                <div class="field">
-                    <label>Unit Type</label>
-                    <select id="custom-unit-type" class="line-select">
-                        <option value="each">Each</option>
-                        <option value="ft">Per Foot</option>
-                        <option value="box">Per Box</option>
-                        <option value="sqft">Per Sq Ft</option>
-                        <option value="bundle">Per Bundle</option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label>Color</label>
-                    <select id="custom-color" class="line-select">
-                        <option value="">N/A</option>
-                        <option value="Driftwood">Driftwood</option>
-                        <option value="Khaki">Khaki</option>
-                        <option value="Slate">Slate</option>
-                        <option value="Beachwood">Beachwood</option>
-                        <option value="Chestnut">Chestnut</option>
-                        <option value="Redwood">Redwood</option>
-                        <option value="Hazelnut">Hazelnut</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <button type="button" class="btn btn-outline" id="btn-add-preset" style="margin-bottom: 1rem; width: 100%;">
-            + Add Selected Product
-        </button>
 
         <table class="order-table" id="order-table">
             <thead>
                 <tr>
-                    <th>Product</th>
-                    <th>Color</th>
-                    <th>Length/Unit</th>
-                    <th>Qty</th>
-                    <th>Unit Price</th>
-                    <th>Subtotal</th>
-                    <th>Actions</th>
+                    <th style="width: 25%;">Product</th>
+                    <th style="width: 15%;">Color</th>
+                    <th style="width: 10%;">Length</th>
+                    <th style="width: 10%;">Qty</th>
+                    <th style="width: 12%;">Unit Price</th>
+                    <th style="width: 12%;">Subtotal</th>
+                    <th style="width: 16%;">Actions</th>
                 </tr>
             </thead>
             <tbody id="order-tbody">
-                <tr>
+                <tr id="empty-row">
                     <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">
-                        Design your deck above and click "Apply to Order Form" or add items from the dropdown.
+                        Design your deck above and click "Apply to Order Form" or click "Add Line Item" below.
                     </td>
                 </tr>
             </tbody>
         </table>
 
-        <button type="button" class="btn btn-ghost btn-add-row" id="btn-add-row">
-            + Add Manual Line Item
+        <button type="button" class="btn btn-outline btn-add-row" id="btn-add-row">
+            + Add Line Item
         </button>
 
-        <div class="total-bar">
-            <span class="label">Estimated Total</span>
-            <span class="value" id="grand-total">$0.00</span>
+        <div class="totals-section">
+            <div class="totals-row subtotal">
+                <span>Subtotal:</span>
+                <span id="order-subtotal">$0.00</span>
+            </div>
+            <div class="totals-row discount">
+                <span>Discount:</span>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <input type="number" id="discount-percent" class="line-input" style="width: 60px; text-align: right;" value="0" min="0" max="100" step="0.5">
+                    <span>%</span>
+                    <span style="margin-left: 1rem;" id="discount-amount">-$0.00</span>
+                </div>
+            </div>
+            <div class="totals-row">
+                <span>Tax Rate:</span>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <input type="number" id="tax-rate" class="line-input" style="width: 60px; text-align: right;" value="6.625" min="0" max="15" step="0.125">
+                    <span>%</span>
+                    <span style="margin-left: 1rem;" id="tax-amount">$0.00</span>
+                </div>
+            </div>
+            <div class="totals-row grand-total">
+                <span>Grand Total:</span>
+                <span id="grand-total">$0.00</span>
+            </div>
         </div>
     </section>
 
@@ -1200,8 +1209,9 @@
     <section class="card">
         <div class="actions-row">
             <button type="button" class="btn btn-ghost" id="btn-reset-form">Reset Form</button>
+            <button type="button" class="btn btn-outline" id="btn-save-quote">Save Quote</button>
             <button type="button" class="btn btn-primary" id="btn-pdf">Export PDF</button>
-            <button type="button" class="btn btn-primary" id="btn-submit">Submit Order</button>
+            <button type="button" class="btn btn-success" id="btn-submit">Submit Order</button>
         </div>
     </section>
 
@@ -1246,6 +1256,7 @@ const COLOR_IMAGES = {
     Hazelnut: "Hazelnut.png"
 };
 
+// Fallback hex colors
 const COLOR_HEX_FALLBACK = {
     Driftwood: 0xA89F91,
     Khaki: 0xC2B280,
@@ -1256,120 +1267,134 @@ const COLOR_HEX_FALLBACK = {
     Hazelnut: 0x8B7355
 };
 
-// PRODUCTS - UPDATED with DexerDry Seal at correct $2.00/ft pricing
+// BOARD PATTERNS
+const PATTERNS = {
+    standard: { name: "Standard", angle: 0 },
+    diagonal: { name: "Diagonal 45°", angle: 45 },
+    herringbone: { name: "Herringbone", angle: 0, isHerringbone: true },
+    chevron: { name: "Chevron", angle: 0, isChevron: true },
+    doubleHerringbone: { name: "Double Herringbone", angle: 0, isDoubleHerringbone: true }
+};
+
+// PRODUCTS
 const PRODUCTS = {
     system: {
-        name: "AmeriDex System Boards (Grooved + Dexerdry included)",
+        name: "AmeriDex System Boards (Grooved + Dexerdry)",
         price: 8.0,
-        unit: "ft",
+        isFt: true,
         hasColor: true
     },
     solid: {
         name: "Solid Edge Deck Boards",
         price: 6.0,
-        unit: "ft",
+        isFt: true,
         hasColor: true
-    },
-    // FIXED: DexerDry Seal - $2.00 per linear foot
-    "dexerdry-50": {
-        name: "DexerDry Seal - 50 ft Box",
-        price: 100.00,  // $2.00/ft × 50 ft
-        unit: "box",
-        hasColor: false,
-        linearFeet: 50
-    },
-    "dexerdry-100": {
-        name: "DexerDry Seal - 100 ft Box",
-        price: 200.00,  // $2.00/ft × 100 ft
-        unit: "box",
-        hasColor: false,
-        linearFeet: 100
-    },
-    "dexerdry-240": {
-        name: "DexerDry Seal - 240 ft Box",
-        price: 480.00,  // $2.00/ft × 240 ft
-        unit: "box",
-        hasColor: false,
-        linearFeet: 240
     },
     screws: {
         name: "Epoxy-Coated Screws (box of 375)",
         price: 37.0,
-        unit: "box",
+        isFt: false,
         hasColor: false
     },
     plugs: {
         name: "Color-Matching Plugs",
         price: 33.79,
-        unit: "box",
+        isFt: false,
         hasColor: true
+    },
+    fascia: {
+        name: "Fascia Board (12ft)",
+        price: 45.0,
+        isFt: false,
+        hasColor: true
+    },
+    railing: {
+        name: "Railing Kit (6ft section)",
+        price: 125.0,
+        isFt: false,
+        hasColor: false
+    },
+    post: {
+        name: "Railing Post",
+        price: 35.0,
+        isFt: false,
+        hasColor: false
+    },
+    custom: {
+        name: "Custom Item",
+        price: 0,
+        isFt: false,
+        hasColor: false
     }
 };
 
-// NEW: Pattern waste factors based on industry standards
-const PATTERN_WASTE_FACTORS = {
-    standard: 1.10,     // 10% waste
-    diagonal: 1.15,     // 15% waste
-    herringbone: 1.25,  // 25% waste
-    chevron: 1.20       // 20% waste
-};
-
-const PATTERN_INFO = {
-    standard: { name: "Standard (Parallel)", joistSpacing: 16, difficulty: "Easy" },
-    diagonal: { name: "Diagonal (45°)", joistSpacing: 12, difficulty: "Moderate" },
-    herringbone: { name: "Herringbone", joistSpacing: 12, difficulty: "Advanced" },
-    chevron: { name: "Chevron", joistSpacing: 12, difficulty: "Advanced" }
-};
-
-// Board geometry constants
+// Board geometry data
 const BOARD_WIDTH_INCH = 5.5;
 const BOARD_THICKNESS_INCH = 1;
 const GAP_INCH = 0.125;
 const BOARD_WIDTH = BOARD_WIDTH_INCH / 12;
 const BOARD_THICK = BOARD_THICKNESS_INCH / 12;
 const EFFECTIVE_WIDTH = (BOARD_WIDTH_INCH + GAP_INCH) / 12;
+const WASTE_FACTOR = 1.1;
 const SCREWS_PER_BOX = 375;
 const STAIR_RISE = 7.5 / 12;
 const STAIR_RUN = 10.5 / 12;
-const DEXERDRY_PRICE_PER_FT = 2.00;
 
-// State
+// 3D State
 let state = {
     length: 16,
     width: 12,
     height: 3,
     color: "Driftwood",
-    boardLength: 16,
     pattern: "standard",
+    boardLength: 16,
     stairs: { front: false, back: false, left: false, right: false },
     stairWidth: 4,
     railing: false,
     border: false,
-    includeDexerDry: false,
     includePlugs: false,
     estimates: {
         numStockBoards: 0,
         borderBoards: 0,
         stairTreads: 0,
         screwBoxes: 0,
-        dexerDryFeet: 0,
         plugBoxes: 0,
         total: 0
     }
 };
 
-let orderLines = [];
+// Three.js globals
 let scene, camera, renderer, controls;
-let deckGroup, houseGroup;
+let deckGroup;
 let deckTextures = {};
 let textureLoader = new THREE.TextureLoader();
 
+// Generate quote number
+function generateQuoteNumber() {
+    const date = new Date();
+    const num = Math.floor(Math.random() * 9000) + 1000;
+    return `ADX-${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}-${num}`;
+}
+
+// Initialize dates
+function initializeDates() {
+    const today = new Date();
+    const validDate = new Date(today);
+    validDate.setDate(validDate.getDate() + 30);
+
+    document.getElementById("quote-date").value = today.toISOString().split('T')[0];
+    document.getElementById("quote-valid").value = validDate.toISOString().split('T')[0];
+    document.getElementById("quote-number").value = generateQuoteNumber();
+}
+
+// Show texture loading badge
 function showTextureLoading(show) {
     const el = document.getElementById("texture-loading");
     if (show) el.classList.add("visible");
     else el.classList.remove("visible");
 }
 
+// Load one color texture
 function loadColorTexture(colorName) {
     return new Promise((resolve, reject) => {
         if (deckTextures[colorName]) {
@@ -1399,10 +1424,12 @@ function loadColorTexture(colorName) {
     });
 }
 
+// Preload all textures
 function preloadAllTextures() {
     COLORS.forEach(c => loadColorTexture(c).catch(() => {}));
 }
 
+// Create deck material using texture if available
 function createDeckMaterial(colorName) {
     if (deckTextures[colorName]) {
         const tex = deckTextures[colorName].clone();
@@ -1421,103 +1448,7 @@ function createDeckMaterial(colorName) {
     });
 }
 
-// NEW: Build house model
-function buildHouse() {
-    if (houseGroup) {
-        while (houseGroup.children.length) {
-            const child = houseGroup.children[0];
-            if (child.geometry) child.geometry.dispose();
-            if (child.material) child.material.dispose();
-            houseGroup.remove(child);
-        }
-    } else {
-        houseGroup = new THREE.Group();
-        scene.add(houseGroup);
-    }
-
-    const sidingMat = new THREE.MeshStandardMaterial({ color: 0xE8DCC4, roughness: 0.9 });
-    const roofMat = new THREE.MeshStandardMaterial({ color: 0x4A4A4A, roughness: 0.95 });
-    const trimMat = new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.7 });
-    const windowMat = new THREE.MeshStandardMaterial({ color: 0x87CEEB, roughness: 0.1, metalness: 0.3 });
-    const doorMat = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.8 });
-
-    const houseWidth = 20;
-    const houseDepth = 16;
-    const houseHeight = 10;
-    const roofHeight = 6;
-    const houseX = -state.length / 2 - houseWidth / 2 - 2;
-
-    // Main body
-    const bodyGeo = new THREE.BoxGeometry(houseWidth, houseHeight, houseDepth);
-    const body = new THREE.Mesh(bodyGeo, sidingMat);
-    body.position.set(houseX, houseHeight / 2, 0);
-    body.castShadow = true;
-    body.receiveShadow = true;
-    houseGroup.add(body);
-
-    // Roof
-    const roofShape = new THREE.Shape();
-    roofShape.moveTo(-houseWidth / 2 - 1, 0);
-    roofShape.lineTo(houseWidth / 2 + 1, 0);
-    roofShape.lineTo(0, roofHeight);
-    roofShape.lineTo(-houseWidth / 2 - 1, 0);
-    const roofGeo = new THREE.ExtrudeGeometry(roofShape, { steps: 1, depth: houseDepth + 2, bevelEnabled: false });
-    const roof = new THREE.Mesh(roofGeo, roofMat);
-    roof.rotation.x = Math.PI / 2;
-    roof.position.set(houseX, houseHeight, houseDepth / 2 + 1);
-    roof.castShadow = true;
-    houseGroup.add(roof);
-
-    // Door
-    const doorGeo = new THREE.BoxGeometry(0.2, 7, 3);
-    const door = new THREE.Mesh(doorGeo, doorMat);
-    door.position.set(houseX + houseWidth / 2 + 0.1, 3.5, 0);
-    houseGroup.add(door);
-
-    // Door frame
-    const frameGeo = new THREE.BoxGeometry(0.3, 7.5, 3.5);
-    const frame = new THREE.Mesh(frameGeo, trimMat);
-    frame.position.set(houseX + houseWidth / 2 + 0.05, 3.75, 0);
-    houseGroup.add(frame);
-
-    // Windows
-    const windowGeo = new THREE.BoxGeometry(0.2, 3, 2.5);
-    const windowFrameGeo = new THREE.BoxGeometry(0.25, 3.4, 2.9);
-
-    [{ z: -4 }, { z: 4 }].forEach(pos => {
-        const wFrame = new THREE.Mesh(windowFrameGeo, trimMat);
-        wFrame.position.set(houseX + houseWidth / 2 + 0.08, houseHeight * 0.6, pos.z);
-        houseGroup.add(wFrame);
-
-        const wPane = new THREE.Mesh(windowGeo, windowMat);
-        wPane.position.set(houseX + houseWidth / 2 + 0.12, houseHeight * 0.6, pos.z);
-        houseGroup.add(wPane);
-    });
-
-    // Foundation
-    const foundGeo = new THREE.BoxGeometry(houseWidth + 0.5, 0.5, houseDepth + 0.5);
-    const foundMat = new THREE.MeshStandardMaterial({ color: 0x666666, roughness: 0.95 });
-    const foundation = new THREE.Mesh(foundGeo, foundMat);
-    foundation.position.set(houseX, 0.25, 0);
-    foundation.receiveShadow = true;
-    houseGroup.add(foundation);
-
-    // Chimney
-    const chimGeo = new THREE.BoxGeometry(2, 4, 2);
-    const chimMat = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.9 });
-    const chimney = new THREE.Mesh(chimGeo, chimMat);
-    chimney.position.set(houseX - 4, houseHeight + roofHeight * 0.4, -3);
-    chimney.castShadow = true;
-    houseGroup.add(chimney);
-
-    // Ledger board
-    const ledgerGeo = new THREE.BoxGeometry(0.2, 1, state.width + 2);
-    const ledgerMat = new THREE.MeshStandardMaterial({ color: 0x654321, roughness: 0.85 });
-    const ledger = new THREE.Mesh(ledgerGeo, ledgerMat);
-    ledger.position.set(houseX + houseWidth / 2 + 0.1, state.height - 0.5, 0);
-    houseGroup.add(ledger);
-}
-
+// Init scene
 function initScene() {
     const container = document.getElementById("viewport-container");
     const canvas = document.getElementById("deck-canvas");
@@ -1525,10 +1456,18 @@ function initScene() {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87CEEB);
 
-    camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 500);
-    camera.position.set(25, 18, 25);
+    camera = new THREE.PerspectiveCamera(
+        50,
+        container.clientWidth / container.clientHeight,
+        0.1,
+        500
+    );
+    camera.position.set(20, 15, 20);
 
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: true
+    });
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
@@ -1553,24 +1492,25 @@ function initScene() {
     sun.shadow.mapSize.height = 2048;
     sun.shadow.camera.near = 1;
     sun.shadow.camera.far = 100;
-    sun.shadow.camera.left = -40;
-    sun.shadow.camera.right = 40;
-    sun.shadow.camera.top = 40;
-    sun.shadow.camera.bottom = -40;
+    sun.shadow.camera.left = -30;
+    sun.shadow.camera.right = 30;
+    sun.shadow.camera.top = 30;
+    sun.shadow.camera.bottom = -30;
     scene.add(sun);
 
     const fill = new THREE.DirectionalLight(0xffffff, 0.4);
     fill.position.set(-10, 10, -10);
     scene.add(fill);
 
-    const groundGeo = new THREE.PlaneGeometry(100, 100);
+    // Ground (grass only, no house)
+    const groundGeo = new THREE.PlaneGeometry(80, 80);
     const groundMat = new THREE.MeshLambertMaterial({ color: 0x7CBA5F });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
     ground.receiveShadow = true;
     scene.add(ground);
 
-    const grid = new THREE.GridHelper(100, 100, 0x5CAD4A, 0x5CAD4A);
+    const grid = new THREE.GridHelper(80, 80, 0x5CAD4A, 0x5CAD4A);
     grid.position.y = 0.01;
     grid.material.transparent = true;
     grid.material.opacity = 0.3;
@@ -1582,8 +1522,8 @@ function initScene() {
     preloadAllTextures();
 
     loadColorTexture(state.color)
-        .then(() => { buildDeck(); buildHouse(); })
-        .catch(() => { buildDeck(); buildHouse(); });
+        .then(buildDeck)
+        .catch(buildDeck);
 
     animate();
     window.addEventListener("resize", onResize);
@@ -1602,6 +1542,7 @@ function animate() {
     renderer.render(scene, camera);
 }
 
+// Build deck with pattern support
 function buildDeck() {
     while (deckGroup.children.length) {
         const child = deckGroup.children[0];
@@ -1613,10 +1554,16 @@ function buildDeck() {
         deckGroup.remove(child);
     }
 
-    const { length, width, height, color, stairs, stairWidth, railing, border } = state;
+    const { length, width, height, color, pattern, stairs, stairWidth, railing, border } = state;
 
-    const supportMat = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.9 });
-    const railMat = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.7 });
+    const supportMat = new THREE.MeshStandardMaterial({
+        color: 0x8B4513,
+        roughness: 0.9
+    });
+    const railMat = new THREE.MeshStandardMaterial({
+        color: 0x333333,
+        roughness: 0.7
+    });
 
     // Support posts
     const postSize = 0.33;
@@ -1657,12 +1604,55 @@ function buildDeck() {
     rimRight.castShadow = true;
     deckGroup.add(rimRight);
 
-    // Deck boards
+    // Build decking based on pattern
+    buildDeckingPattern(pattern, length, width, height, color);
+
+    // Picture frame border
+    if (border) {
+        buildPictureFrame(length, width, height, color);
+    }
+
+    // Railing
+    if (railing) {
+        buildRailing(length, width, height, stairs, railMat);
+    }
+
+    // Build stairs
+    const activeSide = Object.keys(stairs).find(side => stairs[side]);
+    if (activeSide) {
+        buildStairs(activeSide, stairWidth, height);
+    }
+
+    updateMaterialEstimates();
+    updateQuickStats();
+}
+
+// Build decking based on selected pattern
+function buildDeckingPattern(pattern, length, width, height, color) {
+    const patternConfig = PATTERNS[pattern];
+
+    if (patternConfig.isHerringbone) {
+        buildHerringbonePattern(length, width, height, color);
+    } else if (patternConfig.isChevron) {
+        buildChevronPattern(length, width, height, color);
+    } else if (patternConfig.isDoubleHerringbone) {
+        buildDoubleHerringbonePattern(length, width, height, color);
+    } else if (patternConfig.angle === 45) {
+        buildDiagonalPattern(length, width, height, color);
+    } else {
+        buildStandardPattern(length, width, height, color);
+    }
+}
+
+// Standard parallel pattern
+function buildStandardPattern(length, width, height, color) {
     const numBoards = Math.ceil(length / EFFECTIVE_WIDTH);
+    const boardDepth = width - 0.1;
+
     for (let i = 0; i < numBoards; i++) {
         const xPos = -length / 2 + BOARD_WIDTH / 2 + i * EFFECTIVE_WIDTH;
         if (xPos < length / 2) {
-            const boardGeo = new THREE.BoxGeometry(BOARD_WIDTH, BOARD_THICK, width - 0.1);
+            const boardGeo = new THREE.BoxGeometry(BOARD_WIDTH, BOARD_THICK, boardDepth);
             const boardMat = createDeckMaterial(color);
             if (boardMat.map) {
                 boardMat.map = boardMat.map.clone();
@@ -1676,94 +1666,287 @@ function buildDeck() {
             deckGroup.add(board);
         }
     }
-
-    // Picture frame border
-    if (border) {
-        const frameGeo1 = new THREE.BoxGeometry(length + BOARD_WIDTH * 2, BOARD_THICK * 1.2, BOARD_WIDTH);
-        const frameFront = new THREE.Mesh(frameGeo1, createDeckMaterial(color));
-        frameFront.position.set(0, height + BOARD_THICK / 2 + 0.01, width / 2 + BOARD_WIDTH / 2);
-        frameFront.castShadow = true;
-        deckGroup.add(frameFront);
-
-        const frameBack = new THREE.Mesh(frameGeo1, createDeckMaterial(color));
-        frameBack.position.set(0, height + BOARD_THICK / 2 + 0.01, -width / 2 - BOARD_WIDTH / 2);
-        frameBack.castShadow = true;
-        deckGroup.add(frameBack);
-
-        const frameGeo2 = new THREE.BoxGeometry(BOARD_WIDTH, BOARD_THICK * 1.2, width);
-        const frameLeft = new THREE.Mesh(frameGeo2, createDeckMaterial(color));
-        frameLeft.position.set(-length / 2 - BOARD_WIDTH / 2, height + BOARD_THICK / 2 + 0.01, 0);
-        frameLeft.castShadow = true;
-        deckGroup.add(frameLeft);
-
-        const frameRight = new THREE.Mesh(frameGeo2, createDeckMaterial(color));
-        frameRight.position.set(length / 2 + BOARD_WIDTH / 2, height + BOARD_THICK / 2 + 0.01, 0);
-        frameRight.castShadow = true;
-        deckGroup.add(frameRight);
-    }
-
-    // Railing
-    if (railing) {
-        const railHeight = 3;
-        const postSpacing = 4;
-
-        const sides = [
-            { skip: stairs.front, axis: "x", pos: width / 2, range: length },
-            { skip: stairs.back, axis: "x", pos: -width / 2, range: length },
-            { skip: stairs.left, axis: "z", pos: -length / 2, range: width },
-            { skip: stairs.right, axis: "z", pos: length / 2, range: width }
-        ];
-
-        sides.forEach(side => {
-            if (side.skip) return;
-
-            const numPosts = Math.ceil(side.range / postSpacing) + 1;
-            const postGeo = new THREE.BoxGeometry(0.1, railHeight, 0.1);
-
-            for (let i = 0; i < numPosts; i++) {
-                const offset = -side.range / 2 + (i * side.range) / (numPosts - 1);
-                const railPost = new THREE.Mesh(postGeo, railMat);
-                if (side.axis === "x") {
-                    railPost.position.set(offset, height + railHeight / 2, side.pos);
-                } else {
-                    railPost.position.set(side.pos, height + railHeight / 2, offset);
-                }
-                railPost.castShadow = true;
-                deckGroup.add(railPost);
-
-                if (i < numPosts - 1) {
-                    const railGeo = new THREE.BoxGeometry(
-                        side.axis === "x" ? side.range / (numPosts - 1) : 0.08,
-                        2.5,
-                        side.axis === "z" ? side.range / (numPosts - 1) : 0.08
-                    );
-                    const rail = new THREE.Mesh(railGeo, railMat);
-                    if (side.axis === "x") {
-                        rail.position.set(offset + side.range / (2 * (numPosts - 1)), height + 1.5, side.pos);
-                    } else {
-                        rail.position.set(side.pos, height + 1.5, offset + side.range / (2 * (numPosts - 1)));
-                    }
-                    rail.castShadow = true;
-                    deckGroup.add(rail);
-                }
-            }
-        });
-    }
-
-    // Build stairs for each active side
-    Object.keys(stairs).forEach(side => {
-        if (stairs[side]) {
-            buildStairs(side, stairWidth, height);
-        }
-    });
-
-    updateMaterialEstimates();
-    updateBOMOptimizer();
 }
 
+// Diagonal 45° pattern
+function buildDiagonalPattern(length, width, height, color) {
+    const diagLength = Math.sqrt(length * length + width * width);
+    const numBoards = Math.ceil(diagLength / EFFECTIVE_WIDTH) * 1.5;
+    const angle = Math.PI / 4;
+
+    for (let i = -numBoards / 2; i < numBoards / 2; i++) {
+        const offset = i * EFFECTIVE_WIDTH;
+        const boardLen = Math.min(diagLength, length * 1.5);
+
+        const boardGeo = new THREE.BoxGeometry(BOARD_WIDTH, BOARD_THICK, boardLen);
+        const boardMat = createDeckMaterial(color);
+        if (boardMat.map) {
+            boardMat.map = boardMat.map.clone();
+            boardMat.map.offset.y = Math.random() * 0.5;
+            boardMat.map.needsUpdate = true;
+        }
+
+        const board = new THREE.Mesh(boardGeo, boardMat);
+        board.position.set(offset * Math.cos(angle), height + BOARD_THICK / 2, offset * Math.sin(angle));
+        board.rotation.y = angle;
+        board.castShadow = true;
+        board.receiveShadow = true;
+
+        // Create clipping box to constrain boards to deck area
+        const clip = new THREE.Box3(
+            new THREE.Vector3(-length / 2, height, -width / 2),
+            new THREE.Vector3(length / 2, height + BOARD_THICK * 2, width / 2)
+        );
+
+        deckGroup.add(board);
+    }
+}
+
+// Herringbone pattern - boards at alternating 45° angles
+function buildHerringbonePattern(length, width, height, color) {
+    const segmentLength = 2; // Each board segment is 2 ft
+    const numSegmentsX = Math.ceil(length / segmentLength) + 2;
+    const numSegmentsZ = Math.ceil(width / segmentLength) + 2;
+
+    for (let i = -1; i < numSegmentsX; i++) {
+        for (let j = -1; j < numSegmentsZ; j++) {
+            const isEven = (i + j) % 2 === 0;
+
+            // Create board segment
+            const boardGeo = new THREE.BoxGeometry(
+                isEven ? segmentLength : BOARD_WIDTH,
+                BOARD_THICK,
+                isEven ? BOARD_WIDTH : segmentLength
+            );
+
+            const boardMat = createDeckMaterial(color);
+            if (boardMat.map) {
+                boardMat.map = boardMat.map.clone();
+                boardMat.map.rotation = isEven ? 0 : Math.PI / 2;
+                boardMat.map.offset.set(Math.random() * 0.5, Math.random() * 0.5);
+                boardMat.map.needsUpdate = true;
+            }
+
+            const board = new THREE.Mesh(boardGeo, boardMat);
+
+            const xPos = -length / 2 + segmentLength / 2 + i * segmentLength;
+            const zPos = -width / 2 + segmentLength / 2 + j * segmentLength;
+
+            // Only add if within deck bounds
+            if (xPos >= -length / 2 - 0.5 && xPos <= length / 2 + 0.5 &&
+                zPos >= -width / 2 - 0.5 && zPos <= width / 2 + 0.5) {
+                board.position.set(xPos, height + BOARD_THICK / 2, zPos);
+                board.castShadow = true;
+                board.receiveShadow = true;
+                deckGroup.add(board);
+            }
+        }
+    }
+}
+
+// Chevron pattern - V-shaped boards meeting at center
+function buildChevronPattern(length, width, height, color) {
+    const segmentLength = 3;
+    const numRows = Math.ceil(width / EFFECTIVE_WIDTH);
+    const angle = Math.PI / 6; // 30 degrees
+
+    for (let row = 0; row < numRows; row++) {
+        const zPos = -width / 2 + BOARD_WIDTH / 2 + row * EFFECTIVE_WIDTH;
+
+        // Left side of chevron
+        for (let seg = 0; seg < Math.ceil(length / 2 / segmentLength) + 1; seg++) {
+            const boardGeo = new THREE.BoxGeometry(segmentLength, BOARD_THICK, BOARD_WIDTH);
+            const boardMat = createDeckMaterial(color);
+            if (boardMat.map) {
+                boardMat.map = boardMat.map.clone();
+                boardMat.map.offset.y = Math.random() * 0.5;
+                boardMat.map.needsUpdate = true;
+            }
+
+            const board = new THREE.Mesh(boardGeo, boardMat);
+            const xOffset = -length / 4 + seg * segmentLength * Math.cos(angle);
+            board.position.set(xOffset, height + BOARD_THICK / 2, zPos);
+            board.rotation.y = angle;
+            board.castShadow = true;
+            board.receiveShadow = true;
+            deckGroup.add(board);
+        }
+
+        // Right side of chevron (mirrored)
+        for (let seg = 0; seg < Math.ceil(length / 2 / segmentLength) + 1; seg++) {
+            const boardGeo = new THREE.BoxGeometry(segmentLength, BOARD_THICK, BOARD_WIDTH);
+            const boardMat = createDeckMaterial(color);
+            if (boardMat.map) {
+                boardMat.map = boardMat.map.clone();
+                boardMat.map.offset.y = Math.random() * 0.5;
+                boardMat.map.needsUpdate = true;
+            }
+
+            const board = new THREE.Mesh(boardGeo, boardMat);
+            const xOffset = length / 4 - seg * segmentLength * Math.cos(angle);
+            board.position.set(xOffset, height + BOARD_THICK / 2, zPos);
+            board.rotation.y = -angle;
+            board.castShadow = true;
+            board.receiveShadow = true;
+            deckGroup.add(board);
+        }
+    }
+}
+
+// Double herringbone pattern
+function buildDoubleHerringbonePattern(length, width, height, color) {
+    const segmentLength = 1.5;
+    const groupSize = 2; // Two boards per segment
+    const numGroupsX = Math.ceil(length / (segmentLength * 2)) + 2;
+    const numGroupsZ = Math.ceil(width / (EFFECTIVE_WIDTH * groupSize * 2)) + 2;
+
+    for (let gx = -1; gx < numGroupsX; gx++) {
+        for (let gz = -1; gz < numGroupsZ; gz++) {
+            const baseX = -length / 2 + gx * segmentLength * 2;
+            const baseZ = -width / 2 + gz * EFFECTIVE_WIDTH * groupSize * 2;
+
+            // Create 4 board groups forming herringbone
+            for (let subGroup = 0; subGroup < 4; subGroup++) {
+                const isHorizontal = subGroup % 2 === 0;
+                const isSecondRow = subGroup >= 2;
+
+                for (let b = 0; b < groupSize; b++) {
+                    const boardGeo = new THREE.BoxGeometry(
+                        isHorizontal ? segmentLength : BOARD_WIDTH,
+                        BOARD_THICK,
+                        isHorizontal ? BOARD_WIDTH : segmentLength
+                    );
+
+                    const boardMat = createDeckMaterial(color);
+                    if (boardMat.map) {
+                        boardMat.map = boardMat.map.clone();
+                        boardMat.map.rotation = isHorizontal ? 0 : Math.PI / 2;
+                        boardMat.map.offset.set(Math.random() * 0.3, Math.random() * 0.3);
+                        boardMat.map.needsUpdate = true;
+                    }
+
+                    const board = new THREE.Mesh(boardGeo, boardMat);
+
+                    let xPos, zPos;
+                    if (subGroup === 0) {
+                        xPos = baseX + segmentLength / 2;
+                        zPos = baseZ + b * EFFECTIVE_WIDTH;
+                    } else if (subGroup === 1) {
+                        xPos = baseX + segmentLength + b * EFFECTIVE_WIDTH;
+                        zPos = baseZ + segmentLength / 2;
+                    } else if (subGroup === 2) {
+                        xPos = baseX + segmentLength / 2;
+                        zPos = baseZ + segmentLength + b * EFFECTIVE_WIDTH;
+                    } else {
+                        xPos = baseX + b * EFFECTIVE_WIDTH;
+                        zPos = baseZ + segmentLength / 2;
+                    }
+
+                    if (xPos >= -length / 2 - 1 && xPos <= length / 2 + 1 &&
+                        zPos >= -width / 2 - 1 && zPos <= width / 2 + 1) {
+                        board.position.set(xPos, height + BOARD_THICK / 2, zPos);
+                        board.castShadow = true;
+                        board.receiveShadow = true;
+                        deckGroup.add(board);
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Build picture frame border
+function buildPictureFrame(length, width, height, color) {
+    const frameGeo1 = new THREE.BoxGeometry(
+        length + BOARD_WIDTH * 2,
+        BOARD_THICK * 1.2,
+        BOARD_WIDTH
+    );
+    const frameFront = new THREE.Mesh(frameGeo1, createDeckMaterial(color));
+    frameFront.position.set(0, height + BOARD_THICK / 2 + 0.01, width / 2 + BOARD_WIDTH / 2);
+    frameFront.castShadow = true;
+    deckGroup.add(frameFront);
+
+    const frameBack = new THREE.Mesh(frameGeo1, createDeckMaterial(color));
+    frameBack.position.set(0, height + BOARD_THICK / 2 + 0.01, -width / 2 - BOARD_WIDTH / 2);
+    frameBack.castShadow = true;
+    deckGroup.add(frameBack);
+
+    const frameGeo2 = new THREE.BoxGeometry(BOARD_WIDTH, BOARD_THICK * 1.2, width);
+    const frameLeft = new THREE.Mesh(frameGeo2, createDeckMaterial(color));
+    frameLeft.position.set(-length / 2 - BOARD_WIDTH / 2, height + BOARD_THICK / 2 + 0.01, 0);
+    frameLeft.castShadow = true;
+    deckGroup.add(frameLeft);
+
+    const frameRight = new THREE.Mesh(frameGeo2, createDeckMaterial(color));
+    frameRight.position.set(length / 2 + BOARD_WIDTH / 2, height + BOARD_THICK / 2 + 0.01, 0);
+    frameRight.castShadow = true;
+    deckGroup.add(frameRight);
+}
+
+// Build railing
+function buildRailing(length, width, height, stairs, railMat) {
+    const railHeight = 3;
+    const postSpacing = 4;
+
+    const sides = [
+        { skip: stairs.front, axis: "x", pos: width / 2, range: length },
+        { skip: stairs.back, axis: "x", pos: -width / 2, range: length },
+        { skip: stairs.left, axis: "z", pos: -length / 2, range: width },
+        { skip: stairs.right, axis: "z", pos: length / 2, range: width }
+    ];
+
+    sides.forEach(side => {
+        if (side.skip) return;
+
+        const numPosts = Math.ceil(side.range / postSpacing) + 1;
+        const postGeo = new THREE.BoxGeometry(0.1, railHeight, 0.1);
+
+        for (let i = 0; i < numPosts; i++) {
+            const offset = -side.range / 2 + (i * side.range) / (numPosts - 1);
+            const railPost = new THREE.Mesh(postGeo, railMat);
+            if (side.axis === "x") {
+                railPost.position.set(offset, height + railHeight / 2, side.pos);
+            } else {
+                railPost.position.set(side.pos, height + railHeight / 2, offset);
+            }
+            railPost.castShadow = true;
+            deckGroup.add(railPost);
+
+            if (i < numPosts - 1) {
+                const railGeo = new THREE.BoxGeometry(
+                    side.axis === "x" ? side.range / (numPosts - 1) : 0.08,
+                    2.5,
+                    side.axis === "z" ? side.range / (numPosts - 1) : 0.08
+                );
+                const rail = new THREE.Mesh(railGeo, railMat);
+                if (side.axis === "x") {
+                    rail.position.set(
+                        offset + side.range / (2 * (numPosts - 1)),
+                        height + 1.5,
+                        side.pos
+                    );
+                } else {
+                    rail.position.set(
+                        side.pos,
+                        height + 1.5,
+                        offset + side.range / (2 * (numPosts - 1))
+                    );
+                }
+                rail.castShadow = true;
+                deckGroup.add(rail);
+            }
+        }
+    });
+}
+
+// Build stairs
 function buildStairs(side, stairWidth, deckHeight) {
     const stairMat = createDeckMaterial(state.color);
-    const stringerMat = new THREE.MeshStandardMaterial({ color: 0xA0826D, roughness: 0.8 });
+    const stringerMat = new THREE.MeshStandardMaterial({
+        color: 0xA0826D,
+        roughness: 0.8
+    });
 
     const numSteps = Math.ceil(deckHeight / STAIR_RISE);
     const stairDepth = numSteps * STAIR_RUN;
@@ -1773,21 +1956,22 @@ function buildStairs(side, stairWidth, deckHeight) {
     if (side === "front") {
         startX = 0;
         startZ = state.width / 2;
-        direction = { x: 0, z: 1, rise: -1 };
+        direction = { x: 0, z: 1 };
     } else if (side === "back") {
         startX = 0;
         startZ = -state.width / 2;
-        direction = { x: 0, z: -1, rise: -1 };
+        direction = { x: 0, z: -1 };
     } else if (side === "left") {
         startX = -state.length / 2;
         startZ = 0;
-        direction = { x: -1, z: 0, rise: -1 };
+        direction = { x: -1, z: 0 };
     } else {
         startX = state.length / 2;
         startZ = 0;
-        direction = { x: 1, z: 0, rise: -1 };
+        direction = { x: 1, z: 0 };
     }
 
+    // Build stringers
     const stringerThick = 1.5 / 12;
     const stringerHeight = deckHeight + 1;
 
@@ -1819,48 +2003,47 @@ function buildStairs(side, stairWidth, deckHeight) {
     stringer2.castShadow = true;
     deckGroup.add(stringer2);
 
-    const treadThick = BOARD_THICK;
-
+    // Build treads
     for (let i = 0; i < numSteps; i++) {
-        const treadY = state.height + (numSteps - i - 1) * STAIR_RISE - treadThick / 2;
+        const treadY = state.height - (i + 1) * STAIR_RISE + BOARD_THICK / 2;
         const progressDown = (i + 1) * STAIR_RUN;
 
         const treadGeo = new THREE.BoxGeometry(
-            side === "front" || side === "back" ? stairWidth : treadThick,
-            treadThick,
-            side === "left" || side === "right" ? stairWidth : treadThick
+            side === "front" || side === "back" ? stairWidth : STAIR_RUN * 0.9,
+            BOARD_THICK,
+            side === "left" || side === "right" ? stairWidth : STAIR_RUN * 0.9
         );
 
         const treadMat = createDeckMaterial(state.color);
         if (treadMat.map) {
             treadMat.map = treadMat.map.clone();
-            treadMat.needsUpdate = true;
+            treadMat.map.needsUpdate = true;
         }
 
         const tread = new THREE.Mesh(treadGeo, treadMat);
-
-        if (side === "front") {
-            tread.position.set(0, treadY, startZ + progressDown * direction.z);
-        } else if (side === "back") {
-            tread.position.set(0, treadY, startZ + progressDown * direction.z);
-        } else if (side === "left") {
-            tread.position.set(startX + progressDown * direction.x, treadY, 0);
-        } else {
-            tread.position.set(startX + progressDown * direction.x, treadY, 0);
-        }
-
+        tread.position.set(
+            startX + progressDown * direction.x,
+            treadY,
+            startZ + progressDown * direction.z
+        );
         tread.castShadow = true;
         tread.receiveShadow = true;
         deckGroup.add(tread);
     }
 }
 
+// Calculate material estimates
 function updateMaterialEstimates() {
-    const { length, width, height, boardLength, stairs, stairWidth, border, includePlugs, includeDexerDry, pattern } = state;
+    const { length, width, height, boardLength, stairs, stairWidth, border, includePlugs, pattern } = state;
 
-    const wasteFactor = PATTERN_WASTE_FACTORS[pattern] || 1.10;
-    let numStockBoards = Math.ceil((length * width * wasteFactor) / (BOARD_WIDTH * boardLength));
-    let borderBoards = border ? Math.ceil(((length + width) * 2 * wasteFactor) / boardLength) : 0;
+    // Pattern multiplier for waste
+    let patternWaste = WASTE_FACTOR;
+    if (pattern === "diagonal") patternWaste = 1.15;
+    else if (pattern === "herringbone" || pattern === "chevron") patternWaste = 1.2;
+    else if (pattern === "doubleHerringbone") patternWaste = 1.25;
+
+    let numStockBoards = Math.ceil((length * width * patternWaste) / (BOARD_WIDTH * boardLength));
+    let borderBoards = border ? Math.ceil(((length + width) * 2 * WASTE_FACTOR) / boardLength) : 0;
 
     const numSteps = Math.ceil(height / STAIR_RISE);
     let stairTreads = 0;
@@ -1871,111 +2054,66 @@ function updateMaterialEstimates() {
 
     const surfaceArea = length * width + (stairTreads > 0 ? stairTreads * stairWidth * 0.5 : 0);
     const screwBoxes = Math.ceil((surfaceArea * 8) / SCREWS_PER_BOX);
-
-    let dexerDryFeet = 0;
-    if (includeDexerDry) {
-        const joistCount = Math.ceil(length / (16 / 12));
-        dexerDryFeet = Math.ceil(joistCount * width * 1.1);
-    }
-
     let plugBoxes = 0;
+
     if (includePlugs) {
         plugBoxes = Math.ceil(screwBoxes * 0.3);
     }
-
-    const dexerDryCost = dexerDryFeet * DEXERDRY_PRICE_PER_FT;
 
     state.estimates = {
         numStockBoards,
         borderBoards,
         stairTreads,
         screwBoxes,
-        dexerDryFeet,
         plugBoxes,
-        total: numStockBoards * 8 + borderBoards * 6 + stairTreads * 12 + screwBoxes * 37 + dexerDryCost + plugBoxes * 33.79
+        total: numStockBoards * 8 * boardLength + borderBoards * 6 * boardLength + stairTreads * 12 + screwBoxes * 37 + plugBoxes * 33.79
     };
 
     document.getElementById("mat-boards").textContent = numStockBoards;
     document.getElementById("mat-border").textContent = borderBoards;
     document.getElementById("mat-stairs").textContent = stairTreads;
     document.getElementById("mat-screws").textContent = screwBoxes;
-    document.getElementById("mat-dexerdry").textContent = dexerDryFeet + " ft ($" + dexerDryCost.toFixed(2) + ")";
     document.getElementById("mat-plugs").textContent = plugBoxes;
     document.getElementById("mat-total").textContent = "$" + state.estimates.total.toFixed(2);
     document.getElementById("plugs-hint").textContent = `(${plugBoxes} boxes)`;
-    document.getElementById("dexerdry-hint").textContent = `(${dexerDryFeet} ft)`;
 
-    document.getElementById("plugs-row").style.display = includePlugs ? "flex" : "none";
-    document.getElementById("dexerdry-row").style.display = includeDexerDry ? "flex" : "none";
+    const plugsRow = document.getElementById("plugs-row");
+    plugsRow.style.display = includePlugs ? "flex" : "none";
 }
 
-// NEW: Update BOM Optimizer suggestions
-function updateBOMOptimizer() {
-    const { length, width, boardLength, pattern } = state;
-    const resultEl = document.getElementById("optimization-result");
+// Update quick stats
+function updateQuickStats() {
+    const sqft = state.length * state.width;
+    const perimeter = (state.length + state.width) * 2;
+    const costPerSqft = state.estimates.total / sqft;
 
-    const patternInfo = PATTERN_INFO[pattern];
-    const wasteFactor = PATTERN_WASTE_FACTORS[pattern];
-    const wastePercent = ((wasteFactor - 1) * 100).toFixed(0);
-
-    const boardLengths = [12, 16, 20];
-    let optimalLength = boardLength;
-    let minWaste = Infinity;
-
-    boardLengths.forEach(bl => {
-        const boardsNeededLength = Math.ceil(width / bl);
-        const wastedPerBoard = (boardsNeededLength * bl) - width;
-        const totalWaste = wastedPerBoard * Math.ceil(length / EFFECTIVE_WIDTH);
-        if (totalWaste < minWaste) {
-            minWaste = totalWaste;
-            optimalLength = bl;
-        }
-    });
-
-    const currentBoards = Math.ceil((length * width * wasteFactor) / (BOARD_WIDTH * boardLength));
-    const optimalBoards = Math.ceil((length * width * wasteFactor) / (BOARD_WIDTH * optimalLength));
-    const savings = (currentBoards - optimalBoards) * 8;
-
-    let html = `
-        <p><strong>Pattern:</strong> ${patternInfo.name}</p>
-        <p><strong>Joist Spacing:</strong> ${patternInfo.joistSpacing}" on center</p>
-        <p class="waste-info">Waste Factor: ~${wastePercent}% extra material</p>
-    `;
-
-    if (optimalLength !== boardLength && savings > 0) {
-        html += `<p class="savings">Tip: Using ${optimalLength}' boards could save ~$${savings.toFixed(2)}</p>`;
-    }
-
-    if (pattern === "herringbone" || pattern === "chevron") {
-        html += `<p style="color:#854d0e; font-size:0.7rem; margin-top:0.5rem;">Note: This pattern requires additional blocking and precise cutting.</p>`;
-    }
-
-    resultEl.innerHTML = html;
+    document.getElementById("stat-sqft").textContent = sqft;
+    document.getElementById("stat-perimeter").textContent = perimeter + " ft";
+    document.getElementById("stat-cost-sqft").textContent = "$" + costPerSqft.toFixed(2);
 }
 
-// Event Handlers
+// DOM Event Handlers
+
+// Input change handlers
 document.getElementById("deck-length").addEventListener("input", e => {
     state.length = parseFloat(e.target.value);
     buildDeck();
-    buildHouse();
 });
 
 document.getElementById("deck-width").addEventListener("input", e => {
     state.width = parseFloat(e.target.value);
     buildDeck();
-    buildHouse();
 });
 
 document.getElementById("deck-height").addEventListener("input", e => {
     state.height = parseFloat(e.target.value);
     buildDeck();
-    buildHouse();
 });
 
 document.getElementById("board-length").addEventListener("change", e => {
     state.boardLength = parseFloat(e.target.value);
     updateMaterialEstimates();
-    updateBOMOptimizer();
+    updateQuickStats();
 });
 
 document.getElementById("stair-width").addEventListener("input", e => {
@@ -1993,26 +2131,47 @@ document.getElementById("add-border").addEventListener("change", e => {
     buildDeck();
 });
 
-document.getElementById("add-dexerdry").addEventListener("change", e => {
-    state.includeDexerDry = e.target.checked;
-    updateMaterialEstimates();
-});
-
 document.getElementById("add-plugs").addEventListener("change", e => {
     state.includePlugs = e.target.checked;
     updateMaterialEstimates();
+    updateQuickStats();
 });
 
-// Pattern selector
-document.querySelectorAll(".pattern-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        document.querySelectorAll(".pattern-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        state.pattern = btn.dataset.pattern;
-        updateMaterialEstimates();
-        updateBOMOptimizer();
-    });
+// Pattern grid
+const patternGrid = document.getElementById("pattern-grid");
+Object.keys(PATTERNS).forEach((patternKey, idx) => {
+    const pattern = PATTERNS[patternKey];
+    const card = document.createElement("div");
+    card.className = "pattern-card" + (idx === 0 ? " selected" : "");
+    card.dataset.pattern = patternKey;
+
+    // Create SVG icons for each pattern
+    let svgContent = "";
+    if (patternKey === "standard") {
+        svgContent = `<svg viewBox="0 0 40 40"><rect x="2" y="5" width="36" height="4" fill="currentColor"/><rect x="2" y="12" width="36" height="4" fill="currentColor"/><rect x="2" y="19" width="36" height="4" fill="currentColor"/><rect x="2" y="26" width="36" height="4" fill="currentColor"/><rect x="2" y="33" width="36" height="4" fill="currentColor"/></svg>`;
+    } else if (patternKey === "diagonal") {
+        svgContent = `<svg viewBox="0 0 40 40"><line x1="0" y1="10" x2="10" y2="0" stroke="currentColor" stroke-width="3"/><line x1="0" y1="20" x2="20" y2="0" stroke="currentColor" stroke-width="3"/><line x1="0" y1="30" x2="30" y2="0" stroke="currentColor" stroke-width="3"/><line x1="0" y1="40" x2="40" y2="0" stroke="currentColor" stroke-width="3"/><line x1="10" y1="40" x2="40" y2="10" stroke="currentColor" stroke-width="3"/><line x1="20" y1="40" x2="40" y2="20" stroke="currentColor" stroke-width="3"/><line x1="30" y1="40" x2="40" y2="30" stroke="currentColor" stroke-width="3"/></svg>`;
+    } else if (patternKey === "herringbone") {
+        svgContent = `<svg viewBox="0 0 40 40"><rect x="2" y="2" width="16" height="4" fill="currentColor"/><rect x="18" y="2" width="4" height="16" fill="currentColor"/><rect x="22" y="2" width="16" height="4" fill="currentColor"/><rect x="2" y="6" width="4" height="16" fill="currentColor"/><rect x="6" y="18" width="16" height="4" fill="currentColor"/><rect x="22" y="18" width="4" height="16" fill="currentColor"/><rect x="26" y="22" width="12" height="4" fill="currentColor"/><rect x="2" y="22" width="4" height="16" fill="currentColor"/><rect x="6" y="34" width="16" height="4" fill="currentColor"/></svg>`;
+    } else if (patternKey === "chevron") {
+        svgContent = `<svg viewBox="0 0 40 40"><line x1="20" y1="0" x2="0" y2="10" stroke="currentColor" stroke-width="3"/><line x1="20" y1="0" x2="40" y2="10" stroke="currentColor" stroke-width="3"/><line x1="20" y1="13" x2="0" y2="23" stroke="currentColor" stroke-width="3"/><line x1="20" y1="13" x2="40" y2="23" stroke="currentColor" stroke-width="3"/><line x1="20" y1="26" x2="0" y2="36" stroke="currentColor" stroke-width="3"/><line x1="20" y1="26" x2="40" y2="36" stroke="currentColor" stroke-width="3"/></svg>`;
+    } else if (patternKey === "doubleHerringbone") {
+        svgContent = `<svg viewBox="0 0 40 40"><rect x="1" y="1" width="8" height="3" fill="currentColor"/><rect x="1" y="5" width="8" height="3" fill="currentColor"/><rect x="9" y="1" width="3" height="8" fill="currentColor"/><rect x="13" y="1" width="3" height="8" fill="currentColor"/><rect x="17" y="9" width="8" height="3" fill="currentColor"/><rect x="17" y="13" width="8" height="3" fill="currentColor"/><rect x="25" y="9" width="3" height="8" fill="currentColor"/><rect x="29" y="9" width="3" height="8" fill="currentColor"/><rect x="1" y="17" width="8" height="3" fill="currentColor"/><rect x="1" y="21" width="8" height="3" fill="currentColor"/><rect x="9" y="17" width="3" height="8" fill="currentColor"/><rect x="13" y="17" width="3" height="8" fill="currentColor"/></svg>`;
+    }
+
+    card.innerHTML = `${svgContent}<div class="pattern-card-label">${pattern.name}</div>`;
+    card.addEventListener("click", () => selectPattern(patternKey));
+    patternGrid.appendChild(card);
 });
+
+function selectPattern(patternKey) {
+    document.querySelectorAll(".pattern-card").forEach(card => {
+        card.classList.toggle("selected", card.dataset.pattern === patternKey);
+    });
+    state.pattern = patternKey;
+    document.getElementById("viewport-pattern-name").textContent = PATTERNS[patternKey].name;
+    buildDeck();
+}
 
 // Color grid
 const colorGrid = document.getElementById("color-grid");
@@ -2058,28 +2217,23 @@ document.querySelectorAll(".view-btn").forEach(btn => {
         btn.classList.add("active");
 
         const view = btn.dataset.view;
-        switch (view) {
-            case "top":
-                camera.position.set(0, 35, 0.1);
-                controls.target.set(0, state.height, 0);
-                break;
-            case "front":
-                camera.position.set(0, state.height + 5, 30);
-                controls.target.set(0, state.height, 0);
-                break;
-            case "side":
-                camera.position.set(30, state.height + 5, 0);
-                controls.target.set(0, state.height, 0);
-                break;
-            default:
-                camera.position.set(25, 18, 25);
-                controls.target.set(0, state.height / 2, 0);
+        const dist = Math.max(state.length, state.width) * 1.5;
+
+        if (view === "3d") {
+            camera.position.set(20, 15, 20);
+        } else if (view === "top") {
+            camera.position.set(0, dist, 0);
+        } else if (view === "front") {
+            camera.position.set(0, state.height + 5, dist);
+        } else if (view === "side") {
+            camera.position.set(dist, state.height + 5, 0);
         }
+        controls.target.set(0, state.height / 2, 0);
         controls.update();
     });
 });
 
-// Color modal
+// Color comparison
 document.getElementById("preview-color-1").addEventListener("click", () => {
     const modal = document.getElementById("colorModal");
     document.getElementById("modal-color-img").src = document.getElementById("preview-color-1").src;
@@ -2110,15 +2264,14 @@ document.getElementById("reset-builder").addEventListener("click", () => {
         width: 12,
         height: 3,
         color: "Driftwood",
-        boardLength: 16,
         pattern: "standard",
+        boardLength: 16,
         stairs: { front: false, back: false, left: false, right: false },
         stairWidth: 4,
         railing: false,
         border: false,
-        includeDexerDry: false,
         includePlugs: false,
-        estimates: { numStockBoards: 0, borderBoards: 0, stairTreads: 0, screwBoxes: 0, dexerDryFeet: 0, plugBoxes: 0, total: 0 }
+        estimates: { numStockBoards: 0, borderBoards: 0, stairTreads: 0, screwBoxes: 0, plugBoxes: 0, total: 0 }
     };
     document.getElementById("deck-length").value = 16;
     document.getElementById("deck-width").value = 12;
@@ -2126,241 +2279,197 @@ document.getElementById("reset-builder").addEventListener("click", () => {
     document.getElementById("stair-width").value = 4;
     document.getElementById("add-railing").checked = false;
     document.getElementById("add-border").checked = false;
-    document.getElementById("add-dexerdry").checked = false;
     document.getElementById("add-plugs").checked = false;
     document.querySelectorAll(".stair-btn").forEach(btn => btn.classList.remove("active"));
-    document.querySelectorAll(".pattern-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.pattern === "standard");
+    document.querySelectorAll(".pattern-card").forEach((card, idx) => {
+        card.classList.toggle("selected", idx === 0);
     });
     selectColor("Driftwood");
     buildDeck();
-    buildHouse();
 });
 
-// Show/hide custom product form
-document.getElementById("product-select").addEventListener("change", e => {
-    const customForm = document.getElementById("custom-product-form");
-    if (e.target.value === "custom") {
-        customForm.classList.add("active");
-    } else {
-        customForm.classList.remove("active");
-    }
-});
+// ========== ORDER FORM FUNCTIONS ==========
 
-// Order form functions
-function createTableRow(productKey, color, length, qty, unitPrice, productName = null) {
-    const subtotal = qty * unitPrice;
-    const displayName = productName || PRODUCTS[productKey]?.name || productKey;
-    const hasColorField = PRODUCTS[productKey]?.hasColor || (color && color !== "");
-
-    const colorImg = hasColorField && color ? `<img src="colors/${COLOR_IMAGES[color] || "Driftwood.png"}" alt="${color}">` : "";
-    const colorText = hasColorField && color ? `<span>${color}</span>` : "<span>N/A</span>";
-
+// Create editable table row
+function createEditableRow(productKey = "", color = "", length = "", qty = 1, unitPrice = 0, description = "") {
     const tr = document.createElement("tr");
+    tr.className = "line-item-row";
+
+    const productOptions = Object.keys(PRODUCTS).map(key => {
+        const p = PRODUCTS[key];
+        return `<option value="${key}" ${key === productKey ? "selected" : ""}>${p.name}</option>`;
+    }).join("");
+
+    const colorOptions = ["", ...COLORS].map(c => {
+        return `<option value="${c}" ${c === color ? "selected" : ""}>${c || "N/A"}</option>`;
+    }).join("");
+
+    const lengthOptions = ["", "12", "16", "20", "Box", "Each"].map(l => {
+        return `<option value="${l}" ${l === length ? "selected" : ""}>${l || "N/A"}</option>`;
+    }).join("");
+
+    const subtotal = qty * unitPrice;
+
     tr.innerHTML = `
-        <td data-label="Product">${displayName}</td>
-        <td data-label="Color" class="color-cell">${colorImg}${colorText}</td>
-        <td data-label="Length/Unit">${length || "N/A"}</td>
-        <td data-label="Qty" class="numeric">${qty.toFixed(1)}</td>
-        <td data-label="Unit Price" class="numeric">$${unitPrice.toFixed(2)}</td>
-        <td data-label="Subtotal" class="numeric">$${subtotal.toFixed(2)}</td>
+        <td data-label="Product">
+            <select class="line-select product-select">${productOptions}</select>
+        </td>
+        <td data-label="Color">
+            <select class="line-select color-select">${colorOptions}</select>
+        </td>
+        <td data-label="Length">
+            <select class="line-select length-select">${lengthOptions}</select>
+        </td>
+        <td data-label="Qty" class="numeric">
+            <input type="number" class="line-input narrow qty-input" value="${qty}" min="0" step="0.1">
+        </td>
+        <td data-label="Unit Price" class="numeric">
+            <input type="number" class="line-input price price-input" value="${unitPrice.toFixed(2)}" min="0" step="0.01">
+        </td>
+        <td data-label="Subtotal" class="numeric">
+            <span class="subtotal-display">$${subtotal.toFixed(2)}</span>
+        </td>
         <td data-label="Actions">
-            <button type="button" class="btn-remove-row">×</button>
+            <button type="button" class="btn-remove-row" title="Remove">×</button>
         </td>
     `;
+
+    // Event listeners for this row
+    const productSelect = tr.querySelector(".product-select");
+    const colorSelect = tr.querySelector(".color-select");
+    const qtyInput = tr.querySelector(".qty-input");
+    const priceInput = tr.querySelector(".price-input");
+
+    productSelect.addEventListener("change", () => {
+        const selectedProduct = PRODUCTS[productSelect.value];
+        if (selectedProduct) {
+            priceInput.value = selectedProduct.price.toFixed(2);
+            if (!selectedProduct.hasColor) {
+                colorSelect.value = "";
+            }
+        }
+        updateRowSubtotal(tr);
+        recalculateTotals();
+    });
+
+    colorSelect.addEventListener("change", () => {
+        recalculateTotals();
+    });
+
+    qtyInput.addEventListener("input", () => {
+        updateRowSubtotal(tr);
+        recalculateTotals();
+    });
+
+    priceInput.addEventListener("input", () => {
+        updateRowSubtotal(tr);
+        recalculateTotals();
+    });
+
     tr.querySelector(".btn-remove-row").addEventListener("click", () => {
         tr.remove();
-        recalculateTotal();
+        checkEmptyTable();
+        recalculateTotals();
     });
+
     return tr;
 }
 
-function addLineItem() {
-    const productSelect = document.getElementById("product-select");
-    const product = productSelect.value;
-    const qty = parseFloat(document.getElementById("product-qty").value);
-
-    if (!product || qty <= 0) {
-        alert("Please select a product and enter a quantity");
-        return;
-    }
-
-    const tbody = document.getElementById("order-tbody");
-    if (tbody.rows.length === 1 && tbody.rows[0].cells[0].colSpan === 7) {
-        tbody.innerHTML = "";
-    }
-
-    // Handle custom product
-    if (product === "custom") {
-        const customName = document.getElementById("custom-product-name").value.trim();
-        const customPrice = parseFloat(document.getElementById("custom-unit-price").value);
-        const customUnit = document.getElementById("custom-unit-type").value;
-        const customColor = document.getElementById("custom-color").value;
-
-        if (!customName) {
-            alert("Please enter a product name for custom items");
-            return;
-        }
-        if (isNaN(customPrice) || customPrice < 0) {
-            alert("Please enter a valid unit price");
-            return;
-        }
-
-        const row = createTableRow("custom", customColor, customUnit, qty, customPrice, customName);
-        tbody.appendChild(row);
-
-        // Reset custom form
-        document.getElementById("custom-product-name").value = "";
-        document.getElementById("custom-unit-price").value = "0";
-        document.getElementById("custom-product-form").classList.remove("active");
-    } else {
-        const productData = PRODUCTS[product];
-        if (!productData) {
-            alert("Invalid product selected");
-            return;
-        }
-
-        const length = productData.unit || "";
-        const color = productData.hasColor ? state.color : "";
-        const row = createTableRow(product, color, length, qty, productData.price);
-        tbody.appendChild(row);
-    }
-
-    productSelect.value = "";
-    document.getElementById("product-qty").value = "1";
-    recalculateTotal();
+function updateRowSubtotal(row) {
+    const qty = parseFloat(row.querySelector(".qty-input").value) || 0;
+    const price = parseFloat(row.querySelector(".price-input").value) || 0;
+    const subtotal = qty * price;
+    row.querySelector(".subtotal-display").textContent = "$" + subtotal.toFixed(2);
 }
 
-document.getElementById("btn-add-preset").addEventListener("click", addLineItem);
-
-// Manual editable row
-document.getElementById("btn-add-row").addEventListener("click", () => {
+function checkEmptyTable() {
     const tbody = document.getElementById("order-tbody");
-    if (tbody.rows.length === 1 && tbody.rows[0].cells[0].colSpan === 7) {
-        tbody.innerHTML = "";
+    const rows = tbody.querySelectorAll(".line-item-row");
+
+    if (rows.length === 0) {
+        const emptyRow = document.createElement("tr");
+        emptyRow.id = "empty-row";
+        emptyRow.innerHTML = `
+            <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                Design your deck above and click "Apply to Order Form" or click "Add Line Item" below.
+            </td>
+        `;
+        tbody.appendChild(emptyRow);
     }
+}
 
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-        <td data-label="Product">
-            <input type="text" class="line-input edit-product" placeholder="Product name" value="">
-        </td>
-        <td data-label="Color">
-            <select class="line-select edit-color">
-                <option value="">N/A</option>
-                ${COLORS.map(c => `<option value="${c}">${c}</option>`).join("")}
-            </select>
-        </td>
-        <td data-label="Length/Unit">
-            <input type="text" class="line-input edit-length" placeholder="ft/box/etc" value="">
-        </td>
-        <td data-label="Qty" class="numeric">
-            <input type="number" class="line-input edit-qty" value="1" min="0.1" step="0.1">
-        </td>
-        <td data-label="Unit Price" class="numeric">
-            <input type="number" class="line-input edit-price" value="0" min="0" step="0.01">
-        </td>
-        <td data-label="Subtotal" class="numeric edit-subtotal">$0.00</td>
-        <td data-label="Actions">
-            <button type="button" class="btn-remove-row">×</button>
-        </td>
-    `;
+function removeEmptyRow() {
+    const emptyRow = document.getElementById("empty-row");
+    if (emptyRow) emptyRow.remove();
+}
 
-    const qtyInput = tr.querySelector(".edit-qty");
-    const priceInput = tr.querySelector(".edit-price");
-    const subtotalCell = tr.querySelector(".edit-subtotal");
+function recalculateTotals() {
+    let subtotal = 0;
+    const rows = document.querySelectorAll(".line-item-row");
 
-    const updateSubtotal = () => {
-        const qty = parseFloat(qtyInput.value) || 0;
-        const price = parseFloat(priceInput.value) || 0;
-        subtotalCell.textContent = "$" + (qty * price).toFixed(2);
-        recalculateTotal();
-    };
-
-    qtyInput.addEventListener("input", updateSubtotal);
-    priceInput.addEventListener("input", updateSubtotal);
-
-    tr.querySelector(".btn-remove-row").addEventListener("click", () => {
-        tr.remove();
-        recalculateTotal();
+    rows.forEach(row => {
+        const qty = parseFloat(row.querySelector(".qty-input").value) || 0;
+        const price = parseFloat(row.querySelector(".price-input").value) || 0;
+        subtotal += qty * price;
     });
 
-    tbody.appendChild(tr);
+    const discountPercent = parseFloat(document.getElementById("discount-percent").value) || 0;
+    const taxRate = parseFloat(document.getElementById("tax-rate").value) || 0;
+
+    const discountAmount = subtotal * (discountPercent / 100);
+    const afterDiscount = subtotal - discountAmount;
+    const taxAmount = afterDiscount * (taxRate / 100);
+    const grandTotal = afterDiscount + taxAmount;
+
+    document.getElementById("order-subtotal").textContent = "$" + subtotal.toFixed(2);
+    document.getElementById("discount-amount").textContent = "-$" + discountAmount.toFixed(2);
+    document.getElementById("tax-amount").textContent = "$" + taxAmount.toFixed(2);
+    document.getElementById("grand-total").textContent = "$" + grandTotal.toFixed(2);
+}
+
+// Add line item button
+document.getElementById("btn-add-row").addEventListener("click", () => {
+    removeEmptyRow();
+    const tbody = document.getElementById("order-tbody");
+    const row = createEditableRow("", state.color, "", 1, 0);
+    tbody.appendChild(row);
+    recalculateTotals();
 });
 
+// Apply from 3D builder
 document.getElementById("apply-order").addEventListener("click", () => {
+    removeEmptyRow();
     const tbody = document.getElementById("order-tbody");
-    if (tbody.rows.length === 1 && tbody.rows[0].cells[0].colSpan === 7) {
-        tbody.innerHTML = "";
-    }
 
-    const { numStockBoards, borderBoards, stairTreads, screwBoxes, plugBoxes, dexerDryFeet } = state.estimates;
+    const { numStockBoards, borderBoards, stairTreads, screwBoxes, plugBoxes } = state.estimates;
 
     if (numStockBoards > 0) {
-        const row = createTableRow("system", state.color, state.boardLength + " ft", numStockBoards, 8.0);
+        const row = createEditableRow("system", state.color, String(state.boardLength), numStockBoards, 8.0 * state.boardLength);
         tbody.appendChild(row);
     }
     if (borderBoards > 0) {
-        const row = createTableRow("system", state.color, state.boardLength + " ft (border)", borderBoards, 8.0);
+        const row = createEditableRow("system", state.color, String(state.boardLength), borderBoards, 8.0 * state.boardLength);
         tbody.appendChild(row);
     }
     if (stairTreads > 0) {
-        const row = createTableRow("system", state.color, "12 ft (stairs)", stairTreads, 12.0);
+        const row = createEditableRow("system", state.color, "12", stairTreads, 96.0);
         tbody.appendChild(row);
     }
     if (screwBoxes > 0) {
-        const row = createTableRow("screws", "", "box", screwBoxes, 37.0);
+        const row = createEditableRow("screws", "", "Box", screwBoxes, 37.0);
         tbody.appendChild(row);
-    }
-    if (state.includeDexerDry && dexerDryFeet > 0) {
-        // Calculate best box size
-        let boxes240 = Math.floor(dexerDryFeet / 240);
-        let remaining = dexerDryFeet - (boxes240 * 240);
-        let boxes100 = Math.floor(remaining / 100);
-        remaining = remaining - (boxes100 * 100);
-        let boxes50 = Math.ceil(remaining / 50);
-
-        if (boxes240 > 0) {
-            const row = createTableRow("dexerdry-240", "", "240 ft box", boxes240, 480.0);
-            tbody.appendChild(row);
-        }
-        if (boxes100 > 0) {
-            const row = createTableRow("dexerdry-100", "", "100 ft box", boxes100, 200.0);
-            tbody.appendChild(row);
-        }
-        if (boxes50 > 0) {
-            const row = createTableRow("dexerdry-50", "", "50 ft box", boxes50, 100.0);
-            tbody.appendChild(row);
-        }
     }
     if (plugBoxes > 0) {
-        const row = createTableRow("plugs", state.color, "box", plugBoxes, 33.79);
+        const row = createEditableRow("plugs", state.color, "Box", plugBoxes, 33.79);
         tbody.appendChild(row);
     }
 
-    recalculateTotal();
+    recalculateTotals();
 });
 
-function recalculateTotal() {
-    let total = 0;
-    const rows = document.getElementById("order-tbody").querySelectorAll("tr");
-    rows.forEach(row => {
-        // Check for editable subtotal cell
-        const editSubtotal = row.querySelector(".edit-subtotal");
-        if (editSubtotal) {
-            const subtotal = parseFloat(editSubtotal.textContent.replace("$", "")) || 0;
-            total += subtotal;
-        } else {
-            // Static row
-            const subtotalCell = row.cells[5];
-            if (subtotalCell && !subtotalCell.colSpan) {
-                const subtotal = parseFloat(subtotalCell.textContent.replace("$", "")) || 0;
-                total += subtotal;
-            }
-        }
-    });
-    document.getElementById("grand-total").textContent = "$" + total.toFixed(2);
-}
+// Discount and tax listeners
+document.getElementById("discount-percent").addEventListener("input", recalculateTotals);
+document.getElementById("tax-rate").addEventListener("input", recalculateTotals);
 
 // Form handlers
 document.getElementById("btn-reset-form").addEventListener("click", () => {
@@ -2370,14 +2479,37 @@ document.getElementById("btn-reset-form").addEventListener("click", () => {
     document.getElementById("cust-email").value = "";
     document.getElementById("cust-address").value = "";
     document.getElementById("special-notes").value = "";
-    document.getElementById("order-tbody").innerHTML = `
-        <tr>
-            <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">
-                Design your deck above and click "Apply to Order Form" or add items from the dropdown.
-            </td>
-        </tr>
-    `;
-    recalculateTotal();
+    document.getElementById("discount-percent").value = "0";
+
+    const tbody = document.getElementById("order-tbody");
+    tbody.innerHTML = "";
+    checkEmptyTable();
+    recalculateTotals();
+    initializeDates();
+});
+
+document.getElementById("btn-save-quote").addEventListener("click", () => {
+    const quoteData = {
+        quoteNumber: document.getElementById("quote-number").value,
+        quoteDate: document.getElementById("quote-date").value,
+        customer: {
+            name: document.getElementById("cust-name").value,
+            company: document.getElementById("cust-company").value,
+            phone: document.getElementById("cust-phone").value,
+            email: document.getElementById("cust-email").value,
+            address: document.getElementById("cust-address").value
+        },
+        deckConfig: state,
+        total: document.getElementById("grand-total").textContent
+    };
+
+    const blob = new Blob([JSON.stringify(quoteData, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `AmeriDex-Quote-${quoteData.quoteNumber}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
 });
 
 document.getElementById("btn-submit").addEventListener("click", () => {
@@ -2391,15 +2523,17 @@ document.getElementById("btn-submit").addEventListener("click", () => {
         return;
     }
 
-    alert("Order submitted!\n\nCustomer: " + name + "\nEmail: " + email + "\nTotal: " + document.getElementById("grand-total").textContent);
+    const total = document.getElementById("grand-total").textContent;
+    alert(`Order Submitted Successfully!\n\nQuote #: ${document.getElementById("quote-number").value}\nCustomer: ${name}\nEmail: ${email}\nTotal: ${total}\n\nA confirmation email will be sent shortly.`);
 });
 
 document.getElementById("btn-pdf").addEventListener("click", () => {
-    alert("PDF export feature coming soon. For now, use your browser's Print to PDF function (Ctrl+P or Cmd+P).");
+    window.print();
 });
 
 // Initialize
 initScene();
+initializeDates();
 </script>
 
 </body>
