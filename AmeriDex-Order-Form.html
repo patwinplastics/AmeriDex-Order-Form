@@ -308,7 +308,7 @@
     td {
         border: 1px solid var(--border-subtle);
         padding: 0.55rem 0.5rem;
-        vertical-align: middle;
+        vertical-align: top;
     }
 
     th {
@@ -332,7 +332,12 @@
 
     td .qty-input { max-width: 70px; }
     td .len-input { max-width: 120px; }
-    td .price-input { max-width: 140px; }
+    td .price-input { max-width: 110px; }
+    td .desc-input { 
+        width: 100%; 
+        margin-top: 0.4rem;
+        font-size: 0.82rem;
+    }
 
     .length-wrapper {
         display: flex;
@@ -353,6 +358,12 @@
         color: var(--primary);
         font-weight: 600;
         margin-top: 0.25rem;
+    }
+
+    .default-price-hint {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        margin-top: 0.2rem;
     }
 
     #mobile-items-container {
@@ -641,15 +652,15 @@
 
     @media (min-width: 769px) {
         #line-items th:nth-child(1),
-        #line-items td:nth-child(1) { width: 28%; }
+        #line-items td:nth-child(1) { width: 26%; }
         #line-items th:nth-child(2),
         #line-items td:nth-child(2) { width: 14%; }
         #line-items th:nth-child(3),
         #line-items td:nth-child(3) { width: 14%; }
         #line-items th:nth-child(4),
-        #line-items td:nth-child(4) { width: 10%; }
+        #line-items td:nth-child(4) { width: 8%; }
         #line-items th:nth-child(5),
-        #line-items td:nth-child(5) { width: 16%; }
+        #line-items td:nth-child(5) { width: 14%; }
         #line-items th:nth-child(6),
         #line-items td:nth-child(6) { width: 12%; }
         #line-items th:nth-child(7),
@@ -773,6 +784,26 @@
         gap: 1rem;
         justify-content: center;
         margin-top: 1rem;
+    }
+
+    /* Email fallback notice */
+    .email-fallback-notice {
+        background: #fef3c7;
+        border: 1px solid #f59e0b;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-top: 1rem;
+        font-size: 0.85rem;
+        color: #92400e;
+    }
+
+    .email-fallback-notice p {
+        margin: 0 0 0.5rem 0;
+    }
+
+    .email-fallback-notice .email-link {
+        color: var(--primary);
+        font-weight: 600;
     }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1012,7 +1043,7 @@
                     <button type="button" class="btn btn-primary" id="review-btn">Review & Send</button>
                 </div>
                 <div id="success-msg" class="success-banner" style="display:none;">
-                    Order email prepared. Check your email client to review and send.
+                    Order copied to clipboard and email client opened.
                 </div>
             </section>
         </form>
@@ -1063,7 +1094,15 @@
             <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem; justify-content: center; flex-wrap: wrap;">
                 <button type="button" class="btn btn-ghost" id="review-back">Back to Edit</button>
                 <button type="button" class="btn btn-outline" id="review-copy">Copy to Clipboard</button>
-                <button type="button" class="btn btn-primary" id="review-submit">Open in Email</button>
+                <button type="button" class="btn btn-primary" id="review-submit">Send Order</button>
+            </div>
+
+            <div id="email-fallback" class="email-fallback-notice" style="display: none;">
+                <p><strong>Order copied to clipboard!</strong></p>
+                <p>If your email client didn't open, please:</p>
+                <p>1. Open your email manually</p>
+                <p>2. Send to: <span class="email-link">orders@ameridex.com</span></p>
+                <p>3. Paste (Ctrl+V / Cmd+V) the order into the email body</p>
             </div>
         </div>
     </div>
@@ -1099,7 +1138,7 @@ const PRODUCT_CONFIG = {
                     isFt: true,
                     hasColor: true,
                     lengthType: "board",
-                    help: "Our premium option includes both grooved boards and integrated Dexerdry sealing. Best for complete system deck projects."
+                    help: "Premium option with grooved boards and integrated Dexerdry sealing."
                 },
                 grooved: {
                     name: "Grooved Deck Boards (no Dexerdry)",
@@ -1107,7 +1146,7 @@ const PRODUCT_CONFIG = {
                     isFt: true,
                     hasColor: true,
                     lengthType: "board",
-                    help: "Grooved boards without integrated sealing. Add standalone Dexerdry if needed."
+                    help: "Grooved boards without integrated sealing."
                 },
                 solid: {
                     name: "Solid Edge Deck Boards",
@@ -1115,7 +1154,7 @@ const PRODUCT_CONFIG = {
                     isFt: true,
                     hasColor: true,
                     lengthType: "board",
-                    help: "Use for picture framing around deck perimeter or stair construction."
+                    help: "For picture framing or stair construction."
                 }
             }
         },
@@ -1128,7 +1167,7 @@ const PRODUCT_CONFIG = {
                     isFt: true,
                     hasColor: false,
                     lengthType: "coil",
-                    help: "Standalone sealing product. Available in 240 ft or 50 ft boxes."
+                    help: "Standalone sealing. 240 ft or 50 ft boxes."
                 }
             }
         },
@@ -1137,17 +1176,17 @@ const PRODUCT_CONFIG = {
             products: {
                 screws: {
                     name: "Epoxy-Coated Screws",
-                    price: 37,
+                    price: 37.00,
                     isFt: false,
                     hasColor: false,
-                    help: "Per box (375 screws). Typically 2 screws per board-joist intersection."
+                    help: "Per box (375 screws)."
                 },
                 plugs: {
                     name: "Color-Matching Plugs",
                     price: 33.79,
                     isFt: false,
                     hasColor: false,
-                    help: "Per box. Matches installed screw heads with color-matched wooden plugs."
+                    help: "Per box."
                 }
             }
         },
@@ -1159,7 +1198,7 @@ const PRODUCT_CONFIG = {
                     price: 0,
                     isFt: false,
                     hasColor: false,
-                    help: "Add any custom product or service with your own description and price."
+                    help: "Enter your own description and price."
                 }
             }
         }
@@ -1210,9 +1249,6 @@ const reviewModal = document.getElementById("reviewModal");
 const printPreviewModal = document.getElementById("printPreviewModal");
 const modalImg = document.getElementById("colorLarge");
 const modalName = document.getElementById("colorName");
-const closeBtn = document.getElementById("modal-close");
-const reviewCloseBtn = document.getElementById("review-close");
-const printPreviewCloseBtn = document.getElementById("print-preview-close");
 
 // Responsive breakpoint detection
 function isMobileView() {
@@ -1252,11 +1288,7 @@ function initColorGrid() {
 
 function updateColorSelection() {
     document.querySelectorAll(".color-card").forEach(card => {
-        if (card.getAttribute("data-color") === selectedColor1) {
-            card.classList.add("selected");
-        } else {
-            card.classList.remove("selected");
-        }
+        card.classList.toggle("selected", card.getAttribute("data-color") === selectedColor1);
     });
 }
 
@@ -1270,7 +1302,6 @@ function updateColorComparison() {
     document.getElementById("color2-name").textContent = selectedColor2;
 }
 
-// Customer info progress tracking
 function updateCustomerProgress() {
     const name = document.getElementById("cust-name").value.trim() ? 1 : 0;
     const address = document.getElementById("cust-address").value.trim() ? 1 : 0;
@@ -1279,11 +1310,7 @@ function updateCustomerProgress() {
     const completed = name + address + phone + email;
     const badge = document.getElementById("cust-badge");
     badge.textContent = `${completed}/4`;
-    if (completed === 4) {
-        badge.classList.remove("incomplete");
-    } else {
-        badge.classList.add("incomplete");
-    }
+    badge.classList.toggle("incomplete", completed !== 4);
 }
 
 ["cust-name", "cust-address", "cust-phone", "cust-email"].forEach(id => {
@@ -1308,23 +1335,31 @@ document.getElementById("add-row").onclick = () => {
 
 document.getElementById("calc-btn").onclick = calculateAndSuggest;
 
-closeBtn.onclick = () => modal.classList.remove("active");
-reviewCloseBtn.onclick = () => reviewModal.classList.remove("active");
-printPreviewCloseBtn.onclick = () => printPreviewModal.classList.remove("active");
+// Modal close handlers
+document.getElementById("modal-close").onclick = () => modal.classList.remove("active");
+document.getElementById("review-close").onclick = () => { 
+    reviewModal.classList.remove("active");
+    document.getElementById("email-fallback").style.display = "none";
+};
+document.getElementById("print-preview-close").onclick = () => printPreviewModal.classList.remove("active");
 document.getElementById("print-preview-cancel").onclick = () => printPreviewModal.classList.remove("active");
 
 window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-        if (modal.classList.contains("active")) modal.classList.remove("active");
-        if (reviewModal.classList.contains("active")) reviewModal.classList.remove("active");
-        if (printPreviewModal.classList.contains("active")) printPreviewModal.classList.remove("active");
+        modal.classList.remove("active");
+        reviewModal.classList.remove("active");
+        printPreviewModal.classList.remove("active");
         document.getElementById("print-dropdown").classList.remove("active");
+        document.getElementById("email-fallback").style.display = "none";
     }
 });
 
 window.addEventListener("click", (e) => {
     if (e.target === modal) modal.classList.remove("active");
-    if (e.target === reviewModal) reviewModal.classList.remove("active");
+    if (e.target === reviewModal) {
+        reviewModal.classList.remove("active");
+        document.getElementById("email-fallback").style.display = "none";
+    }
     if (e.target === printPreviewModal) printPreviewModal.classList.remove("active");
 
     const dropdown = document.getElementById("print-dropdown");
@@ -1347,39 +1382,34 @@ document.getElementById("reset").onclick = () => {
     document.getElementById("stairs").checked = false;
     document.getElementById("pic-frame-note").style.display = "none";
     document.getElementById("stairs-note").style.display = "none";
-    const hintEl = document.getElementById("fastener-hint");
-    hintEl.style.display = "none";
-    hintEl.innerHTML = "";
+    document.getElementById("fastener-hint").style.display = "none";
+    document.getElementById("fastener-hint").innerHTML = "";
     document.getElementById("success-msg").style.display = "none";
 };
 
-// Print dropdown toggle
+// Print dropdown
 document.getElementById("print-btn").onclick = (e) => {
     e.stopPropagation();
     document.getElementById("print-dropdown").classList.toggle("active");
 };
 
-// Print customer quote
 document.getElementById("print-customer").onclick = () => {
     document.getElementById("print-dropdown").classList.remove("active");
     currentPrintType = "customer";
     showPrintPreview("customer");
 };
 
-// Print internal order form
 document.getElementById("print-internal").onclick = () => {
     document.getElementById("print-dropdown").classList.remove("active");
     currentPrintType = "internal";
     showPrintPreview("internal");
 };
 
-// Export PDF
 document.getElementById("export-pdf").onclick = () => {
     document.getElementById("print-dropdown").classList.remove("active");
     generatePDF();
 };
 
-// Print preview print button
 document.getElementById("print-preview-print").onclick = () => {
     printFromPreview();
 };
@@ -1387,10 +1417,7 @@ document.getElementById("print-preview-print").onclick = () => {
 function showPrintPreview(type) {
     const title = type === "customer" ? "Customer Quote Preview" : "Internal Order Form Preview";
     document.getElementById("print-preview-title").textContent = title;
-
-    const content = generatePrintHTML(type);
-    document.getElementById("print-preview-content").innerHTML = content;
-
+    document.getElementById("print-preview-content").innerHTML = generatePrintHTML(type);
     printPreviewModal.classList.add("active");
 }
 
@@ -1441,8 +1468,7 @@ function generatePrintHTML(type) {
         const prod = PRODUCTS[item.type] || PRODUCTS.custom;
         const price = getItemPrice(item);
         const sub = getItemSubtotal(item);
-        let desc = prod.name;
-        if (item.type === "custom" && item.customDesc) desc = item.customDesc;
+        let desc = item.type === "custom" && item.customDesc ? item.customDesc : prod.name;
 
         let lengthDisplay = "";
         if (item.type === "dexerdry") {
@@ -1463,16 +1489,9 @@ function generatePrintHTML(type) {
             </tr>
         `;
 
-        // Show total footage for Dexerdry
         if (item.type === "dexerdry") {
             const totalFt = item.length * item.qty;
-            html += `
-                <tr style="background: #f0f9ff;">
-                    <td colspan="6" style="font-size: 0.9em; color: #1d4ed8; padding-left: 2rem;">
-                        Total Dexerdry: ${totalFt} ft
-                    </td>
-                </tr>
-            `;
+            html += `<tr style="background: #f0f9ff;"><td colspan="6" style="font-size: 0.9em; color: #1d4ed8; padding-left: 2rem;">Total Dexerdry: ${totalFt} ft</td></tr>`;
         }
     });
 
@@ -1500,20 +1519,12 @@ function generatePrintHTML(type) {
     }
 
     const ship = document.getElementById("ship-addr").value;
-    if (ship) {
-        html += `<h2>Shipping Address</h2><p>${ship.replace(/\n/g, "<br>")}</p>`;
-    }
+    if (ship) html += `<h2>Shipping Address</h2><p>${ship.replace(/\n/g, "<br>")}</p>`;
 
     const delDate = document.getElementById("del-date").value;
-    if (delDate) {
-        html += `<p><strong>Preferred Delivery Date:</strong> ${delDate}</p>`;
-    }
+    if (delDate) html += `<p><strong>Preferred Delivery Date:</strong> ${delDate}</p>`;
 
-    html += `
-        <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ddd; text-align: center; color: #666;">
-            <p>Thank you for choosing AmeriDex!<br>www.ameridex.com</p>
-        </div>
-    `;
+    html += `<div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ddd; text-align: center; color: #666;"><p>Thank you for choosing AmeriDex!<br>www.ameridex.com</p></div>`;
 
     return html;
 }
@@ -1528,87 +1539,46 @@ function printFromPreview() {
         <head>
             <title>AmeriDex ${currentPrintType === "customer" ? "Quote" : "Order Form"}</title>
             <style>
-                body {
-                    font-family: "Times New Roman", serif;
-                    padding: 20px;
-                    max-width: 800px;
-                    margin: 0 auto;
-                }
-                h1 {
-                    color: #2563eb;
-                    border-bottom: 2px solid #2563eb;
-                    padding-bottom: 0.5rem;
-                }
-                h2 {
-                    color: #374151;
-                    font-size: 1.1rem;
-                    margin-top: 1.5rem;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin: 1rem 0;
-                }
-                th, td {
-                    border: 1px solid #ddd;
-                    padding: 8px;
-                    text-align: left;
-                }
-                th {
-                    background: #f3f4f6;
-                }
-                .total-row {
-                    font-weight: bold;
-                    background: #f9fafb;
-                }
-                @media print {
-                    body { padding: 0; }
-                }
+                body { font-family: "Times New Roman", serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+                h1 { color: #2563eb; border-bottom: 2px solid #2563eb; padding-bottom: 0.5rem; }
+                h2 { color: #374151; font-size: 1.1rem; margin-top: 1.5rem; }
+                table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background: #f3f4f6; }
+                .total-row { font-weight: bold; background: #f9fafb; }
+                @media print { body { padding: 0; } }
             </style>
         </head>
-        <body>
-            ${content}
-        </body>
+        <body>${content}</body>
         </html>
     `);
 
     printWindow.document.close();
     printWindow.focus();
-
-    setTimeout(() => {
-        printWindow.print();
-        printWindow.close();
-    }, 250);
-
+    setTimeout(() => { printWindow.print(); printWindow.close(); }, 250);
     printPreviewModal.classList.remove("active");
 }
 
 document.getElementById("review-btn").onclick = showReview;
-
-document.getElementById("review-submit").onclick = () => {
-    submitOrder();
-};
-
+document.getElementById("review-submit").onclick = submitOrder;
 document.getElementById("review-back").onclick = () => {
     reviewModal.classList.remove("active");
+    document.getElementById("email-fallback").style.display = "none";
 };
 
 document.getElementById("review-copy").onclick = () => {
     const orderText = generateOrderText(true);
     navigator.clipboard.writeText(orderText).then(() => {
         const btn = document.getElementById("review-copy");
-        const originalText = btn.textContent;
         btn.textContent = "Copied!";
         btn.classList.add("btn-success");
         btn.classList.remove("btn-outline");
         setTimeout(() => {
-            btn.textContent = originalText;
+            btn.textContent = "Copy to Clipboard";
             btn.classList.remove("btn-success");
             btn.classList.add("btn-outline");
         }, 2000);
-    }).catch(err => {
-        alert("Failed to copy. Please try again.");
-    });
+    }).catch(() => alert("Failed to copy."));
 };
 
 ["pic-frame", "stairs"].forEach(id => {
@@ -1617,10 +1587,8 @@ document.getElementById("review-copy").onclick = () => {
     });
 });
 
-// Responsive render function
 function render() {
     renderDesktop();
-
     if (isMobileView()) {
         renderMobile();
         document.getElementById("mobile-items-container").style.display = "block";
@@ -1636,9 +1604,8 @@ function renderDesktop() {
         const prod = PRODUCTS[item.type] || PRODUCTS.custom;
         const row = document.createElement("tr");
 
-        // Product with help
+        // Product column
         let td = document.createElement("td");
-        td.setAttribute("data-label", "Product");
         const sel = document.createElement("select");
 
         Object.entries(PRODUCT_CONFIG.categories).forEach(([catKey, category]) => {
@@ -1656,11 +1623,11 @@ function renderDesktop() {
 
         sel.onchange = () => {
             item.type = sel.value;
+            item.priceOverride = null;
             if (item.type !== "custom") {
                 item.customDesc = "";
                 item.customUnitPrice = 0;
             }
-            // Reset length based on product type
             if (item.type === "dexerdry") {
                 item.length = 240;
             } else if (PRODUCTS[item.type].isFt) {
@@ -1674,16 +1641,26 @@ function renderDesktop() {
         };
         td.appendChild(sel);
 
-        const helpDiv = document.createElement("div");
-        helpDiv.className = "help-text";
-        helpDiv.textContent = prod.help || "";
-        td.appendChild(helpDiv);
+        // Custom description input
+        if (item.type === "custom") {
+            const descInput = document.createElement("input");
+            descInput.type = "text";
+            descInput.className = "desc-input";
+            descInput.placeholder = "Enter product description...";
+            descInput.value = item.customDesc || "";
+            descInput.oninput = e => { item.customDesc = e.target.value; };
+            td.appendChild(descInput);
+        } else {
+            const helpDiv = document.createElement("div");
+            helpDiv.className = "help-text";
+            helpDiv.textContent = prod.help || "";
+            td.appendChild(helpDiv);
+        }
 
         row.appendChild(td);
 
-        // Color
+        // Color column
         td = document.createElement("td");
-        td.setAttribute("data-label", "Color");
         if (prod.hasColor) {
             const csel = document.createElement("select");
             COLORS.forEach(c => {
@@ -1695,11 +1672,13 @@ function renderDesktop() {
             });
 
             const prev = document.createElement("img");
+            prev.className = "preview-img";
+            prev.alt = "preview";
+            prev.title = "Click to enlarge";
 
             function applyImage() {
                 const colorName = item.color || COLORS[0];
-                const imgFile = COLOR_IMAGES[colorName] || COLOR_IMAGES.Driftwood;
-                prev.src = "colors/" + imgFile;
+                prev.src = "colors/" + (COLOR_IMAGES[colorName] || COLOR_IMAGES.Driftwood);
             }
 
             csel.onchange = e => {
@@ -1712,26 +1691,20 @@ function renderDesktop() {
             item.color = item.color || COLORS[0];
             applyImage();
 
-            prev.className = "preview-img";
-            prev.alt = "preview";
-            prev.title = "Click to enlarge";
             prev.onerror = () => { prev.src = "https://via.placeholder.com/34?text=?"; };
             prev.onclick = () => {
                 modalImg.src = prev.src;
                 modalName.textContent = item.color || COLORS[0];
                 modal.classList.add("active");
             };
-
             td.appendChild(prev);
         }
         row.appendChild(td);
 
-        // Length
+        // Length column
         td = document.createElement("td");
-        td.setAttribute("data-label", "Length");
 
         if (item.type === "dexerdry") {
-            // Dexerdry coil options
             const wrapper = document.createElement("div");
             const lenSel = document.createElement("select");
             lenSel.className = "len-input";
@@ -1752,7 +1725,6 @@ function renderDesktop() {
 
             wrapper.appendChild(lenSel);
 
-            // Total footage display
             const footageDiv = document.createElement("div");
             footageDiv.className = "footage-display";
             footageDiv.id = "footage-" + i;
@@ -1760,7 +1732,6 @@ function renderDesktop() {
 
             td.appendChild(wrapper);
         } else if (prod.isFt) {
-            // Board length options (12, 16, 20, custom)
             const wrapper = document.createElement("div");
             wrapper.className = "length-wrapper";
 
@@ -1783,7 +1754,6 @@ function renderDesktop() {
 
             wrapper.appendChild(lenSel);
 
-            // Custom length input
             if (item.length === "custom") {
                 const customInput = document.createElement("input");
                 customInput.type = "number";
@@ -1803,9 +1773,8 @@ function renderDesktop() {
         }
         row.appendChild(td);
 
-        // Qty
+        // Qty column
         td = document.createElement("td");
-        td.setAttribute("data-label", "Qty");
         td.className = "numeric";
         const qtyInput = document.createElement("input");
         qtyInput.type = "number";
@@ -1820,33 +1789,30 @@ function renderDesktop() {
         td.appendChild(qtyInput);
         row.appendChild(td);
 
-        // Unit Price
+        // Unit Price column - ALL items can have editable price
         td = document.createElement("td");
-        td.setAttribute("data-label", "Unit Price");
         td.className = "numeric";
 
+        const priceWrapper = document.createElement("div");
+
         if (item.type === "custom") {
-            const customPriceInput = document.createElement("input");
-            customPriceInput.type = "number";
-            customPriceInput.className = "price-input";
-            customPriceInput.placeholder = "Enter price";
-            customPriceInput.value = item.customUnitPrice || "";
-            customPriceInput.step = "0.01";
-            customPriceInput.min = "0";
-            customPriceInput.oninput = e => {
+            const priceInput = document.createElement("input");
+            priceInput.type = "number";
+            priceInput.className = "price-input";
+            priceInput.placeholder = "Price";
+            priceInput.value = item.customUnitPrice || "";
+            priceInput.step = "0.01";
+            priceInput.min = "0";
+            priceInput.oninput = e => {
                 item.customUnitPrice = parseFloat(e.target.value) || 0;
                 updateTotalAndFasteners();
             };
-            td.appendChild(customPriceInput);
-        } else if (item.type === "dexerdry") {
-            td.textContent = "$" + prod.price.toFixed(2) + "/ft";
-        } else if (!prod.isFt) {
-            td.textContent = "$" + prod.price.toFixed(2);
+            priceWrapper.appendChild(priceInput);
         } else {
             const priceInput = document.createElement("input");
             priceInput.type = "number";
             priceInput.className = "price-input";
-            priceInput.placeholder = "default $" + prod.price.toFixed(2);
+            priceInput.placeholder = "$" + prod.price.toFixed(2);
             priceInput.value = item.priceOverride != null ? item.priceOverride : "";
             priceInput.step = "0.01";
             priceInput.min = "0";
@@ -1855,18 +1821,24 @@ function renderDesktop() {
                 item.priceOverride = val === "" ? null : parseFloat(val) || 0;
                 updateTotalAndFasteners();
             };
-            td.appendChild(priceInput);
+            priceWrapper.appendChild(priceInput);
+
+            const hintDiv = document.createElement("div");
+            hintDiv.className = "default-price-hint";
+            hintDiv.textContent = "Default: $" + prod.price.toFixed(2) + (prod.isFt ? "/ft" : "");
+            priceWrapper.appendChild(hintDiv);
         }
+
+        td.appendChild(priceWrapper);
         row.appendChild(td);
 
-        // Subtotal
+        // Subtotal column
         td = document.createElement("td");
-        td.setAttribute("data-label", "Subtotal");
         td.className = "numeric";
         td.id = "sub-" + i;
         row.appendChild(td);
 
-        // Remove
+        // Remove button column
         td = document.createElement("td");
         td.className = "table-actions-cell";
         const rmBtn = document.createElement("button");
@@ -1897,7 +1869,7 @@ function renderMobile() {
         card.className = "line-item-card";
 
         const title = document.createElement("h4");
-        title.textContent = `Item ${i + 1}: ${prod.name}`;
+        title.textContent = `Item ${i + 1}: ${item.type === "custom" && item.customDesc ? item.customDesc : prod.name}`;
         card.appendChild(title);
 
         // Product select
@@ -1922,6 +1894,7 @@ function renderMobile() {
 
         prodSel.onchange = () => {
             item.type = prodSel.value;
+            item.priceOverride = null;
             if (item.type !== "custom") {
                 item.customDesc = "";
                 item.customUnitPrice = 0;
@@ -1941,6 +1914,22 @@ function renderMobile() {
         productRow.appendChild(prodLabel);
         productRow.appendChild(prodSel);
         card.appendChild(productRow);
+
+        // Custom description for custom items
+        if (item.type === "custom") {
+            const descRow = document.createElement("div");
+            descRow.className = "line-item-row full";
+            const descLabel = document.createElement("label");
+            descLabel.textContent = "Description";
+            const descInput = document.createElement("input");
+            descInput.type = "text";
+            descInput.placeholder = "Enter product description...";
+            descInput.value = item.customDesc || "";
+            descInput.oninput = e => { item.customDesc = e.target.value; };
+            descRow.appendChild(descLabel);
+            descRow.appendChild(descInput);
+            card.appendChild(descRow);
+        }
 
         // Color
         if (prod.hasColor) {
@@ -1965,7 +1954,7 @@ function renderMobile() {
             card.appendChild(colorRow);
         }
 
-        // Length and Qty
+        // Length and Qty row
         const lengthQtyRow = document.createElement("div");
         lengthQtyRow.className = "line-item-row";
 
@@ -2033,13 +2022,43 @@ function renderMobile() {
         qtyInput.type = "number";
         qtyInput.value = item.qty;
         qtyInput.min = "1";
-        qtyInput.step = "1";
         qtyInput.oninput = e => { item.qty = Math.max(1, parseInt(e.target.value) || 1); updateTotalAndFasteners(); };
         qtyDiv.appendChild(qtyLabel);
         qtyDiv.appendChild(qtyInput);
         lengthQtyRow.appendChild(qtyDiv);
 
         card.appendChild(lengthQtyRow);
+
+        // Unit Price row (editable for all)
+        const priceRow = document.createElement("div");
+        priceRow.className = "line-item-row full";
+        const priceLabel = document.createElement("label");
+        priceLabel.textContent = item.type === "custom" ? "Unit Price" : `Unit Price (Default: $${prod.price.toFixed(2)}${prod.isFt ? "/ft" : ""})`;
+        const priceInput = document.createElement("input");
+        priceInput.type = "number";
+        priceInput.step = "0.01";
+        priceInput.min = "0";
+
+        if (item.type === "custom") {
+            priceInput.placeholder = "Enter price";
+            priceInput.value = item.customUnitPrice || "";
+            priceInput.oninput = e => {
+                item.customUnitPrice = parseFloat(e.target.value) || 0;
+                updateTotalAndFasteners();
+            };
+        } else {
+            priceInput.placeholder = "Leave blank for default";
+            priceInput.value = item.priceOverride != null ? item.priceOverride : "";
+            priceInput.oninput = e => {
+                const val = e.target.value.trim();
+                item.priceOverride = val === "" ? null : parseFloat(val) || 0;
+                updateTotalAndFasteners();
+            };
+        }
+
+        priceRow.appendChild(priceLabel);
+        priceRow.appendChild(priceInput);
+        card.appendChild(priceRow);
 
         // Subtotal display
         const subRow = document.createElement("div");
@@ -2073,8 +2092,7 @@ function updateUndoButton() {
     if (deletedItems.length > 0) {
         btn.style.display = "block";
         btn.onclick = () => {
-            const item = deletedItems.pop();
-            lineItems.push(item);
+            lineItems.push(deletedItems.pop());
             render();
             updateTotalAndFasteners();
             updateUndoButton();
@@ -2085,18 +2103,13 @@ function updateUndoButton() {
 }
 
 function getItemLength(item) {
-    if (item.length === "custom") {
-        return item.customLength || 0;
-    }
-    return item.length || 0;
+    return item.length === "custom" ? (item.customLength || 0) : (item.length || 0);
 }
 
 function getItemPrice(item) {
     const prod = PRODUCTS[item.type] || PRODUCTS.custom;
-    if (item.priceOverride != null && !Number.isNaN(item.priceOverride) && item.type !== "dexerdry") {
-        return item.priceOverride;
-    }
     if (item.type === "custom") return item.customUnitPrice || 0;
+    if (item.priceOverride != null && !Number.isNaN(item.priceOverride)) return item.priceOverride;
     return prod.price;
 }
 
@@ -2105,11 +2118,9 @@ function getItemSubtotal(item) {
     const price = getItemPrice(item);
 
     if (item.type === "dexerdry") {
-        // Dexerdry: price per ft * box size * qty
         return item.length * item.qty * price;
     } else if (prod.isFt) {
-        const len = getItemLength(item);
-        return len * (item.qty || 0) * price;
+        return getItemLength(item) * (item.qty || 0) * price;
     }
     return (item.qty || 0) * price;
 }
@@ -2123,6 +2134,7 @@ function updateTotalAndFasteners() {
     lineItems.forEach((item, i) => {
         const sub = getItemSubtotal(item);
         total += sub;
+
         const subCell = document.getElementById("sub-" + i);
         if (subCell) subCell.textContent = "$" + sub.toFixed(2);
 
@@ -2130,22 +2142,17 @@ function updateTotalAndFasteners() {
         if (mobileSubCell) {
             let subText = "Subtotal: $" + sub.toFixed(2);
             if (item.type === "dexerdry") {
-                const totalFt = item.length * item.qty;
-                subText += ` (${totalFt} ft total)`;
+                subText += ` (${item.length * item.qty} ft total)`;
             }
             mobileSubCell.textContent = subText;
         }
 
-        // Update footage display for dexerdry
         const footageEl = document.getElementById("footage-" + i);
         if (footageEl && item.type === "dexerdry") {
-            const totalFt = item.length * item.qty;
-            footageEl.textContent = `Total: ${totalFt} ft`;
+            footageEl.textContent = `Total: ${item.length * item.qty} ft`;
         }
 
-        if (["system", "grooved"].includes(item.type)) {
-            totalGroovedBoards += item.qty;
-        }
+        if (["system", "grooved"].includes(item.type)) totalGroovedBoards += item.qty;
         if (item.type === "system") hasSystem = true;
         if (item.type === "dexerdry") hasStandaloneDex = true;
     });
@@ -2157,26 +2164,16 @@ function updateTotalAndFasteners() {
 
     if (totalGroovedBoards > 0 && deckLengthFt > 0) {
         const joistCount = Math.floor(deckLengthFt * 12 / 16) + 1;
-        const intersections = totalGroovedBoards * joistCount;
-        const screwsNeeded = intersections * 2;
-        const boxesScrews = Math.ceil(screwsNeeded / SCREWS_PER_BOX);
-
-        hintHtml += "<strong>Fastener suggestion (reference only):</strong><br>" +
-            "≈ " + boxesScrews + " boxes of screws<br>" +
-            "≈ " + boxesScrews + " boxes of plugs";
+        const boxesScrews = Math.ceil((totalGroovedBoards * joistCount * 2) / SCREWS_PER_BOX);
+        hintHtml += `<strong>Fastener suggestion:</strong><br>≈ ${boxesScrews} boxes of screws<br>≈ ${boxesScrews} boxes of plugs`;
     }
 
     if (hasSystem && hasStandaloneDex) {
-        hintHtml += '<div class="fastener-warning">AmeriDex System Boards already include Dexerdry in the price. Standalone Dexerdry is typically only needed for non-system decks.</div>';
+        hintHtml += '<div class="fastener-warning">AmeriDex System Boards already include Dexerdry. Standalone Dexerdry is typically only needed for non-system decks.</div>';
     }
 
-    if (hintHtml) {
-        hintEl.style.display = "block";
-        hintEl.innerHTML = hintHtml;
-    } else {
-        hintEl.style.display = "none";
-        hintEl.innerHTML = "";
-    }
+    hintEl.style.display = hintHtml ? "block" : "none";
+    hintEl.innerHTML = hintHtml;
 }
 
 function calculateAndSuggest() {
@@ -2193,20 +2190,9 @@ function calculateAndSuggest() {
     const run = perp ? deckWidthFt : deckLengthFt;
 
     const boardsNeeded = Math.ceil((span / EFFECTIVE_FT) * WASTE);
-    const dexerdryFt = (boardsNeeded - 1) * run * WASTE;
+    let suggestedLength = run <= 12 ? 12 : (run <= 16 ? 16 : 20);
 
-    // Determine best board length
-    let suggestedLength = 16;
-    if (run <= 12) suggestedLength = 12;
-    else if (run <= 16) suggestedLength = 16;
-    else suggestedLength = 20;
-
-    const msg =
-        "<strong>Suggested AmeriDex System Boards (Dexerdry included in price)</strong><br>" +
-        "• " + boardsNeeded + " boards @ " + suggestedLength + " ft each<br>" +
-        "• Total board ft: " + (boardsNeeded * suggestedLength).toFixed(1) + "<br>" +
-        "• Integrated Dexerdry coverage (for reference): " + dexerdryFt.toFixed(1) + " ft<br><br>" +
-        "(10% waste included)";
+    const msg = `<strong>Suggested AmeriDex System Boards</strong><br>• ${boardsNeeded} boards @ ${suggestedLength} ft each<br>• Total: ${(boardsNeeded * suggestedLength).toFixed(1)} board ft<br>(10% waste included)`;
     document.getElementById("calc-result").innerHTML = msg;
 
     if (confirm("Add suggested AmeriDex System Boards to the order?")) {
@@ -2228,36 +2214,25 @@ function calculateAndSuggest() {
 }
 
 function validateRequired() {
-    const name = document.getElementById("cust-name").value.trim();
-    const email = document.getElementById("cust-email").value.trim();
-    const phone = document.getElementById("cust-phone").value.trim();
-    const address = document.getElementById("cust-address").value.trim();
+    const fields = [
+        { id: "cust-name", msg: "customer name" },
+        { id: "cust-email", msg: "customer email" },
+        { id: "cust-phone", msg: "customer phone" },
+        { id: "cust-address", msg: "customer address" }
+    ];
 
-    if (!name) {
-        alert("Please enter customer name.");
-        document.getElementById("cust-name").focus();
-        return false;
+    for (const f of fields) {
+        if (!document.getElementById(f.id).value.trim()) {
+            alert("Please enter " + f.msg + ".");
+            document.getElementById(f.id).focus();
+            return false;
+        }
     }
-    if (!email) {
-        alert("Please enter customer email.");
-        document.getElementById("cust-email").focus();
-        return false;
-    }
-    if (!phone) {
-        alert("Please enter customer phone.");
-        document.getElementById("cust-phone").focus();
-        return false;
-    }
-    if (!address) {
-        alert("Please enter customer address.");
-        document.getElementById("cust-address").focus();
-        return false;
-    }
+
     if (lineItems.length === 0) {
         alert("Please add at least one line item.");
         return false;
     }
-
     return true;
 }
 
@@ -2274,8 +2249,6 @@ function generateOrderText(includeInternal = true) {
     txt += "Phone: " + document.getElementById("cust-phone").value + "\n";
     txt += "Email: " + document.getElementById("cust-email").value + "\n\n";
 
-    txt += "ORDER DETAILS\n";
-
     if (document.getElementById("pic-frame").checked) txt += "* Picture Framing Required\n";
     if (document.getElementById("stairs").checked) txt += "* Stairs Required\n";
     if (document.getElementById("pic-frame").checked || document.getElementById("stairs").checked) txt += "\n";
@@ -2285,17 +2258,14 @@ function generateOrderText(includeInternal = true) {
         const prod = PRODUCTS[item.type] || PRODUCTS.custom;
         const price = getItemPrice(item);
         const sub = getItemSubtotal(item);
-        let desc = prod.name;
-        if (item.type === "custom") desc = item.customDesc || desc;
+        let desc = item.type === "custom" && item.customDesc ? item.customDesc : prod.name;
         if (prod.hasColor && item.color) desc += " (" + item.color + ")";
 
         txt += (i + 1) + ". " + desc + "\n";
         if (item.type === "dexerdry") {
-            const totalFt = item.length * item.qty;
-            txt += "   Box Size: " + item.length + " ft | Qty: " + item.qty + " | Total: " + totalFt + " ft\n";
+            txt += "   Box: " + item.length + " ft | Qty: " + item.qty + " | Total: " + (item.length * item.qty) + " ft\n";
         } else if (prod.isFt) {
-            const len = getItemLength(item);
-            txt += "   Length: " + len + " ft | Qty: " + item.qty + " | @ $" + price.toFixed(2) + "/ft\n";
+            txt += "   Length: " + getItemLength(item) + " ft | Qty: " + item.qty + " | @ $" + price.toFixed(2) + "/ft\n";
         } else {
             txt += "   Qty: " + item.qty + " | @ $" + price.toFixed(2) + " each\n";
         }
@@ -2305,30 +2275,20 @@ function generateOrderText(includeInternal = true) {
     txt += "ESTIMATED TOTAL: " + document.getElementById("grand-total").textContent + "\n\n";
 
     const special = document.getElementById("special-instr").value;
-    if (special) {
-        txt += "SPECIAL INSTRUCTIONS:\n" + special + "\n\n";
-    }
+    if (special) txt += "SPECIAL INSTRUCTIONS:\n" + special + "\n\n";
 
     if (includeInternal) {
         const internal = document.getElementById("internal-notes").value;
-        if (internal) {
-            txt += "INTERNAL NOTES (Sales Rep):\n" + internal + "\n\n";
-        }
+        if (internal) txt += "INTERNAL NOTES:\n" + internal + "\n\n";
     }
 
     const ship = document.getElementById("ship-addr").value;
-    if (ship) {
-        txt += "SHIPPING ADDRESS:\n" + ship.replace(/\n/g, ", ") + "\n\n";
-    }
+    if (ship) txt += "SHIPPING ADDRESS:\n" + ship.replace(/\n/g, ", ") + "\n\n";
 
     const delDate = document.getElementById("del-date").value;
-    if (delDate) {
-        txt += "PREFERRED DELIVERY DATE: " + delDate + "\n\n";
-    }
+    if (delDate) txt += "PREFERRED DELIVERY DATE: " + delDate + "\n\n";
 
-    txt += "Thank you for choosing AmeriDex!\n";
     txt += "www.ameridex.com\n";
-
     return txt;
 }
 
@@ -2339,15 +2299,31 @@ function submitOrder() {
     const customerName = document.getElementById("cust-name").value;
     const subject = "AmeriDex Quote - " + customerName;
 
-    // Send to orders@ameridex.com
-    const mailto = "mailto:orders@ameridex.com" + 
-                   "?subject=" + encodeURIComponent(subject) + 
-                   "&body=" + encodeURIComponent(orderText);
+    // First, copy to clipboard
+    navigator.clipboard.writeText(orderText).then(() => {
+        // Then try to open email
+        const mailto = "mailto:orders@ameridex.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(orderText);
 
-    window.location.href = mailto;
+        // Create a hidden link and click it (more reliable than window.location)
+        const link = document.createElement("a");
+        link.href = mailto;
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
 
-    document.getElementById("success-msg").style.display = "block";
-    reviewModal.classList.remove("active");
+        // Show fallback instructions after a short delay
+        setTimeout(() => {
+            document.getElementById("email-fallback").style.display = "block";
+        }, 500);
+
+        document.getElementById("success-msg").style.display = "block";
+
+    }).catch(() => {
+        // If clipboard fails, still try email
+        window.location.href = "mailto:orders@ameridex.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(orderText);
+        document.getElementById("email-fallback").style.display = "block";
+    });
 }
 
 function showReview() {
@@ -2356,32 +2332,28 @@ function showReview() {
     document.getElementById("review-name").textContent = document.getElementById("cust-name").value;
     document.getElementById("review-email").textContent = document.getElementById("cust-email").value;
     document.getElementById("review-phone").textContent = document.getElementById("cust-phone").value;
+    document.getElementById("email-fallback").style.display = "none";
 
     const reviewItems = document.getElementById("review-items");
     reviewItems.innerHTML = "";
     lineItems.forEach((item, i) => {
         const prod = PRODUCTS[item.type] || PRODUCTS.custom;
         const sub = getItemSubtotal(item);
-        let desc = prod.name;
+        let desc = item.type === "custom" && item.customDesc ? item.customDesc : prod.name;
         if (prod.hasColor && item.color) desc += " (" + item.color + ")";
 
         let detail = "";
         if (item.type === "dexerdry") {
-            const totalFt = item.length * item.qty;
-            detail = ` - ${item.qty} x ${item.length}ft box (${totalFt} ft total)`;
+            detail = ` - ${item.qty} x ${item.length}ft box (${item.length * item.qty} ft)`;
         } else if (prod.isFt) {
-            const len = getItemLength(item);
-            detail = ` - ${item.qty} x ${len}ft`;
+            detail = ` - ${item.qty} x ${getItemLength(item)}ft`;
         } else {
             detail = ` - Qty: ${item.qty}`;
         }
 
         const itemDiv = document.createElement("div");
         itemDiv.className = "review-item";
-        itemDiv.innerHTML = `
-            <span class="review-item-label">${i + 1}. ${desc}${detail}</span>
-            <span>$${sub.toFixed(2)}</span>
-        `;
+        itemDiv.innerHTML = `<span class="review-item-label">${i + 1}. ${desc}${detail}</span><span>$${sub.toFixed(2)}</span>`;
         reviewItems.appendChild(itemDiv);
     });
 
@@ -2398,7 +2370,6 @@ function generatePDF() {
     const margin = 20;
     let y = 20;
 
-    // Header
     doc.setFontSize(20);
     doc.setTextColor(37, 99, 235);
     doc.text("AmeriDex Quote", pageWidth / 2, y, { align: "center" });
@@ -2409,7 +2380,6 @@ function generatePDF() {
     doc.text("Date: " + new Date().toLocaleDateString(), pageWidth / 2, y, { align: "center" });
     y += 15;
 
-    // Customer Info
     doc.setFontSize(12);
     doc.setTextColor(0);
     doc.setFont(undefined, "bold");
@@ -2418,19 +2388,14 @@ function generatePDF() {
 
     doc.setFont(undefined, "normal");
     doc.setFontSize(10);
-    doc.text("Name: " + document.getElementById("cust-name").value, margin, y);
-    y += 5;
-    doc.text("Email: " + document.getElementById("cust-email").value, margin, y);
-    y += 5;
-    doc.text("Phone: " + document.getElementById("cust-phone").value, margin, y);
-    y += 5;
+    doc.text("Name: " + document.getElementById("cust-name").value, margin, y); y += 5;
+    doc.text("Email: " + document.getElementById("cust-email").value, margin, y); y += 5;
+    doc.text("Phone: " + document.getElementById("cust-phone").value, margin, y); y += 5;
 
-    const address = document.getElementById("cust-address").value;
-    const addressLines = doc.splitTextToSize("Address: " + address, pageWidth - 2 * margin);
+    const addressLines = doc.splitTextToSize("Address: " + document.getElementById("cust-address").value, pageWidth - 2 * margin);
     doc.text(addressLines, margin, y);
     y += addressLines.length * 5 + 10;
 
-    // Line Items
     doc.setFontSize(12);
     doc.setFont(undefined, "bold");
     doc.text("Order Items", margin, y);
@@ -2440,14 +2405,11 @@ function generatePDF() {
     doc.setFont(undefined, "normal");
 
     lineItems.forEach((item, i) => {
-        if (y > 260) {
-            doc.addPage();
-            y = 20;
-        }
+        if (y > 260) { doc.addPage(); y = 20; }
 
         const prod = PRODUCTS[item.type] || PRODUCTS.custom;
         const sub = getItemSubtotal(item);
-        let desc = prod.name;
+        let desc = item.type === "custom" && item.customDesc ? item.customDesc : prod.name;
         if (prod.hasColor && item.color) desc += " (" + item.color + ")";
 
         const descLines = doc.splitTextToSize((i + 1) + ". " + desc, pageWidth - 2 * margin - 40);
@@ -2457,11 +2419,9 @@ function generatePDF() {
 
         doc.setTextColor(100);
         if (item.type === "dexerdry") {
-            const totalFt = item.length * item.qty;
-            doc.text("   " + item.qty + " x " + item.length + "ft box = " + totalFt + " ft total", margin, y);
+            doc.text("   " + item.qty + " x " + item.length + "ft box = " + (item.length * item.qty) + " ft", margin, y);
         } else if (prod.isFt) {
-            const len = getItemLength(item);
-            doc.text("   " + len + " ft x " + item.qty + " @ $" + getItemPrice(item).toFixed(2) + "/ft", margin, y);
+            doc.text("   " + getItemLength(item) + " ft x " + item.qty + " @ $" + getItemPrice(item).toFixed(2) + "/ft", margin, y);
         } else {
             doc.text("   Qty: " + item.qty + " @ $" + getItemPrice(item).toFixed(2) + " each", margin, y);
         }
@@ -2469,10 +2429,8 @@ function generatePDF() {
         y += 8;
     });
 
-    // Total
     y += 5;
     doc.setDrawColor(37, 99, 235);
-    doc.setLineWidth(0.5);
     doc.line(margin, y, pageWidth - margin, y);
     y += 8;
 
@@ -2481,9 +2439,7 @@ function generatePDF() {
     doc.setTextColor(37, 99, 235);
     doc.text("Estimated Total: " + document.getElementById("grand-total").textContent, pageWidth - margin, y, { align: "right" });
 
-    // Footer
-    const pageCount = doc.internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
+    for (let i = 1; i <= doc.internal.getNumberOfPages(); i++) {
         doc.setPage(i);
         doc.setFontSize(8);
         doc.setTextColor(150);
@@ -2493,13 +2449,10 @@ function generatePDF() {
     doc.save("AmeriDex-Quote-" + document.getElementById("cust-name").value.replace(/\s+/g, "-") + ".pdf");
 }
 
-// Debounced resize listener
 let resizeTimeout;
 window.addEventListener("resize", () => {
     clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-        render();
-    }, 250);
+    resizeTimeout = setTimeout(render, 250);
 });
 
 // Initialize
