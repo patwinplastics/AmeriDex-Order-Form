@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AmeriDex Order Form Pro</title>
 <style>
     :root {
@@ -20,35 +20,28 @@
         --shadow-soft: 0 10px 25px rgba(15, 23, 42, 0.08);
         --radius-card: 14px;
         --radius-field: 8px;
-        --safe-area-inset-bottom: env(safe-area-inset-bottom, 0);
     }
 
     * { box-sizing: border-box; }
 
-    html, body {
+    body {
         margin: 0;
-        padding: 0;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         background-color: var(--bg-page);
         color: var(--text-main);
         line-height: 1.5;
     }
 
-    body {
-        -webkit-font-smoothing: antialiased;
-        -webkit-tap-highlight-color: transparent;
-    }
-
     .page-shell {
         max-width: 1120px;
         margin: 0 auto;
-        padding: 0.75rem 0.75rem 3rem;
+        padding: 1.5rem 1.25rem 2.5rem;
     }
 
     header.app-header {
         background: linear-gradient(135deg, #2563eb, #1e40af);
         color: #fff;
-        padding: 1.5rem 1rem 1.75rem;
+        padding: 2.4rem 1.75rem 2.6rem;
         border-radius: 0 0 var(--radius-card) var(--radius-card);
         box-shadow: var(--shadow-soft);
         text-align: center;
@@ -58,70 +51,65 @@
     }
 
     header.app-header img {
-        max-width: 160px;
+        max-width: 220px;
         height: auto;
         display: block;
-        margin: 0 auto 0.5rem;
+        margin: 0 auto 0.75rem;
     }
 
     header.app-header h1 {
-        margin: 0.15rem 0 0.3rem;
-        font-size: 1.4rem;
+        margin: 0.25rem 0 0.5rem;
+        font-size: 1.9rem;
         letter-spacing: 0.03em;
     }
 
     header.app-header p.header-sub {
-        margin: 0.1rem 0 0;
-        font-size: 0.75rem;
+        margin: 0.15rem 0 0;
+        font-size: 0.88rem;
         color: rgba(249, 250, 251, 0.9);
-        line-height: 1.3;
     }
 
-    main { margin-top: 0.75rem; }
+    main { margin-top: 1.5rem; }
 
     .card {
         background: var(--bg-card);
         border-radius: var(--radius-card);
-        padding: 1.25rem;
-        margin-bottom: 0.9rem;
+        padding: 1.75rem;
+        margin-bottom: 1.25rem;
         box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
         border: 1px solid rgba(148, 163, 184, 0.18);
     }
 
     .card-header {
-        margin-bottom: 0.75rem;
+        margin-bottom: 1rem;
         border-bottom: 1px solid rgba(229, 231, 235, 0.9);
-        padding-bottom: 0.5rem;
+        padding-bottom: 0.75rem;
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
-        gap: 0.5rem;
+        align-items: center;
     }
 
     .card-title {
         margin: 0;
-        font-size: 1rem;
+        font-size: 1.15rem;
         font-weight: 700;
         letter-spacing: 0.01em;
     }
 
     .card-subtitle {
-        margin: 0.15rem 0 0;
-        font-size: 0.75rem;
+        margin: 0.2rem 0 0;
+        font-size: 0.88rem;
         color: var(--text-muted);
-        line-height: 1.3;
     }
 
     .progress-badge {
         display: inline-block;
         background: var(--success);
         color: white;
-        padding: 0.25rem 0.6rem;
+        padding: 0.3rem 0.8rem;
         border-radius: 999px;
-        font-size: 0.65rem;
+        font-size: 0.75rem;
         font-weight: 600;
-        white-space: nowrap;
-        flex-shrink: 0;
     }
 
     .progress-badge.incomplete {
@@ -131,61 +119,43 @@
     .form-grid {
         display: grid;
         grid-template-columns: minmax(0, 1fr);
-        gap: 0.7rem;
+        gap: 0.9rem 1.25rem;
     }
 
     .field {
         display: flex;
         flex-direction: column;
-        gap: 0.2rem;
+        gap: 0.25rem;
     }
 
     .field-row-2 {
         display: grid;
         grid-template-columns: minmax(0, 1fr);
-        gap: 0.7rem;
-    }
-
-    .field-row-3 {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr);
-        gap: 0.7rem;
-    }
-
-    .field-row-4 {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.7rem;
+        gap: 0.9rem 1.25rem;
     }
 
     @media (min-width: 768px) {
         .field-row-2 {
             grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         }
-        .field-row-3 {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-        }
-        .field-row-4 {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-        }
     }
 
     label {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         font-weight: 600;
         color: #374151;
     }
 
     .required-indicator {
         color: var(--danger);
-        margin-left: 0.1rem;
+        margin-left: 0.15rem;
     }
 
     .help-text {
-        font-size: 0.7rem;
+        font-size: 0.8rem;
         color: var(--text-muted);
-        margin-top: 0.15rem;
-        line-height: 1.3;
+        margin-top: 0.2rem;
+        line-height: 1.4;
     }
 
     input[type="text"],
@@ -196,23 +166,13 @@
     textarea,
     select {
         width: 100%;
-        padding: 0.75rem 0.6rem;
+        padding: 0.68rem 0.7rem;
         border-radius: var(--radius-field);
         border: 1px solid var(--border-subtle);
-        font-size: 1rem;
+        font-size: 0.94rem;
         color: var(--text-main);
         background-color: #ffffff;
         transition: border-color 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
-        appearance: none;
-        -webkit-appearance: none;
-    }
-
-    select {
-        padding-right: 2.5rem;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23111827' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 0.6rem center;
-        background-size: 1.2rem;
     }
 
     input:focus,
@@ -220,362 +180,65 @@
     select:focus {
         outline: none;
         border-color: var(--primary);
-        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+        box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.22);
         background-color: #f9fafb;
     }
 
     textarea {
-        min-height: 80px;
+        min-height: 90px;
         resize: vertical;
-        font-family: inherit;
     }
 
     .error {
-        font-size: 0.7rem;
+        font-size: 0.78rem;
         color: var(--danger);
         margin-top: 0.1rem;
     }
 
     .hint {
-        font-size: 0.75rem;
+        font-size: 0.82rem;
         color: var(--text-muted);
-        margin-top: 0.1rem;
-        line-height: 1.4;
+        margin-top: 0.15rem;
     }
 
     .inline-checks {
         display: flex;
         flex-direction: column;
-        gap: 0.4rem;
-        margin-bottom: 0.6rem;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
     }
 
     .check-row {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: 0.5rem;
-        padding: 0.4rem 0;
     }
 
     .check-row input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        margin-top: 0.15rem;
-        cursor: pointer;
-        flex-shrink: 0;
-    }
-
-    .check-row label {
-        margin: 0;
-        font-size: 0.9rem;
-        font-weight: 500;
-        cursor: pointer;
-        flex: 1;
+        width: 16px;
+        height: 16px;
     }
 
     .note-inline {
-        margin-left: 2rem;
-        font-size: 0.75rem;
+        margin-left: 1.6rem;
+        font-size: 0.82rem;
         color: #b45309;
-        line-height: 1.3;
     }
 
-    /* 3D Deck Builder Styles */
-    .deck-builder-container {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-
-    @media (min-width: 992px) {
-        .deck-builder-container {
-            grid-template-columns: 320px 1fr;
-        }
-    }
-
-    .builder-controls {
-        background: #f9fafb;
-        border-radius: 10px;
-        padding: 1rem;
-        border: 1px solid var(--border-subtle);
-    }
-
-    .builder-controls h3 {
-        margin: 0 0 0.75rem 0;
-        font-size: 0.9rem;
-        color: var(--primary);
-        border-bottom: 1px solid var(--border-subtle);
-        padding-bottom: 0.5rem;
-    }
-
-    .control-section {
-        margin-bottom: 1rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px dashed var(--border-subtle);
-    }
-
-    .control-section:last-child {
-        border-bottom: none;
-        margin-bottom: 0;
-        padding-bottom: 0;
-    }
-
-    .control-section-title {
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: var(--text-muted);
-        margin-bottom: 0.5rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    .builder-viewport {
-        position: relative;
-        background: linear-gradient(180deg, #87CEEB 0%, #E0F4FF 50%, #90EE90 100%);
-        border-radius: 10px;
-        overflow: hidden;
-        min-height: 400px;
-        border: 2px solid var(--border-subtle);
-    }
-
-    @media (min-width: 768px) {
-        .builder-viewport {
-            min-height: 500px;
-        }
-    }
-
-    #deck-canvas {
-        width: 100%;
-        height: 100%;
-        display: block;
-    }
-
-    .viewport-controls {
-        position: absolute;
-        bottom: 10px;
-        left: 10px;
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-    }
-
-    .viewport-btn {
-        background: rgba(255,255,255,0.95);
-        border: 1px solid var(--border-subtle);
-        border-radius: 6px;
-        padding: 0.4rem 0.7rem;
-        font-size: 0.75rem;
-        cursor: pointer;
-        transition: all 0.15s ease;
-        font-weight: 600;
-    }
-
-    .viewport-btn:hover {
-        background: var(--primary);
-        color: white;
-        border-color: var(--primary);
-    }
-
-    .viewport-btn.active {
-        background: var(--primary);
-        color: white;
-        border-color: var(--primary);
-    }
-
-    .material-summary {
-        background: white;
-        border-radius: 8px;
-        padding: 0.75rem;
-        margin-top: 0.75rem;
-        border: 1px solid var(--border-subtle);
-    }
-
-    .material-summary h4 {
-        margin: 0 0 0.5rem 0;
-        font-size: 0.85rem;
-        color: var(--primary-dark);
-    }
-
-    .material-item {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.8rem;
-        padding: 0.25rem 0;
-        border-bottom: 1px dotted var(--border-subtle);
-    }
-
-    .material-item:last-child {
-        border-bottom: none;
-    }
-
-    .material-item-label {
-        color: var(--text-muted);
-    }
-
-    .material-item-value {
-        font-weight: 600;
-    }
-
-    .color-swatches {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0.4rem;
-        margin-top: 0.5rem;
-    }
-
-    .color-swatch {
-        aspect-ratio: 1;
-        border-radius: 6px;
-        cursor: pointer;
-        border: 2px solid transparent;
-        transition: all 0.15s ease;
-        position: relative;
-    }
-
-    .color-swatch:hover {
-        transform: scale(1.1);
-    }
-
-    .color-swatch.selected {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
-    }
-
-    .color-swatch::after {
-        content: attr(data-name);
-        position: absolute;
-        bottom: -18px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 0.6rem;
-        white-space: nowrap;
-        color: var(--text-muted);
-    }
-
-    .stair-config {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.5rem;
-    }
-
-    .stair-side-btn {
-        padding: 0.5rem;
-        font-size: 0.75rem;
-        border: 1px solid var(--border-subtle);
-        background: white;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: all 0.15s ease;
-    }
-
-    .stair-side-btn:hover {
-        border-color: var(--primary);
-    }
-
-    .stair-side-btn.active {
-        background: var(--primary);
-        color: white;
-        border-color: var(--primary);
-    }
-
-    .stair-side-btn.disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
-
-    .apply-btn {
-        width: 100%;
-        margin-top: 1rem;
-        background: var(--success);
-        color: white;
-        border: none;
-        padding: 0.75rem;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        font-size: 0.9rem;
-        transition: all 0.15s ease;
-    }
-
-    .apply-btn:hover {
-        background: #15803d;
-    }
-
-    .reset-builder-btn {
-        width: 100%;
-        margin-top: 0.5rem;
-        background: transparent;
-        color: var(--text-muted);
-        border: 1px solid var(--border-subtle);
-        padding: 0.5rem;
-        border-radius: 6px;
-        font-size: 0.8rem;
-        cursor: pointer;
-        transition: all 0.15s ease;
-    }
-
-    .reset-builder-btn:hover {
-        border-color: var(--danger);
-        color: var(--danger);
-    }
-
-    /* Loading overlay */
-    .builder-loading {
-        position: absolute;
-        inset: 0;
-        background: rgba(255,255,255,0.9);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        gap: 1rem;
-        z-index: 10;
-    }
-
-    .builder-loading.hidden {
-        display: none;
-    }
-
-    .spinner {
-        width: 40px;
-        height: 40px;
-        border: 4px solid var(--border-subtle);
-        border-top-color: var(--primary);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-
-    /* Mobile Color Grid */
     .color-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-        gap: 0.6rem;
-        margin-top: 0.75rem;
-        margin-bottom: 0.75rem;
-    }
-
-    @media (min-width: 768px) {
-        .color-grid {
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 1rem;
-        }
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
     }
 
     .color-card {
         border: 2px solid transparent;
-        border-radius: 8px;
+        border-radius: 10px;
         overflow: hidden;
         cursor: pointer;
         transition: all 0.2s ease;
-        position: relative;
-    }
-
-    .color-card:active {
-        transform: scale(0.95);
     }
 
     .color-card:hover {
@@ -590,36 +253,32 @@
 
     .color-card img {
         width: 100%;
-        height: 60px;
+        height: 80px;
         object-fit: cover;
-        border-radius: 6px;
-        display: block;
+        border-radius: 8px;
     }
 
     .color-card-label {
         text-align: center;
-        font-size: 0.7rem;
+        font-size: 0.8rem;
         font-weight: 600;
-        margin-top: 0.3rem;
+        margin-top: 0.4rem;
         color: var(--text-main);
     }
 
-    /* Mobile Comparison Panel */
     .comparison-panel {
         display: grid;
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        margin-top: 1rem;
-        padding: 0.75rem;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+        padding: 1rem;
         background: #f9fafb;
         border-radius: 10px;
     }
 
-    @media (min-width: 768px) {
+    @media (max-width: 768px) {
         .comparison-panel {
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            padding: 1rem;
+            grid-template-columns: 1fr;
         }
     }
 
@@ -628,104 +287,22 @@
     }
 
     .color-preview h4 {
-        margin: 0 0 0.5rem 0;
-        font-size: 0.85rem;
-        font-weight: 600;
+        margin-top: 0;
+        font-size: 0.9rem;
     }
 
     .color-preview img {
         width: 100%;
-        max-width: 150px;
-        border-radius: 8px;
-        border: 1px solid var(--border-subtle);
-    }
-
-    /* Mobile Line Items Card Layout */
-    .line-item-card {
-        background: white;
-        border: 1px solid var(--border-subtle);
+        max-width: 200px;
         border-radius: 10px;
-        padding: 0.9rem;
-        margin-bottom: 0.8rem;
-        display: none;
-    }
-
-    .line-item-card.mobile-visible {
-        display: block;
-    }
-
-    .line-item-card h4 {
-        margin: 0 0 0.75rem 0;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--primary);
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .line-item-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.6rem;
-        margin-bottom: 0.6rem;
-    }
-
-    .line-item-row.full {
-        grid-template-columns: 1fr;
-    }
-
-    .line-item-row > div {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .line-item-row label {
-        font-size: 0.8rem;
-        margin-bottom: 0.3rem;
-    }
-
-    .line-item-subtotal {
-        background: #f9fafb;
-        padding: 0.6rem;
-        border-radius: 6px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: var(--primary-dark);
-        text-align: right;
-    }
-
-    .line-item-card-actions {
-        display: flex;
-        gap: 0.4rem;
-        margin-top: 0.75rem;
-        padding-top: 0.75rem;
-        border-top: 1px solid var(--border-subtle);
-    }
-
-    .line-item-card-actions button {
-        flex: 1;
-    }
-
-    @media (max-width: 768px) {
-        #line-items {
-            display: none;
-        }
-    }
-
-    @media (min-width: 769px) {
-        .line-item-card {
-            display: none !important;
-        }
-        #mobile-items-container {
-            display: none !important;
-        }
+        border: 2px solid var(--border-subtle);
     }
 
     table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 0.75rem;
-        font-size: 0.85rem;
+        margin-top: 1rem;
+        font-size: 0.9rem;
     }
 
     thead { background-color: #f9fafb; }
@@ -733,7 +310,7 @@
     th,
     td {
         border: 1px solid var(--border-subtle);
-        padding: 0.5rem;
+        padding: 0.55rem 0.5rem;
         vertical-align: middle;
     }
 
@@ -741,7 +318,7 @@
         font-weight: 600;
         color: #4b5563;
         text-align: left;
-        font-size: 0.8rem;
+        font-size: 0.84rem;
     }
 
     th.numeric,
@@ -751,29 +328,66 @@
 
     td input,
     td select {
-        font-size: 0.8rem;
-        padding: 0.35rem 0.4rem;
+        font-size: 0.86rem;
+        padding: 0.4rem 0.45rem;
         border-radius: 6px;
     }
 
-    td .qty-input { max-width: 60px; }
-    td .len-input { max-width: 80px; }
-    td .price-input { max-width: 120px; }
+    td .qty-input { max-width: 70px; }
+    td .len-input { max-width: 90px; }
+    td .price-input { max-width: 140px; }
+
+    .line-item-card {
+        background: white;
+        border: 1px solid var(--border-subtle);
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        display: none;
+    }
+
+    .line-item-card.mobile-visible {
+        display: block;
+    }
+
+    .line-item-card h4 {
+        margin: 0 0 1rem 0;
+        font-size: 0.95rem;
+    }
+
+    .line-item-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .line-item-row.full {
+        grid-template-columns: 1fr;
+    }
+
+    .line-item-card-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-subtle);
+    }
 
     .preview-img {
-        width: 30px;
-        height: 30px;
+        width: 34px;
+        height: 34px;
         object-fit: cover;
         border-radius: 6px;
         cursor: pointer;
-        margin-left: 0.4rem;
+        margin-left: 0.45rem;
         border: 1px solid #e5e7eb;
         background-color: #f9fafb;
     }
 
     .table-actions-cell {
         text-align: center;
-        width: 35px;
+        width: 40px;
     }
 
     .btn-remove-row {
@@ -781,14 +395,11 @@
         color: #b91c1c;
         border-radius: 999px;
         border: none;
-        padding: 0.25rem 0.6rem;
+        padding: 0.18rem 0.55rem;
         font-size: 1rem;
         cursor: pointer;
-        transition: all 0.12s ease;
-        min-height: 32px;
     }
 
-    .btn-remove-row:active { background-color: #fca5a5; }
     .btn-remove-row:hover { background-color: #fecaca; }
 
     .btn-undo {
@@ -796,152 +407,81 @@
         color: #92400e;
         border-radius: 999px;
         border: none;
-        padding: 0.4rem 0.9rem;
-        font-size: 0.8rem;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.85rem;
         cursor: pointer;
         margin-top: 0.5rem;
-        font-weight: 600;
-        width: 100%;
-        transition: all 0.12s ease;
-        min-height: 40px;
     }
 
-    .btn-undo:active { background-color: #fcd34d; }
     .btn-undo:hover { background-color: #fed7aa; }
 
     .btn-add-row {
-        margin-top: 0.75rem;
-        font-size: 0.85rem;
-        padding-inline: 0.8rem;
-        width: 100%;
-        min-height: 40px;
-    }
-
-    /* Sticky Price Bar - Mobile Bottom */
-    .sticky-price-bar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 20%);
-        padding: 0.5rem 0.75rem var(--safe-area-inset-bottom);
-        border-top: 2px solid var(--border-subtle);
-        z-index: 10;
-        display: none;
-    }
-
-    .sticky-price-bar.mobile-visible {
-        display: block;
-    }
-
-    .sticky-price-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: white;
-        padding: 0.5rem 0.75rem;
-        border-radius: 8px;
-        box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
-    }
-
-    .sticky-label {
-        font-size: 0.8rem;
-        color: var(--text-muted);
-        font-weight: 600;
-    }
-
-    .sticky-value {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: var(--primary-dark);
+        margin-top: 0.9rem;
+        font-size: 0.88rem;
+        padding-inline: 1rem;
     }
 
     .total-bar {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
-        padding: 0.75rem 0.9rem;
+        padding: 0.9rem 1.1rem;
         border-radius: var(--radius-card);
         background: #f9fafb;
         border: 1px solid var(--border-subtle);
-        gap: 1rem;
     }
 
     .total-label {
-        font-size: 0.85rem;
+        font-size: 0.92rem;
         color: #4b5563;
-        font-weight: 600;
+        margin-right: 0.4rem;
     }
 
     .total-value {
-        font-size: 1.15rem;
+        font-size: 1.25rem;
         font-weight: 700;
         color: #1e40af;
     }
 
     .fastener-block {
-        margin-top: 0.75rem;
-        padding: 0.6rem;
+        margin-top: 0.9rem;
+        padding: 0.7rem 0.8rem;
         background-color: var(--primary-soft);
         border-radius: 10px;
         border: 1px dashed #bfdbfe;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         color: #1d4ed8;
-        line-height: 1.4;
     }
 
     .fastener-warning {
         color: #b91c1c;
-        font-size: 0.75rem;
-        margin-top: 0.35rem;
-        line-height: 1.3;
+        font-size: 0.8rem;
+        margin-top: 0.45rem;
     }
 
     .actions-row {
         display: flex;
-        flex-direction: column;
-        gap: 0.6rem;
-        margin-bottom: 2.5rem;
-    }
-
-    @media (min-width: 768px) {
-        .actions-row {
-            flex-direction: row;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 0;
-        }
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
     }
 
     .btn {
-        border-radius: 8px;
-        padding: 0.75rem 1.2rem;
+        border-radius: 999px;
+        padding: 0.7rem 1.6rem;
         font-size: 0.9rem;
         font-weight: 600;
         cursor: pointer;
         border: 1px solid transparent;
-        transition: all 0.12s ease;
-        min-height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    @media (max-width: 768px) {
-        .btn {
-            width: 100%;
-            min-height: 48px;
-            font-size: 0.95rem;
-        }
+        transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
     }
 
     .btn-primary {
         background-color: var(--primary);
         color: #ffffff;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
     }
 
-    .btn-primary:active { background-color: #1e40af; }
     .btn-primary:hover { background-color: var(--primary-dark); }
 
     .btn-outline {
@@ -950,7 +490,6 @@
         border-color: var(--primary);
     }
 
-    .btn-outline:active { background-color: #f0f7ff; }
     .btn-outline:hover { background-color: #eff6ff; }
 
     .btn-ghost {
@@ -959,24 +498,21 @@
         border-color: #d1d5db;
     }
 
-    .btn-ghost:active { background-color: #f3f4f6; }
     .btn-ghost:hover { background-color: #f9fafb; }
 
     .btn-sm {
-        padding: 0.35rem 0.65rem;
-        font-size: 0.75rem;
-        min-height: auto;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
     }
 
     .success-banner {
-        margin-top: 0.6rem;
-        padding: 0.5rem 0.75rem;
+        margin-top: 0.85rem;
+        padding: 0.65rem 0.9rem;
         border-radius: 10px;
         background-color: #ecfdf3;
         color: #166534;
-        font-size: 0.8rem;
+        font-size: 0.84rem;
         border: 1px solid #bbf7d0;
-        line-height: 1.4;
     }
 
     .modal {
@@ -987,9 +523,8 @@
         z-index: 50;
         justify-content: center;
         align-items: center;
-        padding: 0.75rem;
+        padding: 1.25rem;
         overflow-y: auto;
-        padding-bottom: var(--safe-area-inset-bottom);
     }
 
     .modal.active {
@@ -998,41 +533,34 @@
 
     .modal-content {
         background: #ffffff;
-        padding: 1rem;
+        padding: 1.25rem;
         border-radius: 12px;
-        max-width: 95%;
+        max-width: 90%;
         max-height: 90vh;
+        text-align: center;
         position: relative;
         box-shadow: var(--shadow-soft);
         overflow-y: auto;
-        text-align: center;
     }
 
     .modal-content img {
         max-width: 100%;
-        max-height: 60vh;
+        max-height: 70vh;
         border-radius: 10px;
     }
 
     .modal-close {
         position: absolute;
-        top: 8px;
-        right: 8px;
+        top: 10px;
+        right: 12px;
         font-size: 1.5rem;
         cursor: pointer;
         color: #6b7280;
         background: none;
         border: none;
-        padding: 0.4rem;
-        width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.12s ease;
+        padding: 0.5rem;
     }
 
-    .modal-close:active { color: #374151; }
     .modal-close:hover { color: #111827; }
 
     .review-modal-content {
@@ -1041,44 +569,42 @@
     }
 
     .review-section {
-        margin-bottom: 1rem;
-        padding-bottom: 0.75rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
         border-bottom: 1px solid var(--border-subtle);
     }
 
     .review-section h3 {
-        margin: 0 0 0.6rem 0;
-        font-size: 0.95rem;
+        margin: 0 0 0.75rem 0;
+        font-size: 1rem;
         color: var(--primary);
     }
 
     .review-item {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 0.4rem;
-        font-size: 0.85rem;
-        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
     }
 
     .review-item-label {
         color: var(--text-muted);
         font-weight: 600;
-        flex-shrink: 0;
     }
 
     .review-total {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         font-weight: 700;
         color: var(--primary-dark);
-        margin-top: 0.75rem;
-        padding-top: 0.75rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
         border-top: 2px solid var(--primary);
     }
 
     footer.app-footer {
         text-align: center;
-        padding: 1rem 0.75rem 0.5rem;
-        font-size: 0.8rem;
+        padding: 1.5rem 1.25rem 0.5rem;
+        font-size: 0.83rem;
         color: var(--text-muted);
     }
 
@@ -1090,16 +616,6 @@
     footer.app-footer a:hover { text-decoration: underline; }
 
     @media (min-width: 769px) {
-        .page-shell { padding: 1.5rem 1.25rem 2.5rem; }
-        header.app-header { padding: 2.4rem 1.75rem 2.6rem; }
-        header.app-header img { max-width: 220px; margin: 0 auto 0.75rem; }
-        header.app-header h1 { font-size: 1.9rem; }
-        header.app-header p.header-sub { font-size: 0.88rem; }
-        .card { padding: 1.75rem; margin-bottom: 1.25rem; }
-        .btn { width: auto; min-height: 40px; }
-        .actions-row { flex-direction: row; justify-content: center; }
-        .sticky-price-bar { display: none !important; }
-
         #line-items th:nth-child(1),
         #line-items td:nth-child(1) { width: 30%; }
         #line-items th:nth-child(2),
@@ -1115,10 +631,26 @@
         #line-items th:nth-child(7),
         #line-items td:nth-child(7) { width: 4%; }
     }
+
+    @media (max-width: 768px) {
+        header.app-header {
+            border-radius: 0 0 10px 10px;
+            padding-inline: 1.25rem;
+        }
+        .card { padding-inline: 1.2rem; }
+
+        #line-items {
+            display: none;
+        }
+
+        .line-item-card.mobile-visible {
+            display: block;
+        }
+
+        .btn { padding: 0.6rem 1.2rem; font-size: 0.85rem; }
+    }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
 
@@ -1127,126 +659,75 @@
         <img src="colors/AmeriDex.png" alt="AmeriDex Logo">
         <h1>AmeriDex Order Form Pro</h1>
         <p class="header-sub">
-            AmeriDex System Boards include integrated Dexerdry. Standalone Dexerdry for non-system applications.
+            AmeriDex System Boards pricing includes integrated Dexerdry. Use standalone Dexerdry only for non-system applications.
         </p>
     </header>
 
     <main>
         <form id="order-form">
 
-            <!-- 3D Deck Builder Section -->
-            <section class="card" id="deck-builder-section">
+            <!-- Deck Calculator (MOVED TO TOP, DEFAULT VISIBLE) -->
+            <section class="card" id="calculator">
                 <div class="card-header">
                     <div>
-                        <h2 class="card-title">3D Deck Builder</h2>
-                        <p class="card-subtitle">Design your deck in 3D. Drag to rotate, scroll to zoom, right-click to pan.</p>
+                        <h2 class="card-title">Deck Calculator</h2>
+                        <p class="card-subtitle">Let us suggest the right boards for your deck size.</p>
                     </div>
                 </div>
 
-                <div class="deck-builder-container">
-                    <!-- Controls Panel -->
-                    <div class="builder-controls">
-                        <h3>Deck Configuration</h3>
-
-                        <div class="control-section">
-                            <div class="control-section-title">Dimensions</div>
-                            <div class="field" style="margin-bottom: 0.5rem;">
-                                <label for="builder-length">Length (ft)</label>
-                                <input type="number" id="builder-length" value="16" min="4" max="40" step="1">
-                            </div>
-                            <div class="field" style="margin-bottom: 0.5rem;">
-                                <label for="builder-width">Width (ft)</label>
-                                <input type="number" id="builder-width" value="12" min="4" max="30" step="1">
-                            </div>
-                            <div class="field">
-                                <label for="builder-height">Height from Ground (ft)</label>
-                                <input type="number" id="builder-height" value="3" min="1" max="12" step="0.5">
-                            </div>
+                <div class="form-grid">
+                    <div class="field-row-2">
+                        <div class="field">
+                            <label for="deck-len">Deck Length (ft)<span class="required-indicator">*</span></label>
+                            <input type="number" id="deck-len" step="0.1" min="0">
+                            <div class="help-text">Total length of your deck</div>
                         </div>
-
-                        <div class="control-section">
-                            <div class="control-section-title">Board Color</div>
-                            <div class="color-swatches" id="builder-color-swatches"></div>
+                        <div class="field">
+                            <label for="deck-wid">Deck Width (ft)<span class="required-indicator">*</span></label>
+                            <input type="number" id="deck-wid" step="0.1" min="0">
+                            <div class="help-text">Total width of your deck</div>
                         </div>
-
-                        <div class="control-section">
-                            <div class="control-section-title">Board Length</div>
-                            <div class="field">
-                                <select id="builder-board-length">
-                                    <option value="12">12 ft boards</option>
-                                    <option value="16" selected>16 ft boards</option>
-                                    <option value="20">20 ft boards</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="control-section">
-                            <div class="control-section-title">Stairs</div>
-                            <div class="stair-config">
-                                <button type="button" class="stair-side-btn" data-side="front">Front</button>
-                                <button type="button" class="stair-side-btn" data-side="back">Back</button>
-                                <button type="button" class="stair-side-btn" data-side="left">Left</button>
-                                <button type="button" class="stair-side-btn" data-side="right">Right</button>
-                            </div>
-                            <div class="field" style="margin-top: 0.5rem;">
-                                <label for="stair-width">Stair Width (ft)</label>
-                                <input type="number" id="stair-width" value="4" min="3" max="8" step="0.5">
-                            </div>
-                        </div>
-
-                        <div class="control-section">
-                            <div class="control-section-title">Options</div>
-                            <div class="check-row">
-                                <input type="checkbox" id="builder-railing">
-                                <label for="builder-railing">Add Railing</label>
-                            </div>
-                            <div class="check-row">
-                                <input type="checkbox" id="builder-picture-frame">
-                                <label for="builder-picture-frame">Picture Frame Border</label>
-                            </div>
-                        </div>
-
-                        <div class="material-summary" id="material-summary">
-                            <h4>Materials Estimate</h4>
-                            <div class="material-item">
-                                <span class="material-item-label">Deck Boards:</span>
-                                <span class="material-item-value" id="est-boards">0</span>
-                            </div>
-                            <div class="material-item">
-                                <span class="material-item-label">Border Boards:</span>
-                                <span class="material-item-value" id="est-border">0</span>
-                            </div>
-                            <div class="material-item">
-                                <span class="material-item-label">Stair Treads:</span>
-                                <span class="material-item-value" id="est-stairs">0</span>
-                            </div>
-                            <div class="material-item">
-                                <span class="material-item-label">Screw Boxes:</span>
-                                <span class="material-item-value" id="est-screws">0</span>
-                            </div>
-                            <div class="material-item" style="border-top: 1px solid var(--border-subtle); padding-top: 0.5rem; margin-top: 0.25rem;">
-                                <span class="material-item-label">Est. Total:</span>
-                                <span class="material-item-value" id="est-total" style="color: var(--primary-dark);">$0.00</span>
-                            </div>
-                        </div>
-
-                        <button type="button" class="apply-btn" id="apply-to-order">Apply to Order Form</button>
-                        <button type="button" class="reset-builder-btn" id="reset-builder">Reset Builder</button>
                     </div>
 
-                    <!-- 3D Viewport -->
-                    <div class="builder-viewport" id="builder-viewport">
-                        <div class="builder-loading" id="builder-loading">
-                            <div class="spinner"></div>
-                            <span>Loading 3D Builder...</span>
+                    <div class="field-row-2">
+                        <div class="field">
+                            <label for="orientation">Board Orientation</label>
+                            <select id="orientation">
+                                <option value="parallel">Parallel to Length</option>
+                                <option value="perpendicular" selected>Perpendicular to Length</option>
+                            </select>
+                            <div class="help-text">Direction boards run across deck</div>
                         </div>
-                        <canvas id="deck-canvas"></canvas>
-                        <div class="viewport-controls">
-                            <button type="button" class="viewport-btn" id="view-top">Top</button>
-                            <button type="button" class="viewport-btn" id="view-front">Front</button>
-                            <button type="button" class="viewport-btn" id="view-side">Side</button>
-                            <button type="button" class="viewport-btn active" id="view-3d">3D</button>
+                        <div class="field" style="align-self:flex-end;">
+                            <button type="button" class="btn btn-outline" id="calc-btn">Calculate & Suggest</button>
                         </div>
+                    </div>
+
+                    <div id="calc-result" class="hint" style="margin-top:0.65rem;"></div>
+                </div>
+            </section>
+
+            <!-- Color Selection Panel -->
+            <section class="card" id="colors">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Select Colors</h2>
+                        <p class="card-subtitle">Preview and compare available color options.</p>
+                    </div>
+                </div>
+
+                <div class="color-grid" id="color-grid"></div>
+
+                <div class="comparison-panel">
+                    <div class="color-preview">
+                        <h4>Color 1</h4>
+                        <img id="color1-preview" src="colors/Driftwood.png" alt="Color 1">
+                        <div id="color1-name" style="margin-top: 0.5rem; font-weight: 600;">Driftwood</div>
+                    </div>
+                    <div class="color-preview">
+                        <h4>Color 2 (Compare)</h4>
+                        <img id="color2-preview" src="colors/Khaki.png" alt="Color 2">
+                        <div id="color2-name" style="margin-top: 0.5rem; font-weight: 600;">Khaki</div>
                     </div>
                 </div>
             </section>
@@ -1256,7 +737,7 @@
                 <div class="card-header">
                     <div>
                         <h2 class="card-title">Customer Information</h2>
-                        <p class="card-subtitle">Who we're shipping to and contact details.</p>
+                        <p class="card-subtitle">Where this order will be used and who we should contact.</p>
                     </div>
                     <span class="progress-badge incomplete" id="cust-badge">0/4</span>
                 </div>
@@ -1284,12 +765,12 @@
                     <div class="field-row-2">
                         <div class="field">
                             <label for="cust-phone">Phone<span class="required-indicator">*</span></label>
-                            <input type="tel" id="cust-phone" required inputmode="tel">
+                            <input type="tel" id="cust-phone" required>
                             <div class="error" id="err-phone"></div>
                         </div>
                         <div class="field">
                             <label for="cust-email">Email<span class="required-indicator">*</span></label>
-                            <input type="email" id="cust-email" required inputmode="email">
+                            <input type="email" id="cust-email" required>
                             <div class="error" id="err-email"></div>
                         </div>
                     </div>
@@ -1301,7 +782,7 @@
                 <div class="card-header">
                     <div>
                         <h2 class="card-title">Order Details</h2>
-                        <p class="card-subtitle">Products and special requirements.</p>
+                        <p class="card-subtitle">Deck layout, boards, and special requirements.</p>
                     </div>
                 </div>
 
@@ -1345,9 +826,9 @@
                 <button type="button" class="btn btn-outline btn-add-row" id="add-row">+ Add Line Item</button>
 
                 <!-- Undo Button -->
-                <button type="button" class="btn-undo" id="undo-btn" style="display:none;">Undo Last Deletion</button>
+                <button type="button" class="btn-undo" id="undo-btn" style="display:none;">↶ Undo Last Deletion</button>
 
-                <div style="margin-top:1rem;" class="form-grid">
+                <div style="margin-top:1.4rem;" class="form-grid">
                     <div class="field">
                         <label for="special-instr">Special Instructions / Notes for Production</label>
                         <textarea id="special-instr" rows="3"></textarea>
@@ -1364,7 +845,7 @@
                 <div class="card-header">
                     <div>
                         <h2 class="card-title">Shipping & Delivery</h2>
-                        <p class="card-subtitle">Only if different from customer information.</p>
+                        <p class="card-subtitle">Delivery details if different from the customer information.</p>
                     </div>
                 </div>
 
@@ -1402,14 +883,6 @@
         </form>
     </main>
 
-    <!-- Sticky Price Bar (Mobile) -->
-    <div class="sticky-price-bar mobile-visible" id="sticky-price">
-        <div class="sticky-price-content">
-            <span class="sticky-label">Order Total</span>
-            <span class="sticky-value" id="sticky-total">$0.00</span>
-        </div>
-    </div>
-
     <!-- Color Preview Modal -->
     <div id="colorModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="colorName">
         <div class="modal-content">
@@ -1423,8 +896,8 @@
     <div id="reviewModal" class="modal" role="dialog" aria-modal="true">
         <div class="modal-content review-modal-content">
             <button type="button" class="modal-close" id="review-close" aria-label="Close">&times;</button>
-            <h2 style="margin-top: 0; color: var(--primary); font-size: 1.1rem;">Review Your Order</h2>
-
+            <h2 style="margin-top: 0; color: var(--primary);">Review Your Order</h2>
+            
             <div class="review-section">
                 <h3>Customer Details</h3>
                 <div class="review-item">
@@ -1452,9 +925,9 @@
                 </div>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;">
-                <button type="button" class="btn btn-primary" id="review-submit">Proceed to Email</button>
+            <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem; justify-content: center;">
                 <button type="button" class="btn btn-ghost" id="review-back">Back to Edit</button>
+                <button type="button" class="btn btn-primary" id="review-submit">Proceed to Email</button>
             </div>
         </div>
     </div>
@@ -1465,9 +938,7 @@
 </div>
 
 <script>
-// ============================================
-// PRODUCT CONFIGURATION
-// ============================================
+// Product Configuration (refactored for maintainability)
 const PRODUCT_CONFIG = {
     categories: {
         decking: {
@@ -1478,21 +949,21 @@ const PRODUCT_CONFIG = {
                     price: 8.00,
                     isFt: true,
                     hasColor: true,
-                    help: "Our premium option includes both grooved boards and integrated Dexerdry sealing."
+                    help: "Our premium option includes both grooved boards and integrated Dexerdry sealing. Best for complete system deck projects."
                 },
                 grooved: {
                     name: "Grooved Deck Boards (no Dexerdry)",
                     price: 6.00,
                     isFt: true,
                     hasColor: true,
-                    help: "Grooved boards without integrated sealing."
+                    help: "Grooved boards without integrated sealing. Add standalone Dexerdry if needed."
                 },
                 solid: {
                     name: "Solid Edge Deck Boards",
                     price: 6.00,
                     isFt: true,
                     hasColor: true,
-                    help: "Use for picture framing or stair construction."
+                    help: "Use for picture framing around deck perimeter or stair construction."
                 }
             }
         },
@@ -1500,11 +971,11 @@ const PRODUCT_CONFIG = {
             label: "Sealing & Protection",
             products: {
                 dexerdry: {
-                    name: "Dexerdry Seals (standalone)",
+                    name: "Dexerdry Seals (standalone - for non-system decks)",
                     price: 2.00,
                     isFt: true,
                     hasColor: false,
-                    help: "Standalone sealing product."
+                    help: "Standalone sealing product for use with non-system deck boards."
                 }
             }
         },
@@ -1516,14 +987,14 @@ const PRODUCT_CONFIG = {
                     price: 37,
                     isFt: false,
                     hasColor: false,
-                    help: "Per box (375 screws)."
+                    help: "Per box (375 screws). Typically 2 screws per board-joist intersection."
                 },
                 plugs: {
                     name: "Color-Matching Plugs",
                     price: 33.79,
                     isFt: false,
                     hasColor: false,
-                    help: "Per box."
+                    help: "Per box. Matches installed screw heads with color-matched wooden plugs."
                 }
             }
         },
@@ -1535,29 +1006,20 @@ const PRODUCT_CONFIG = {
                     price: 0,
                     isFt: false,
                     hasColor: false,
-                    help: "Add any custom product."
+                    help: "Add any custom product or service with your own description and price."
                 }
             }
         }
     }
 };
 
+// Flatten for easy access
 const PRODUCTS = {};
 Object.values(PRODUCT_CONFIG.categories).forEach(cat => {
     Object.assign(PRODUCTS, cat.products);
 });
 
 const COLORS = ["Driftwood", "Khaki", "Slate", "Beachwood", "Chestnut", "Redwood", "Hazelnut"];
-
-const COLOR_HEX = {
-    Driftwood: 0xA89F91,
-    Khaki: 0xC2B280,
-    Slate: 0x708090,
-    Beachwood: 0xD4C4A8,
-    Chestnut: 0x954535,
-    Redwood: 0xA45A52,
-    Hazelnut: 0x8E7618
-};
 
 const COLOR_IMAGES = {
     Driftwood: "Driftwood.png",
@@ -1571,634 +1033,19 @@ const COLOR_IMAGES = {
 
 // Constants
 const BOARD_WIDTH_INCH = 5.5;
-const BOARD_THICKNESS_INCH = 1;
 const GAP_INCH = 0.125;
-const EFFECTIVE_WIDTH_FT = (BOARD_WIDTH_INCH + GAP_INCH) / 12;
-const WASTE_FACTOR = 1.10;
+const EFFECTIVE_FT = (BOARD_WIDTH_INCH + GAP_INCH) / 12;
+const WASTE = 1.10;
 const SCREWS_PER_BOX = 375;
-const SCREWS_PER_SQFT = 2;
 
-// ============================================
-// STATE
-// ============================================
+// State
 let lineItems = [];
 let deletedItems = [];
+let deckLengthFt = 0;
+let deckWidthFt = 0;
 let selectedColor1 = "Driftwood";
+let selectedColor2 = "Khaki";
 
-// 3D Builder State
-let builderState = {
-    length: 16,
-    width: 12,
-    height: 3,
-    color: "Driftwood",
-    boardLength: 16,
-    stairs: { front: false, back: false, left: false, right: false },
-    stairWidth: 4,
-    railing: false,
-    pictureFrame: false
-};
-
-// Three.js globals
-let scene, camera, renderer, controls;
-let deckGroup, groundMesh;
-let animationId;
-
-// ============================================
-// THREE.JS 3D DECK BUILDER
-// ============================================
-function initThreeJS() {
-    const container = document.getElementById('builder-viewport');
-    const canvas = document.getElementById('deck-canvas');
-
-    // Scene
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x87CEEB);
-
-    // Camera
-    const aspect = container.clientWidth / container.clientHeight;
-    camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1000);
-    camera.position.set(25, 20, 25);
-    camera.lookAt(0, 0, 0);
-
-    // Renderer
-    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-    // Orbit Controls
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.minDistance = 5;
-    controls.maxDistance = 100;
-    controls.maxPolarAngle = Math.PI / 2 - 0.05;
-
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambientLight);
-
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(20, 30, 20);
-    directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 2048;
-    directionalLight.shadow.mapSize.height = 2048;
-    directionalLight.shadow.camera.near = 0.5;
-    directionalLight.shadow.camera.far = 100;
-    directionalLight.shadow.camera.left = -30;
-    directionalLight.shadow.camera.right = 30;
-    directionalLight.shadow.camera.top = 30;
-    directionalLight.shadow.camera.bottom = -30;
-    scene.add(directionalLight);
-
-    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
-    fillLight.position.set(-10, 10, -10);
-    scene.add(fillLight);
-
-    // Ground
-    createGround();
-
-    // Deck Group
-    deckGroup = new THREE.Group();
-    scene.add(deckGroup);
-
-    // Build initial deck
-    buildDeck();
-
-    // Hide loading
-    document.getElementById('builder-loading').classList.add('hidden');
-
-    // Animation loop
-    animate();
-
-    // Handle resize
-    window.addEventListener('resize', onWindowResize);
-}
-
-function createGround() {
-    // Grass ground
-    const groundGeometry = new THREE.PlaneGeometry(100, 100);
-    const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x7CBA5F });
-    groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
-    groundMesh.rotation.x = -Math.PI / 2;
-    groundMesh.position.y = 0;
-    groundMesh.receiveShadow = true;
-    scene.add(groundMesh);
-
-    // Grid helper (subtle)
-    const gridHelper = new THREE.GridHelper(100, 100, 0x6AAF4F, 0x6AAF4F);
-    gridHelper.position.y = 0.01;
-    gridHelper.material.opacity = 0.2;
-    gridHelper.material.transparent = true;
-    scene.add(gridHelper);
-}
-
-function buildDeck() {
-    // Clear existing deck
-    while (deckGroup.children.length > 0) {
-        deckGroup.remove(deckGroup.children[0]);
-    }
-
-    const { length, width, height, color, boardLength, stairs, stairWidth, railing, pictureFrame } = builderState;
-
-    const boardColor = COLOR_HEX[color] || 0xA89F91;
-    const boardWidthFt = BOARD_WIDTH_INCH / 12;
-    const boardThicknessFt = BOARD_THICKNESS_INCH / 12;
-    const gapFt = GAP_INCH / 12;
-
-    // Create wood material with grain texture simulation
-    const deckMaterial = new THREE.MeshLambertMaterial({ color: boardColor });
-    const frameMaterial = new THREE.MeshLambertMaterial({ color: boardColor });
-    const supportMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
-    const railMaterial = new THREE.MeshLambertMaterial({ color: 0x444444 });
-
-    // Support posts
-    const postPositions = [];
-    const postSpacing = 6; // feet
-    for (let x = 0; x <= length; x += postSpacing) {
-        for (let z = 0; z <= width; z += postSpacing) {
-            postPositions.push({ x: x - length/2, z: z - width/2 });
-        }
-    }
-
-    postPositions.forEach(pos => {
-        const postGeometry = new THREE.BoxGeometry(0.33, height, 0.33);
-        const post = new THREE.Mesh(postGeometry, supportMaterial);
-        post.position.set(pos.x, height / 2, pos.z);
-        post.castShadow = true;
-        post.receiveShadow = true;
-        deckGroup.add(post);
-    });
-
-    // Rim joists (perimeter beams)
-    const rimJoistGeometry = new THREE.BoxGeometry(length, 0.75, 0.125);
-    const rimJoistFront = new THREE.Mesh(rimJoistGeometry, supportMaterial);
-    rimJoistFront.position.set(0, height - 0.375, width/2);
-    rimJoistFront.castShadow = true;
-    deckGroup.add(rimJoistFront);
-
-    const rimJoistBack = new THREE.Mesh(rimJoistGeometry, supportMaterial);
-    rimJoistBack.position.set(0, height - 0.375, -width/2);
-    rimJoistBack.castShadow = true;
-    deckGroup.add(rimJoistBack);
-
-    const rimJoistSideGeometry = new THREE.BoxGeometry(0.125, 0.75, width);
-    const rimJoistLeft = new THREE.Mesh(rimJoistSideGeometry, supportMaterial);
-    rimJoistLeft.position.set(-length/2, height - 0.375, 0);
-    rimJoistLeft.castShadow = true;
-    deckGroup.add(rimJoistLeft);
-
-    const rimJoistRight = new THREE.Mesh(rimJoistSideGeometry, supportMaterial);
-    rimJoistRight.position.set(length/2, height - 0.375, 0);
-    rimJoistRight.castShadow = true;
-    deckGroup.add(rimJoistRight);
-
-    // Deck boards (running perpendicular to length, i.e., along width)
-    const numBoards = Math.ceil(length / (boardWidthFt + gapFt));
-    const boardGeometry = new THREE.BoxGeometry(boardWidthFt, boardThicknessFt, width - 0.1);
-
-    for (let i = 0; i < numBoards; i++) {
-        const board = new THREE.Mesh(boardGeometry, deckMaterial);
-        const xPos = -length/2 + boardWidthFt/2 + i * (boardWidthFt + gapFt);
-        if (xPos + boardWidthFt/2 <= length/2) {
-            board.position.set(xPos, height, 0);
-            board.castShadow = true;
-            board.receiveShadow = true;
-            deckGroup.add(board);
-        }
-    }
-
-    // Picture frame border
-    if (pictureFrame) {
-        const frameThickness = boardWidthFt;
-
-        // Front and back frame boards
-        const frameFBGeometry = new THREE.BoxGeometry(length + frameThickness * 2, boardThicknessFt * 1.1, frameThickness);
-        const frameFront = new THREE.Mesh(frameFBGeometry, frameMaterial);
-        frameFront.position.set(0, height + 0.01, width/2 + frameThickness/2);
-        frameFront.castShadow = true;
-        deckGroup.add(frameFront);
-
-        const frameBack = new THREE.Mesh(frameFBGeometry, frameMaterial);
-        frameBack.position.set(0, height + 0.01, -width/2 - frameThickness/2);
-        frameBack.castShadow = true;
-        deckGroup.add(frameBack);
-
-        // Left and right frame boards
-        const frameLRGeometry = new THREE.BoxGeometry(frameThickness, boardThicknessFt * 1.1, width);
-        const frameLeft = new THREE.Mesh(frameLRGeometry, frameMaterial);
-        frameLeft.position.set(-length/2 - frameThickness/2, height + 0.01, 0);
-        frameLeft.castShadow = true;
-        deckGroup.add(frameLeft);
-
-        const frameRight = new THREE.Mesh(frameLRGeometry, frameMaterial);
-        frameRight.position.set(length/2 + frameThickness/2, height + 0.01, 0);
-        frameRight.castShadow = true;
-        deckGroup.add(frameRight);
-    }
-
-    // Railings
-    if (railing) {
-        const railHeight = 3;
-        const railPostSpacing = 4;
-
-        // Add railing posts and top rail on all sides (except where stairs are)
-        const sides = [
-            { name: 'front', positions: [], dir: 'x', fixed: width/2, range: [-length/2, length/2] },
-            { name: 'back', positions: [], dir: 'x', fixed: -width/2, range: [-length/2, length/2] },
-            { name: 'left', positions: [], dir: 'z', fixed: -length/2, range: [-width/2, width/2] },
-            { name: 'right', positions: [], dir: 'z', fixed: length/2, range: [-width/2, width/2] }
-        ];
-
-        sides.forEach(side => {
-            if (stairs[side.name]) return; // Skip if stairs on this side
-
-            const [start, end] = side.range;
-            const railLen = end - start;
-
-            // Posts
-            for (let p = start; p <= end; p += railPostSpacing) {
-                const postGeo = new THREE.BoxGeometry(0.15, railHeight, 0.15);
-                const railPost = new THREE.Mesh(postGeo, railMaterial);
-                if (side.dir === 'x') {
-                    railPost.position.set(p, height + railHeight/2, side.fixed);
-                } else {
-                    railPost.position.set(side.fixed, height + railHeight/2, p);
-                }
-                railPost.castShadow = true;
-                deckGroup.add(railPost);
-            }
-
-            // Top rail
-            const topRailGeo = side.dir === 'x' 
-                ? new THREE.BoxGeometry(railLen, 0.2, 0.3)
-                : new THREE.BoxGeometry(0.3, 0.2, railLen);
-            const topRail = new THREE.Mesh(topRailGeo, railMaterial);
-            if (side.dir === 'x') {
-                topRail.position.set(0, height + railHeight, side.fixed);
-            } else {
-                topRail.position.set(side.fixed, height + railHeight, 0);
-            }
-            topRail.castShadow = true;
-            deckGroup.add(topRail);
-        });
-    }
-
-    // Stairs
-    Object.entries(stairs).forEach(([side, hasStairs]) => {
-        if (!hasStairs) return;
-
-        const numSteps = Math.ceil(height / 0.75);
-        const stepRise = height / numSteps;
-        const stepRun = 1;
-        const stepWidth = stairWidth;
-
-        for (let s = 0; s < numSteps; s++) {
-            const stepGeo = new THREE.BoxGeometry(
-                side === 'left' || side === 'right' ? stepRun : stepWidth,
-                boardThicknessFt,
-                side === 'left' || side === 'right' ? stepWidth : stepRun
-            );
-            const step = new THREE.Mesh(stepGeo, deckMaterial);
-
-            const stepY = height - (s + 1) * stepRise + boardThicknessFt/2;
-            let stepX = 0, stepZ = 0;
-
-            if (side === 'front') {
-                stepZ = width/2 + (s + 1) * stepRun - stepRun/2;
-            } else if (side === 'back') {
-                stepZ = -width/2 - (s + 1) * stepRun + stepRun/2;
-            } else if (side === 'left') {
-                stepX = -length/2 - (s + 1) * stepRun + stepRun/2;
-            } else if (side === 'right') {
-                stepX = length/2 + (s + 1) * stepRun - stepRun/2;
-            }
-
-            step.position.set(stepX, stepY, stepZ);
-            step.castShadow = true;
-            step.receiveShadow = true;
-            deckGroup.add(step);
-
-            // Stair stringers
-            if (s === 0) {
-                const stringerGeo = new THREE.BoxGeometry(
-                    side === 'left' || side === 'right' ? numSteps * stepRun : 0.125,
-                    0.75,
-                    side === 'left' || side === 'right' ? 0.125 : numSteps * stepRun
-                );
-
-                [-stepWidth/2 + 0.1, stepWidth/2 - 0.1].forEach(offset => {
-                    const stringer = new THREE.Mesh(stringerGeo, supportMaterial);
-                    if (side === 'front') {
-                        stringer.position.set(offset, height/2, width/2 + numSteps * stepRun / 2);
-                    } else if (side === 'back') {
-                        stringer.position.set(offset, height/2, -width/2 - numSteps * stepRun / 2);
-                    } else if (side === 'left') {
-                        stringer.position.set(-length/2 - numSteps * stepRun / 2, height/2, offset);
-                    } else if (side === 'right') {
-                        stringer.position.set(length/2 + numSteps * stepRun / 2, height/2, offset);
-                    }
-                    stringer.castShadow = true;
-                    deckGroup.add(stringer);
-                });
-            }
-        }
-    });
-
-    // Update material estimates
-    updateMaterialEstimates();
-}
-
-function updateMaterialEstimates() {
-    const { length, width, height, boardLength, stairs, stairWidth, pictureFrame } = builderState;
-
-    const deckArea = length * width;
-    const boardsPerLength = Math.ceil(length / EFFECTIVE_WIDTH_FT);
-    const boardCoverage = boardLength * (BOARD_WIDTH_INCH / 12);
-
-    // Main deck boards needed
-    let totalBoardFeet = boardsPerLength * width;
-    let numBoards = Math.ceil((totalBoardFeet * WASTE_FACTOR) / boardLength);
-
-    // Border boards for picture frame
-    let borderBoards = 0;
-    if (pictureFrame) {
-        const perimeter = 2 * (length + width);
-        borderBoards = Math.ceil((perimeter * WASTE_FACTOR) / boardLength);
-    }
-
-    // Stair treads
-    let stairTreads = 0;
-    Object.entries(stairs).forEach(([side, hasStairs]) => {
-        if (hasStairs) {
-            const numSteps = Math.ceil(height / 0.75);
-            const treadsPerStep = Math.ceil(stairWidth / (BOARD_WIDTH_INCH / 12));
-            stairTreads += numSteps * treadsPerStep;
-        }
-    });
-
-    // Screws
-    const totalScrews = Math.ceil(deckArea * SCREWS_PER_SQFT);
-    const screwBoxes = Math.ceil(totalScrews / SCREWS_PER_BOX);
-
-    // Cost estimate
-    const boardCost = numBoards * boardLength * PRODUCTS.system.price;
-    const borderCost = borderBoards * boardLength * PRODUCTS.solid.price;
-    const stairCost = stairTreads * 4 * PRODUCTS.solid.price; // Assume 4ft avg
-    const screwCost = screwBoxes * PRODUCTS.screws.price;
-    const totalCost = boardCost + borderCost + stairCost + screwCost;
-
-    // Update UI
-    document.getElementById('est-boards').textContent = `${numBoards} @ ${boardLength}ft`;
-    document.getElementById('est-border').textContent = pictureFrame ? `${borderBoards} @ ${boardLength}ft` : 'None';
-    document.getElementById('est-stairs').textContent = stairTreads > 0 ? `${stairTreads} treads` : 'None';
-    document.getElementById('est-screws').textContent = `${screwBoxes} box${screwBoxes !== 1 ? 'es' : ''}`;
-    document.getElementById('est-total').textContent = `$${totalCost.toFixed(2)}`;
-
-    // Store for apply function
-    builderState.estimates = {
-        numBoards,
-        borderBoards,
-        stairTreads,
-        screwBoxes,
-        totalCost
-    };
-}
-
-function animate() {
-    animationId = requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-}
-
-function onWindowResize() {
-    const container = document.getElementById('builder-viewport');
-    if (!container || !camera || !renderer) return;
-
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
-}
-
-// Camera view presets
-function setCameraView(view) {
-    const { length, width, height } = builderState;
-    const maxDim = Math.max(length, width, height);
-
-    switch(view) {
-        case 'top':
-            camera.position.set(0, maxDim * 2, 0.01);
-            break;
-        case 'front':
-            camera.position.set(0, height + 5, maxDim * 1.5);
-            break;
-        case 'side':
-            camera.position.set(maxDim * 1.5, height + 5, 0);
-            break;
-        case '3d':
-        default:
-            camera.position.set(maxDim * 1.2, maxDim * 0.8, maxDim * 1.2);
-            break;
-    }
-    camera.lookAt(0, height / 2, 0);
-    controls.target.set(0, height / 2, 0);
-}
-
-// ============================================
-// BUILDER UI INITIALIZATION
-// ============================================
-function initBuilderControls() {
-    // Color swatches
-    const swatchContainer = document.getElementById('builder-color-swatches');
-    COLORS.forEach(color => {
-        const swatch = document.createElement('div');
-        swatch.className = 'color-swatch' + (color === builderState.color ? ' selected' : '');
-        swatch.style.backgroundColor = '#' + COLOR_HEX[color].toString(16).padStart(6, '0');
-        swatch.setAttribute('data-name', color);
-        swatch.setAttribute('data-color', color);
-        swatch.onclick = () => {
-            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
-            swatch.classList.add('selected');
-            builderState.color = color;
-            buildDeck();
-        };
-        swatchContainer.appendChild(swatch);
-    });
-
-    // Dimension inputs
-    ['builder-length', 'builder-width', 'builder-height'].forEach(id => {
-        document.getElementById(id).addEventListener('input', (e) => {
-            const prop = id.replace('builder-', '');
-            builderState[prop] = parseFloat(e.target.value) || 1;
-            buildDeck();
-        });
-    });
-
-    // Board length
-    document.getElementById('builder-board-length').addEventListener('change', (e) => {
-        builderState.boardLength = parseInt(e.target.value);
-        updateMaterialEstimates();
-    });
-
-    // Stair width
-    document.getElementById('stair-width').addEventListener('input', (e) => {
-        builderState.stairWidth = parseFloat(e.target.value) || 3;
-        buildDeck();
-    });
-
-    // Stair side buttons
-    document.querySelectorAll('.stair-side-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const side = btn.getAttribute('data-side');
-            builderState.stairs[side] = !builderState.stairs[side];
-            btn.classList.toggle('active', builderState.stairs[side]);
-            buildDeck();
-        });
-    });
-
-    // Options checkboxes
-    document.getElementById('builder-railing').addEventListener('change', (e) => {
-        builderState.railing = e.target.checked;
-        buildDeck();
-    });
-
-    document.getElementById('builder-picture-frame').addEventListener('change', (e) => {
-        builderState.pictureFrame = e.target.checked;
-        buildDeck();
-    });
-
-    // View buttons
-    ['top', 'front', 'side', '3d'].forEach(view => {
-        document.getElementById(`view-${view}`).addEventListener('click', () => {
-            document.querySelectorAll('.viewport-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`view-${view}`).classList.add('active');
-            setCameraView(view);
-        });
-    });
-
-    // Apply to order
-    document.getElementById('apply-to-order').addEventListener('click', applyBuilderToOrder);
-
-    // Reset builder
-    document.getElementById('reset-builder').addEventListener('click', () => {
-        builderState = {
-            length: 16,
-            width: 12,
-            height: 3,
-            color: "Driftwood",
-            boardLength: 16,
-            stairs: { front: false, back: false, left: false, right: false },
-            stairWidth: 4,
-            railing: false,
-            pictureFrame: false
-        };
-
-        document.getElementById('builder-length').value = 16;
-        document.getElementById('builder-width').value = 12;
-        document.getElementById('builder-height').value = 3;
-        document.getElementById('builder-board-length').value = 16;
-        document.getElementById('stair-width').value = 4;
-        document.getElementById('builder-railing').checked = false;
-        document.getElementById('builder-picture-frame').checked = false;
-
-        document.querySelectorAll('.stair-side-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.color-swatch').forEach(s => {
-            s.classList.toggle('selected', s.getAttribute('data-color') === 'Driftwood');
-        });
-
-        buildDeck();
-        setCameraView('3d');
-    });
-}
-
-function applyBuilderToOrder() {
-    const { color, boardLength, estimates, pictureFrame, stairs } = builderState;
-
-    // Clear existing line items
-    lineItems = [];
-
-    // Add deck boards
-    if (estimates.numBoards > 0) {
-        lineItems.push({
-            type: "system",
-            color: color,
-            length: boardLength,
-            qty: estimates.numBoards,
-            priceOverride: null,
-            customDesc: "",
-            customUnitPrice: 0
-        });
-    }
-
-    // Add border boards if picture frame
-    if (pictureFrame && estimates.borderBoards > 0) {
-        lineItems.push({
-            type: "solid",
-            color: color,
-            length: boardLength,
-            qty: estimates.borderBoards,
-            priceOverride: null,
-            customDesc: "",
-            customUnitPrice: 0
-        });
-    }
-
-    // Add stair treads
-    if (estimates.stairTreads > 0) {
-        lineItems.push({
-            type: "solid",
-            color: color,
-            length: 4,
-            qty: estimates.stairTreads,
-            priceOverride: null,
-            customDesc: "",
-            customUnitPrice: 0
-        });
-    }
-
-    // Add screws
-    if (estimates.screwBoxes > 0) {
-        lineItems.push({
-            type: "screws",
-            color: null,
-            length: null,
-            qty: estimates.screwBoxes,
-            priceOverride: null,
-            customDesc: "",
-            customUnitPrice: 0
-        });
-    }
-
-    // Update form checkboxes
-    document.getElementById('pic-frame').checked = pictureFrame;
-    document.getElementById('pic-frame-note').style.display = pictureFrame ? 'block' : 'none';
-
-    const hasStairs = Object.values(stairs).some(v => v);
-    document.getElementById('stairs').checked = hasStairs;
-    document.getElementById('stairs-note').style.display = hasStairs ? 'block' : 'none';
-
-    // Render and update
-    render();
-    updateTotalAndFasteners();
-
-    // Scroll to order section
-    document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
-
-    // Show success feedback
-    const applyBtn = document.getElementById('apply-to-order');
-    const originalText = applyBtn.textContent;
-    applyBtn.textContent = 'Applied!';
-    applyBtn.style.background = '#16a34a';
-    setTimeout(() => {
-        applyBtn.textContent = originalText;
-        applyBtn.style.background = '';
-    }, 2000);
-}
-
-// ============================================
-// ORDER FORM LOGIC (Original functions)
-// ============================================
 const tbody = document.querySelector("#line-items tbody");
 const modal = document.getElementById("colorModal");
 const reviewModal = document.getElementById("reviewModal");
@@ -2207,6 +1054,59 @@ const modalName = document.getElementById("colorName");
 const closeBtn = document.getElementById("modal-close");
 const reviewCloseBtn = document.getElementById("review-close");
 
+// Initialize color grid
+function initColorGrid() {
+    const grid = document.getElementById("color-grid");
+    grid.innerHTML = "";
+    COLORS.forEach(color => {
+        const card = document.createElement("div");
+        card.className = "color-card";
+        card.setAttribute("data-color", color);
+        
+        const img = document.createElement("img");
+        img.src = `colors/${COLOR_IMAGES[color]}`;
+        img.alt = color;
+        img.onerror = () => { img.src = "https://via.placeholder.com/100x80?text=" + color; };
+        
+        const label = document.createElement("div");
+        label.className = "color-card-label";
+        label.textContent = color;
+        
+        card.appendChild(img);
+        card.appendChild(label);
+        
+        card.addEventListener("click", () => {
+            selectedColor1 = color;
+            updateColorComparison();
+            updateColorSelection();
+        });
+        
+        grid.appendChild(card);
+    });
+}
+
+function updateColorSelection() {
+    document.querySelectorAll(".color-card").forEach(card => {
+        if (card.getAttribute("data-color") === selectedColor1) {
+            card.classList.add("selected");
+        } else {
+            card.classList.remove("selected");
+        }
+    });
+}
+
+function updateColorComparison() {
+    document.getElementById("color1-preview").src = `colors/${COLOR_IMAGES[selectedColor1]}`;
+    document.getElementById("color1-name").textContent = selectedColor1;
+    
+    // Cycle color 2
+    const idx = COLORS.indexOf(selectedColor1);
+    selectedColor2 = COLORS[(idx + 1) % COLORS.length];
+    document.getElementById("color2-preview").src = `colors/${COLOR_IMAGES[selectedColor2]}`;
+    document.getElementById("color2-name").textContent = selectedColor2;
+}
+
+// Customer info progress tracking
 function updateCustomerProgress() {
     const name = document.getElementById("cust-name").value.trim() ? 1 : 0;
     const address = document.getElementById("cust-address").value.trim() ? 1 : 0;
@@ -2215,7 +1115,11 @@ function updateCustomerProgress() {
     const completed = name + address + phone + email;
     const badge = document.getElementById("cust-badge");
     badge.textContent = `${completed}/4`;
-    badge.classList.toggle("incomplete", completed !== 4);
+    if (completed === 4) {
+        badge.classList.remove("incomplete");
+    } else {
+        badge.classList.add("incomplete");
+    }
 }
 
 ["cust-name", "cust-address", "cust-phone", "cust-email"].forEach(id => {
@@ -2225,7 +1129,7 @@ function updateCustomerProgress() {
 document.getElementById("add-row").onclick = () => {
     lineItems.push({
         type: "system",
-        color: builderState.color,
+        color: selectedColor1,
         length: 16,
         qty: 1,
         priceOverride: null,
@@ -2237,13 +1141,15 @@ document.getElementById("add-row").onclick = () => {
     updateTotalAndFasteners();
 };
 
+document.getElementById("calc-btn").onclick = calculateAndSuggest;
+
 closeBtn.onclick = () => modal.classList.remove("active");
 reviewCloseBtn.onclick = () => reviewModal.classList.remove("active");
 
 window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-        modal.classList.remove("active");
-        reviewModal.classList.remove("active");
+        if (modal.classList.contains("active")) modal.classList.remove("active");
+        if (reviewModal.classList.contains("active")) reviewModal.classList.remove("active");
     }
 });
 
@@ -2259,24 +1165,31 @@ document.getElementById("reset").onclick = () => {
     render();
     updateTotalAndFasteners();
     updateCustomerProgress();
-    ["cust-name", "cust-company", "cust-address", "cust-phone", "cust-email", "ship-addr", "del-date", "special-instr", "internal-notes"].forEach(id => {
+    ["cust-name", "cust-company", "cust-address", "cust-phone", "cust-email", "ship-addr", "del-date", "special-instr", "internal-notes", "deck-len", "deck-wid"].forEach(id => {
         document.getElementById(id).value = "";
     });
     document.getElementById("pic-frame").checked = false;
     document.getElementById("stairs").checked = false;
     document.getElementById("pic-frame-note").style.display = "none";
     document.getElementById("stairs-note").style.display = "none";
-    document.getElementById("fastener-hint").style.display = "none";
+    const hintEl = document.getElementById("fastener-hint");
+    hintEl.style.display = "none";
+    hintEl.innerHTML = "";
     document.getElementById("success-msg").style.display = "none";
 };
 
 document.getElementById("pdf").onclick = generatePDF;
+
 document.getElementById("review-btn").onclick = showReview;
+
 document.getElementById("review-submit").onclick = () => {
     reviewModal.classList.remove("active");
     submitOrder();
 };
-document.getElementById("review-back").onclick = () => reviewModal.classList.remove("active");
+
+document.getElementById("review-back").onclick = () => {
+    reviewModal.classList.remove("active");
+};
 
 ["pic-frame", "stairs"].forEach(id => {
     document.getElementById(id).addEventListener("change", (e) => {
@@ -2284,23 +1197,9 @@ document.getElementById("review-back").onclick = () => reviewModal.classList.rem
     });
 });
 
-function updateUndoButton() {
-    document.getElementById("undo-btn").style.display = deletedItems.length > 0 ? "block" : "none";
-}
-
-document.getElementById("undo-btn").onclick = () => {
-    if (deletedItems.length > 0) {
-        lineItems.push(deletedItems.pop());
-        render();
-        updateTotalAndFasteners();
-        updateUndoButton();
-    }
-};
-
 function render() {
     renderDesktop();
     renderMobile();
-    updateUndoButton();
 }
 
 function renderDesktop() {
@@ -2309,9 +1208,11 @@ function renderDesktop() {
         const prod = PRODUCTS[item.type] || PRODUCTS.custom;
         const row = document.createElement("tr");
 
-        // Product select
+        // Product with help
         let td = document.createElement("td");
+        td.setAttribute("data-label", "Product");
         const sel = document.createElement("select");
+        
         Object.entries(PRODUCT_CONFIG.categories).forEach(([catKey, category]) => {
             const optgroup = document.createElement("optgroup");
             optgroup.label = category.label;
@@ -2324,6 +1225,7 @@ function renderDesktop() {
             });
             sel.appendChild(optgroup);
         });
+
         sel.onchange = () => {
             item.type = sel.value;
             if (item.type !== "custom") {
@@ -2335,10 +1237,17 @@ function renderDesktop() {
             updateTotalAndFasteners();
         };
         td.appendChild(sel);
+        
+        const helpDiv = document.createElement("div");
+        helpDiv.className = "help-text";
+        helpDiv.textContent = prod.help || "";
+        td.appendChild(helpDiv);
+        
         row.appendChild(td);
 
         // Color
         td = document.createElement("td");
+        td.setAttribute("data-label", "Color");
         if (prod.hasColor) {
             const csel = document.createElement("select");
             COLORS.forEach(c => {
@@ -2348,17 +1257,43 @@ function renderDesktop() {
                 if (c === item.color) o.selected = true;
                 csel.appendChild(o);
             });
+
+            const prev = document.createElement("img");
+
+            function applyImage() {
+                const colorName = item.color || COLORS[0];
+                const imgFile = COLOR_IMAGES[colorName] || COLOR_IMAGES.Driftwood;
+                prev.src = "colors/" + imgFile;
+            }
+
             csel.onchange = e => {
                 item.color = e.target.value;
+                applyImage();
                 updateTotalAndFasteners();
             };
+
             td.appendChild(csel);
+
             item.color = item.color || COLORS[0];
+            applyImage();
+
+            prev.className = "preview-img";
+            prev.alt = "preview";
+            prev.title = "Click to enlarge";
+            prev.onerror = () => { prev.src = "https://via.placeholder.com/34?text=?"; };
+            prev.onclick = () => {
+                modalImg.src = prev.src;
+                modalName.textContent = item.color || COLORS[0];
+                modal.classList.add("active");
+            };
+
+            td.appendChild(prev);
         }
         row.appendChild(td);
 
         // Length
         td = document.createElement("td");
+        td.setAttribute("data-label", "Length (ft)");
         if (prod.isFt) {
             if (["system", "grooved", "solid"].includes(item.type)) {
                 const lsel = document.createElement("select");
@@ -2369,12 +1304,84 @@ function renderDesktop() {
                     if (l === item.length) o.selected = true;
                     lsel.appendChild(o);
                 });
+                const custOpt = document.createElement("option");
+                custOpt.value = "custom";
+                custOpt.text = "Custom";
+                if (![12, 16, 20].includes(item.length)) custOpt.selected = true;
+                lsel.appendChild(custOpt);
+
                 lsel.onchange = e => {
-                    item.length = parseFloat(e.target.value);
+                    if (e.target.value === "custom") {
+                        const val = prompt("Custom length (ft):", item.length || "");
+                        item.length = parseFloat(val) || 16;
+                    } else {
+                        item.length = parseFloat(e.target.value);
+                    }
                     render();
                     updateTotalAndFasteners();
                 };
                 td.appendChild(lsel);
+            } else if (item.type === "dexerdry") {
+                const lengthSelect = document.createElement("select");
+                const opts = [
+                    { value: "240", label: "240 ft coil" },
+                    { value: "50", label: "50 ft coil" },
+                    { value: "custom", label: "Custom length" }
+                ];
+                opts.forEach(o => {
+                    const opt = document.createElement("option");
+                    opt.value = o.value;
+                    opt.textContent = o.label;
+                    if (!item.length && o.value === "240") opt.selected = true;
+                    else if (item.length && String(item.length) === o.value) opt.selected = true;
+                    lengthSelect.appendChild(opt);
+                });
+
+                const customInput = document.createElement("input");
+                customInput.type = "number";
+                customInput.step = "0.1";
+                customInput.min = "0";
+                customInput.placeholder = "Custom ft";
+                customInput.className = "len-input";
+                customInput.style.marginTop = "0.3rem";
+                customInput.style.display = "none";
+
+                function syncInputsFromItem() {
+                    if (item.length === 240 || item.length === 50) {
+                        lengthSelect.value = String(item.length);
+                        customInput.style.display = "none";
+                    } else if (item.length) {
+                        lengthSelect.value = "custom";
+                        customInput.style.display = "block";
+                        customInput.value = item.length;
+                    } else {
+                        lengthSelect.value = "240";
+                        customInput.style.display = "none";
+                        item.length = 240;
+                    }
+                }
+
+                lengthSelect.onchange = e => {
+                    const val = e.target.value;
+                    if (val === "240" || val === "50") {
+                        item.length = parseFloat(val);
+                        customInput.style.display = "none";
+                        updateTotalAndFasteners();
+                    } else {
+                        customInput.style.display = "block";
+                        customInput.focus();
+                    }
+                };
+
+                customInput.oninput = e => {
+                    item.length = parseFloat(e.target.value) || 0;
+                    updateTotalAndFasteners();
+                };
+
+                syncInputsFromItem();
+
+                td.appendChild(lengthSelect);
+                td.appendChild(customInput);
             } else {
                 const inp = document.createElement("input");
                 inp.type = "number";
@@ -2391,6 +1398,7 @@ function renderDesktop() {
         // Qty
         td = document.createElement("td");
         td.className = "numeric";
+        td.setAttribute("data-label", "Qty");
         const q = document.createElement("input");
         q.type = "number";
         q.min = "1";
@@ -2399,19 +1407,39 @@ function renderDesktop() {
         q.value = item.qty;
         q.oninput = e => { item.qty = Math.max(1, parseInt(e.target.value) || 1); updateTotalAndFasteners(); };
         td.appendChild(q);
+
+        if (item.type === "custom") {
+            const d = document.createElement("input");
+            d.type = "text";
+            d.placeholder = "Description";
+            d.style.marginTop = "0.3rem";
+            d.value = item.customDesc || "";
+            d.oninput = e => item.customDesc = e.target.value;
+            td.appendChild(d);
+
+            const up = document.createElement("input");
+            up.type = "number";
+            up.step = "0.01";
+            up.placeholder = "Unit $";
+            up.style.marginTop = "0.25rem";
+            up.value = item.customUnitPrice || "";
+            up.oninput = e => { item.customUnitPrice = parseFloat(e.target.value) || 0; updateTotalAndFasteners(); };
+            td.appendChild(up);
+        }
         row.appendChild(td);
 
-        // Unit Price
+        // Unit price
         td = document.createElement("td");
         td.className = "numeric";
-        if (prod.isFt || item.type === "custom") {
+        td.setAttribute("data-label", "Unit Price");
+        if ((prod.isFt && item.type !== "dexerdry") || item.type === "custom") {
             const p = document.createElement("input");
             p.type = "number";
             p.step = "0.01";
             p.min = "0";
             p.className = "price-input";
             const defPrice = item.type === "custom" ? item.customUnitPrice : prod.price;
-            p.placeholder = "$" + defPrice.toFixed(2);
+            p.placeholder = "default $" + defPrice.toFixed(2);
             p.value = item.priceOverride ?? "";
             p.oninput = e => { item.priceOverride = parseFloat(e.target.value); updateTotalAndFasteners(); };
             td.appendChild(p);
@@ -2424,20 +1452,24 @@ function renderDesktop() {
         td = document.createElement("td");
         td.className = "numeric";
         td.id = "sub-" + i;
+        td.setAttribute("data-label", "Subtotal");
         row.appendChild(td);
 
         // Remove
         td = document.createElement("td");
         td.className = "table-actions-cell";
+        td.setAttribute("data-label", "Actions");
         const rm = document.createElement("button");
         rm.type = "button";
         rm.textContent = "×";
         rm.className = "btn-remove-row";
+        rm.title = "Delete this line item";
         rm.onclick = () => {
             deletedItems.push(JSON.parse(JSON.stringify(item)));
             lineItems.splice(i, 1);
             render();
             updateTotalAndFasteners();
+            updateUndoButton();
         };
         td.appendChild(rm);
         row.appendChild(td);
@@ -2449,84 +1481,423 @@ function renderDesktop() {
 function renderMobile() {
     const container = document.getElementById("mobile-items-container");
     container.innerHTML = "";
-    // Simplified mobile rendering - reuses desktop logic structure
+    lineItems.forEach((item, i) => {
+        const prod = PRODUCTS[item.type] || PRODUCTS.custom;
+        const card = document.createElement("div");
+        card.className = "line-item-card mobile-visible";
+
+        const title = document.createElement("h4");
+        title.textContent = `Item ${i + 1}: ${prod.name}`;
+        card.appendChild(title);
+
+        // Product select
+        const productRow = document.createElement("div");
+        productRow.className = "line-item-row full";
+        const prodLabel = document.createElement("label");
+        prodLabel.textContent = "Product";
+        const prodSel = document.createElement("select");
+        
+        Object.entries(PRODUCT_CONFIG.categories).forEach(([catKey, category]) => {
+            const optgroup = document.createElement("optgroup");
+            optgroup.label = category.label;
+            Object.entries(category.products).forEach(([prodKey, prodData]) => {
+                const opt = document.createElement("option");
+                opt.value = prodKey;
+                opt.textContent = prodData.name;
+                if (prodKey === item.type) opt.selected = true;
+                optgroup.appendChild(opt);
+            });
+            prodSel.appendChild(optgroup);
+        });
+
+        prodSel.onchange = () => {
+            item.type = prodSel.value;
+            if (item.type !== "custom") {
+                item.customDesc = "";
+                item.customUnitPrice = 0;
+            }
+            if (!PRODUCTS[item.type].isFt) item.length = null;
+            render();
+            updateTotalAndFasteners();
+        };
+        
+        productRow.appendChild(prodLabel);
+        productRow.appendChild(prodSel);
+        card.appendChild(productRow);
+
+        // Color
+        if (prod.hasColor) {
+            const colorRow = document.createElement("div");
+            colorRow.className = "line-item-row full";
+            const colorLabel = document.createElement("label");
+            colorLabel.textContent = "Color";
+            const colorSel = document.createElement("select");
+            COLORS.forEach(c => {
+                const o = document.createElement("option");
+                o.value = c;
+                o.textContent = c;
+                if (c === item.color) o.selected = true;
+                colorSel.appendChild(o);
+            });
+            colorSel.onchange = e => {
+                item.color = e.target.value;
+                updateTotalAndFasteners();
+            };
+            colorRow.appendChild(colorLabel);
+            colorRow.appendChild(colorSel);
+            card.appendChild(colorRow);
+        }
+
+        // Length and Qty
+        const lengthQtyRow = document.createElement("div");
+        lengthQtyRow.className = "line-item-row";
+
+        if (prod.isFt) {
+            const lengthLabel = document.createElement("label");
+            lengthLabel.textContent = "Length (ft)";
+            const lengthInput = document.createElement("input");
+            lengthInput.type = "number";
+            lengthInput.value = item.length || "";
+            lengthInput.step = "0.1";
+            lengthInput.min = "0";
+            lengthInput.oninput = e => { item.length = parseFloat(e.target.value) || 0; updateTotalAndFasteners(); };
+            const lengthDiv = document.createElement("div");
+            lengthDiv.appendChild(lengthLabel);
+            lengthDiv.appendChild(lengthInput);
+            lengthQtyRow.appendChild(lengthDiv);
+        }
+
+        const qtyLabel = document.createElement("label");
+        qtyLabel.textContent = "Quantity";
+        const qtyInput = document.createElement("input");
+        qtyInput.type = "number";
+        qtyInput.value = item.qty;
+        qtyInput.min = "1";
+        qtyInput.step = "1";
+        qtyInput.oninput = e => { item.qty = Math.max(1, parseInt(e.target.value) || 1); updateTotalAndFasteners(); };
+        const qtyDiv = document.createElement("div");
+        qtyDiv.appendChild(qtyLabel);
+        qtyDiv.appendChild(qtyInput);
+        lengthQtyRow.appendChild(qtyDiv);
+
+        card.appendChild(lengthQtyRow);
+
+        // Subtotal display
+        const subRow = document.createElement("div");
+        subRow.className = "line-item-row full";
+        subRow.id = "mobile-sub-" + i;
+        card.appendChild(subRow);
+
+        // Actions
+        const actionsDiv = document.createElement("div");
+        actionsDiv.className = "line-item-card-actions";
+        const rmBtn = document.createElement("button");
+        rmBtn.type = "button";
+        rmBtn.textContent = "Delete";
+        rmBtn.className = "btn btn-ghost btn-sm";
+        rmBtn.onclick = () => {
+            deletedItems.push(JSON.parse(JSON.stringify(item)));
+            lineItems.splice(i, 1);
+            render();
+            updateTotalAndFasteners();
+            updateUndoButton();
+        };
+        actionsDiv.appendChild(rmBtn);
+        card.appendChild(actionsDiv);
+
+        container.appendChild(card);
+    });
+}
+
+function updateUndoButton() {
+    const btn = document.getElementById("undo-btn");
+    if (deletedItems.length > 0) {
+        btn.style.display = "block";
+        btn.onclick = () => {
+            const item = deletedItems.pop();
+            lineItems.push(item);
+            render();
+            updateTotalAndFasteners();
+            updateUndoButton();
+        };
+    } else {
+        btn.style.display = "none";
+    }
+}
+
+function getItemPrice(item) {
+    const prod = PRODUCTS[item.type] || PRODUCTS.custom;
+    if (item.priceOverride != null && !Number.isNaN(item.priceOverride) && item.type !== "dexerdry") {
+        return item.priceOverride;
+    }
+    if (item.type === "custom") return item.customUnitPrice || 0;
+    return prod.price;
+}
+
+function getItemSubtotal(item) {
+    const prod = PRODUCTS[item.type] || PRODUCTS.custom;
+    const price = getItemPrice(item);
+    if (prod.isFt || (item.type === "custom" && item.length)) {
+        return item.qty * (item.length || 0) * price;
+    }
+    return item.qty * price;
 }
 
 function updateTotalAndFasteners() {
     let total = 0;
+    let totalGroovedBoards = 0;
+    let hasSystem = false;
+    let hasStandaloneDex = false;
+
     lineItems.forEach((item, i) => {
-        const prod = PRODUCTS[item.type] || PRODUCTS.custom;
-        let unitPrice = item.priceOverride ?? (item.type === "custom" ? item.customUnitPrice : prod.price);
-        let sub = 0;
-
-        if (prod.isFt && item.length) {
-            sub = unitPrice * item.length * item.qty;
-        } else {
-            sub = unitPrice * item.qty;
-        }
-
+        const sub = getItemSubtotal(item);
         total += sub;
-        const subEl = document.getElementById("sub-" + i);
-        if (subEl) subEl.textContent = "$" + sub.toFixed(2);
+        const subCell = document.getElementById("sub-" + i);
+        if (subCell) subCell.textContent = "$" + sub.toFixed(2);
+
+        const mobileSubCell = document.getElementById("mobile-sub-" + i);
+        if (mobileSubCell) mobileSubCell.textContent = "Subtotal: $" + sub.toFixed(2);
+
+        if (["system", "grooved"].includes(item.type)) {
+            totalGroovedBoards += item.qty;
+        }
+        if (item.type === "system") hasSystem = true;
+        if (item.type === "dexerdry") hasStandaloneDex = true;
     });
 
     document.getElementById("grand-total").textContent = "$" + total.toFixed(2);
-    document.getElementById("sticky-total").textContent = "$" + total.toFixed(2);
+
+    const hintEl = document.getElementById("fastener-hint");
+    let hintHtml = "";
+
+    if (totalGroovedBoards > 0 && deckLengthFt > 0) {
+        const joistCount = Math.floor(deckLengthFt * 12 / 16) + 1;
+        const intersections = totalGroovedBoards * joistCount;
+        const screwsNeeded = intersections * 2;
+        const boxesScrews = Math.ceil(screwsNeeded / SCREWS_PER_BOX);
+
+        hintHtml += "<strong>Fastener suggestion (reference only):</strong><br>" +
+            "≈ " + boxesScrews + " boxes of screws<br>" +
+            "≈ " + boxesScrews + " boxes of plugs";
+    }
+
+    if (hasSystem && hasStandaloneDex) {
+        hintHtml += '<div class="fastener-warning">AmeriDex System Boards already include Dexerdry in the price. Standalone Dexerdry is typically only needed for non-system decks.</div>';
+    }
+
+    if (hintHtml) {
+        hintEl.style.display = "block";
+        hintEl.innerHTML = hintHtml;
+    } else {
+        hintEl.style.display = "none";
+        hintEl.innerHTML = "";
+    }
+}
+
+function calculateAndSuggest() {
+    deckLengthFt = parseFloat(document.getElementById("deck-len").value) || 0;
+    deckWidthFt = parseFloat(document.getElementById("deck-wid").value) || 0;
+
+    if (deckLengthFt <= 0 || deckWidthFt <= 0) {
+        alert("Please enter both deck length and width greater than 0.");
+        return;
+    }
+
+    const perp = document.getElementById("orientation").value === "perpendicular";
+    const span = perp ? deckLengthFt : deckWidthFt;
+    const run = perp ? deckWidthFt : deckLengthFt;
+
+    const boardsNeeded = Math.ceil((span / EFFECTIVE_FT) * WASTE);
+    const dexerdryFt = (boardsNeeded - 1) * run * WASTE;
+
+    const msg =
+        "<strong>Suggested AmeriDex System Boards (Dexerdry included in price)</strong><br>" +
+        "• " + boardsNeeded + " boards @ " + run.toFixed(1) + " ft each<br>" +
+        "• Total board ft: " + (boardsNeeded * run).toFixed(1) + "<br>" +
+        "• Integrated Dexerdry coverage (for reference): " + dexerdryFt.toFixed(1) + " ft<br><br>" +
+        "(10% waste included)";
+    document.getElementById("calc-result").innerHTML = msg;
+
+    if (confirm("Add suggested AmeriDex System Boards to the order?")) {
+        lineItems.push({
+            type: "system",
+            color: selectedColor1,
+            length: Math.min(20, Math.max(12, Math.round(run))),
+            qty: boardsNeeded,
+            priceOverride: null,
+            customDesc: "",
+            customUnitPrice: 0
+        });
+        deletedItems = [];
+        render();
+        updateTotalAndFasteners();
+        updateUndoButton();
+    }
+}
+
+function validateRequired() {
+    const form = document.getElementById("order-form");
+    if (form && !form.reportValidity()) {
+        return false;
+    }
+
+    for (let item of lineItems) {
+        if (item.qty < 1) {
+            alert("All quantities must be at least 1.");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function generateOrderText() {
+    let txt = "AmeriDex Order\n\nCUSTOMER:\n";
+    txt += "Name:     " + document.getElementById("cust-name").value + "\n";
+    txt += "Company:  " + (document.getElementById("cust-company").value || "") + "\n";
+    txt += "Address:  " + document.getElementById("cust-address").value.replace(/\n/g, " | ") + "\n";
+    txt += "Phone:    " + document.getElementById("cust-phone").value + "\n";
+    txt += "Email:    " + document.getElementById("cust-email").value + "\n\n";
+
+    txt += "PRODUCTS:\n";
+    lineItems.forEach((item, i) => {
+        const prod = PRODUCTS[item.type] || PRODUCTS.custom;
+        const price = getItemPrice(item);
+        const sub = getItemSubtotal(item);
+        let desc = prod.name;
+        if (item.type === "custom") desc = item.customDesc || desc;
+        if (prod.hasColor && item.color) desc += " (" + item.color + ")";
+        txt += (i + 1) + ". " + desc + "\n";
+        txt += "   Length: " + (item.length || "N/A") + " ft, Qty: " + item.qty + ", Price: $" + price.toFixed(2) + ", Subtotal: $" + sub.toFixed(2) + "\n";
+    });
+
+    txt += "\nTOTAL: $" + document.getElementById("grand-total").textContent + "\n";
+
+    if (document.getElementById("special-instr").value) {
+        txt += "\nSPECIAL INSTRUCTIONS:\n" + document.getElementById("special-instr").value + "\n";
+    }
+
+    if (document.getElementById("del-date").value) {
+        txt += "\nPREFERRED DELIVERY DATE: " + document.getElementById("del-date").value + "\n";
+    }
+
+    return txt;
 }
 
 function generatePDF() {
+    if (!validateRequired()) return;
+
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    let yPosition = 10;
 
     doc.setFontSize(18);
-    doc.text("AmeriDex Order Form", 20, 20);
+    doc.text("AmeriDex Order Form", pageWidth / 2, yPosition, { align: "center" });
+    yPosition += 10;
 
     doc.setFontSize(12);
-    let y = 35;
-
-    doc.text("Customer: " + (document.getElementById("cust-name").value || "N/A"), 20, y);
-    y += 8;
-    doc.text("Email: " + (document.getElementById("cust-email").value || "N/A"), 20, y);
-    y += 8;
-    doc.text("Phone: " + (document.getElementById("cust-phone").value || "N/A"), 20, y);
-    y += 15;
-
-    doc.setFontSize(14);
-    doc.text("Line Items:", 20, y);
-    y += 10;
+    doc.text("Customer Information", 10, yPosition);
+    yPosition += 8;
 
     doc.setFontSize(10);
-    lineItems.forEach((item, i) => {
+    const name = document.getElementById("cust-name").value;
+    const company = document.getElementById("cust-company").value || "N/A";
+    const address = document.getElementById("cust-address").value.replace(/\n/g, ", ");
+    const phone = document.getElementById("cust-phone").value;
+    const email = document.getElementById("cust-email").value;
+
+    doc.text(`Name: ${name}`, 10, yPosition);
+    yPosition += 6;
+    doc.text(`Company: ${company}`, 10, yPosition);
+    yPosition += 6;
+    doc.text(`Address: ${address}`, 10, yPosition);
+    yPosition += 6;
+    doc.text(`Phone: ${phone}`, 10, yPosition);
+    yPosition += 6;
+    doc.text(`Email: ${email}`, 10, yPosition);
+    yPosition += 12;
+
+    doc.setFontSize(12);
+    doc.text("Line Items", 10, yPosition);
+    yPosition += 8;
+
+    doc.setFontSize(9);
+    const headers = ["Product", "Color", "Length", "Qty", "Price", "Subtotal"];
+    const widths = [50, 25, 20, 15, 25, 30];
+    let xPos = 10;
+
+    headers.forEach((h, i) => {
+        doc.text(h, xPos, yPosition);
+        xPos += widths[i];
+    });
+    yPosition += 7;
+
+    doc.setFontSize(8);
+    lineItems.forEach(item => {
         const prod = PRODUCTS[item.type] || PRODUCTS.custom;
-        const line = `${i + 1}. ${prod.name} - ${item.color || 'N/A'} - ${item.length || 'N/A'}ft x ${item.qty}`;
-        doc.text(line, 20, y);
-        y += 6;
-        if (y > 270) {
+        const price = getItemPrice(item);
+        const sub = getItemSubtotal(item);
+
+        let desc = prod.name.substring(0, 25);
+        let color = item.color || "";
+        let length = item.length ? item.length.toString() : "N/A";
+        let qty = item.qty.toString();
+        let priceStr = "$" + price.toFixed(2);
+        let subStr = "$" + sub.toFixed(2);
+
+        xPos = 10;
+        doc.text(desc, xPos, yPosition);
+        xPos += widths[0];
+        doc.text(color, xPos, yPosition);
+        xPos += widths[1];
+        doc.text(length, xPos, yPosition);
+        xPos += widths[2];
+        doc.text(qty, xPos, yPosition);
+        xPos += widths[3];
+        doc.text(priceStr, xPos, yPosition);
+        xPos += widths[4];
+        doc.text(subStr, xPos, yPosition);
+
+        yPosition += 6;
+
+        if (yPosition > pageHeight - 20) {
             doc.addPage();
-            y = 20;
+            yPosition = 10;
         }
     });
 
-    y += 10;
-    doc.setFontSize(14);
-    doc.text("Total: " + document.getElementById("grand-total").textContent, 20, y);
+    yPosition += 6;
+    doc.setFontSize(11);
+    doc.text(`Total: ${document.getElementById("grand-total").textContent}`, 10, yPosition, { style: "bold" });
 
-    doc.save("ameridex-order.pdf");
+    doc.save("AmeriDex-Order.pdf");
 }
 
 function showReview() {
-    document.getElementById("review-name").textContent = document.getElementById("cust-name").value || "Not provided";
-    document.getElementById("review-email").textContent = document.getElementById("cust-email").value || "Not provided";
-    document.getElementById("review-phone").textContent = document.getElementById("cust-phone").value || "Not provided";
+    if (!validateRequired()) return;
 
-    const itemsDiv = document.getElementById("review-items");
-    itemsDiv.innerHTML = "";
+    document.getElementById("review-name").textContent = document.getElementById("cust-name").value;
+    document.getElementById("review-email").textContent = document.getElementById("cust-email").value;
+    document.getElementById("review-phone").textContent = document.getElementById("cust-phone").value;
+
+    const reviewItems = document.getElementById("review-items");
+    reviewItems.innerHTML = "";
     lineItems.forEach((item, i) => {
         const prod = PRODUCTS[item.type] || PRODUCTS.custom;
-        const div = document.createElement("div");
-        div.className = "review-item";
-        div.innerHTML = `<span>${prod.name}</span><span>${item.qty} × ${item.length || 1}ft</span>`;
-        itemsDiv.appendChild(div);
+        const price = getItemPrice(item);
+        const sub = getItemSubtotal(item);
+
+        const itemDiv = document.createElement("div");
+        itemDiv.style.marginBottom = "0.75rem";
+        itemDiv.innerHTML = `
+            <strong>${prod.name}</strong><br>
+            ${item.color ? 'Color: ' + item.color + '<br>' : ''}
+            ${item.length ? 'Length: ' + item.length + ' ft | ' : ''}
+            Qty: ${item.qty} @ $${price.toFixed(2)} = <strong>$${sub.toFixed(2)}</strong>
+        `;
+        reviewItems.appendChild(itemDiv);
     });
 
     document.getElementById("review-total").textContent = document.getElementById("grand-total").textContent;
@@ -2534,35 +1905,17 @@ function showReview() {
 }
 
 function submitOrder() {
-    const name = document.getElementById("cust-name").value;
-    const email = document.getElementById("cust-email").value;
-    const phone = document.getElementById("cust-phone").value;
-    const total = document.getElementById("grand-total").textContent;
-
-    let body = `New AmeriDex Order%0A%0ACustomer: ${name}%0AEmail: ${email}%0APhone: ${phone}%0A%0AItems:%0A`;
-    lineItems.forEach((item, i) => {
-        const prod = PRODUCTS[item.type] || PRODUCTS.custom;
-        body += `${i + 1}. ${prod.name} - ${item.color || 'N/A'} - ${item.length || 'N/A'}ft x ${item.qty}%0A`;
-    });
-    body += `%0ATotal: ${total}`;
-
-    window.location.href = `mailto:orders@ameridex.com?subject=New AmeriDex Order - ${name}&body=${body}`;
+    const orderText = generateOrderText();
+    const mailto = `mailto:${document.getElementById("cust-email").value}?subject=AmeriDex Order Confirmation&body=${encodeURIComponent(orderText)}`;
+    window.location.href = mailto;
     document.getElementById("success-msg").style.display = "block";
 }
 
-// ============================================
-// INITIALIZATION
-// ============================================
-document.addEventListener("DOMContentLoaded", () => {
-    // Initialize Three.js builder
-    initThreeJS();
-    initBuilderControls();
-
-    // Initialize order form
-    render();
-    updateTotalAndFasteners();
-    updateCustomerProgress();
-});
+// Initialize on load
+initColorGrid();
+updateColorSelection();
+updateColorComparison();
+updateCustomerProgress();
 </script>
 
 </body>
