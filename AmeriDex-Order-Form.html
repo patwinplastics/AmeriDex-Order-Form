@@ -159,6 +159,22 @@
         box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
     }
 
+    /* NEW: Inline field group for custom length input */
+    .field-inline-group {
+        display: flex;
+        gap: 0.5rem;
+        align-items: flex-end;
+    }
+
+    .field-inline-group .field {
+        flex: 1;
+        margin-bottom: 0;
+    }
+
+    .field-inline-group .field.small {
+        flex: 0 0 80px;
+    }
+
     /* Color Grid */
     .color-grid {
         display: grid;
@@ -270,6 +286,42 @@
         background: var(--primary);
         color: white;
         border-color: var(--primary);
+    }
+
+    /* NEW: Orientation toggle buttons */
+    .orientation-toggle {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .orientation-btn {
+        flex: 1;
+        padding: 0.6rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: 2px solid var(--border-subtle);
+        background: white;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+    }
+
+    .orientation-btn:hover {
+        border-color: var(--primary);
+        background: var(--primary-soft);
+    }
+
+    .orientation-btn.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .orientation-btn .icon {
+        font-size: 1.2rem;
+        display: block;
+        margin-bottom: 0.25rem;
     }
 
     /* Options row */
@@ -579,6 +631,26 @@
         border: 1px solid var(--border-subtle);
     }
 
+    /* NEW: Editable table cell styles */
+    .line-input.editable-price,
+    .line-input.editable-qty,
+    .line-input.editable-length {
+        width: 80px;
+        text-align: right;
+    }
+
+    .line-select.editable-product {
+        min-width: 180px;
+    }
+
+    .line-select.editable-color {
+        min-width: 100px;
+    }
+
+    .line-select.editable-length-preset {
+        width: 90px;
+    }
+
     .btn-remove-row {
         background-color: #fee2e2;
         color: #b91c1c;
@@ -788,10 +860,24 @@
                     </div>
                 </div>
 
+                <!-- NEW: Deck Orientation Section -->
+                <div class="control-section">
+                    <div class="control-section-title">Board Orientation (Relative to House)</div>
+                    <div class="orientation-toggle">
+                        <button type="button" class="orientation-btn active" data-orientation="perpendicular">
+                            <span class="icon">⬍</span>
+                            Perpendicular
+                        </button>
+                        <button type="button" class="orientation-btn" data-orientation="parallel">
+                            <span class="icon">⬌</span>
+                            Parallel
+                        </button>
+                    </div>
+                </div>
+
                 <div class="control-section">
                     <div class="control-section-title">Board Color</div>
                     <div class="color-grid" id="color-grid"></div>
-
                     <div class="color-preview-panel">
                         <div class="color-preview-box">
                             <h5>Selected Color</h5>
@@ -806,14 +892,21 @@
                     </div>
                 </div>
 
+                <!-- IMPROVED: Board Length with Custom Input -->
                 <div class="control-section">
                     <div class="control-section-title">Board Length</div>
                     <div class="field">
+                        <label>Standard Lengths</label>
                         <select id="board-length">
                             <option value="12">12 ft boards</option>
                             <option value="16" selected>16 ft boards</option>
                             <option value="20">20 ft boards</option>
+                            <option value="custom">Custom Length...</option>
                         </select>
+                    </div>
+                    <div class="field" id="custom-length-field" style="display: none;">
+                        <label>Custom Length (ft)</label>
+                        <input type="number" id="custom-board-length" value="18" min="4" max="24" step="0.5">
                     </div>
                 </div>
 
@@ -935,31 +1028,10 @@
         </div>
     </section>
 
-    <!-- Order Details: 3D-generated + Manual Line Items -->
+    <!-- IMPROVED: Order Details with per-line product selection, editable prices, custom lengths -->
     <section class="card">
         <h2 class="card-title">Order Details</h2>
-        <p class="card-subtitle">Add products from dropdown, or manually enter custom items. You can edit or remove any line.</p>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
-            <div class="field">
-                <label>Select Product</label>
-                <select id="product-select" class="line-select">
-                    <option value="">-- Choose Product --</option>
-                    <option value="system">AmeriDex System Boards (ft)</option>
-                    <option value="solid">Solid Edge Deck Boards (ft)</option>
-                    <option value="screws">Epoxy-Coated Screws (box)</option>
-                    <option value="plugs">Color-Matching Plugs (box)</option>
-                </select>
-            </div>
-            <div class="field">
-                <label>Quantity</label>
-                <input type="number" id="product-qty" class="line-input" value="1" min="0.1" step="0.1">
-            </div>
-        </div>
-
-        <button type="button" class="btn btn-outline" id="btn-add-preset" style="margin-bottom: 1rem; width: 100%;">
-            + Add Selected Product
-        </button>
+        <p class="card-subtitle">Each line item has its own product selection, color, length, quantity, and editable unit price.</p>
 
         <table class="order-table" id="order-table">
             <thead>
@@ -976,14 +1048,14 @@
             <tbody id="order-tbody">
                 <tr>
                     <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">
-                        Design your deck above and click "Apply to Order Form" or add items from the dropdown.
+                        Design your deck above and click "Apply to Order Form" or add items manually below.
                     </td>
                 </tr>
             </tbody>
         </table>
 
-        <button type="button" class="btn btn-ghost btn-add-row" id="btn-add-row">
-            + Add Manual Line Item
+        <button type="button" class="btn btn-outline btn-add-row" id="btn-add-row" style="width: 100%;">
+            + Add Line Item
         </button>
 
         <div class="total-bar">
@@ -1038,7 +1110,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-// COLORS & IMAGES (quote program)
+// COLORS & IMAGES
 const COLORS = ["Driftwood", "Khaki", "Slate", "Beachwood", "Chestnut", "Redwood", "Hazelnut"];
 
 const COLOR_IMAGES = {
@@ -1062,31 +1134,43 @@ const COLOR_HEX_FALLBACK = {
     Hazelnut: 0x8B7355
 };
 
-// PRODUCTS (subset matched to your form)
+// IMPROVED PRODUCTS with updated pricing per your specifications
 const PRODUCTS = {
     system: {
-        name: "AmeriDex System Boards (Grooved + Dexerdry included)",
-        price: 8.0,
+        name: "AmeriDex System Boards (Grooved + Dexerdry)",
+        price: 8.0,  // $8.00/ft as specified
         isFt: true,
-        hasColor: true
+        hasColor: true,
+        allowsLength: true
     },
     solid: {
         name: "Solid Edge Deck Boards",
-        price: 6.0,
+        price: 6.0,  // $6.00/ft as specified
         isFt: true,
-        hasColor: true
+        hasColor: true,
+        allowsLength: true
+    },
+    dexerdry: {
+        name: "Dexerdry Seal (Linear Ft)",
+        price: 1.50,  // Price per linear ft - adjust as needed
+        isFt: true,
+        hasColor: false,
+        allowsLength: true,
+        presetLengths: ["240", "50", "custom"]  // 240ft box, 50ft box, or custom
     },
     screws: {
         name: "Epoxy-Coated Screws (box of 375)",
         price: 37.0,
         isFt: false,
-        hasColor: false
+        hasColor: false,
+        allowsLength: false
     },
     plugs: {
         name: "Color-Matching Plugs",
         price: 33.79,
         isFt: false,
-        hasColor: true
+        hasColor: true,
+        allowsLength: false
     }
 };
 
@@ -1099,16 +1183,18 @@ const BOARD_THICK = BOARD_THICKNESS_INCH / 12;
 const EFFECTIVE_WIDTH = (BOARD_WIDTH_INCH + GAP_INCH) / 12;
 const WASTE_FACTOR = 1.1;
 const SCREWS_PER_BOX = 375;
-const STAIR_RISE = 7.5 / 12; // 7.5 inches = 0.625 ft
-const STAIR_RUN = 10.5 / 12; // 10.5 inches = 0.875 ft
+const STAIR_RISE = 7.5 / 12;
+const STAIR_RUN = 10.5 / 12;
 
-// 3D State
+// 3D State - ADDED orientation
 let state = {
     length: 16,
     width: 12,
     height: 3,
     color: "Driftwood",
     boardLength: 16,
+    customBoardLength: 18,
+    orientation: "perpendicular",  // NEW: "perpendicular" or "parallel"
     stairs: { front: false, back: false, left: false, right: false },
     stairWidth: 4,
     railing: false,
@@ -1123,9 +1209,6 @@ let state = {
         total: 0
     }
 };
-
-// Order line items array
-let orderLines = [];
 
 // Three.js globals
 let scene, camera, renderer, controls;
@@ -1248,6 +1331,7 @@ function initScene() {
     fill.position.set(-10, 10, -10);
     scene.add(fill);
 
+    // Ground
     const groundGeo = new THREE.PlaneGeometry(80, 80);
     const groundMat = new THREE.MeshLambertMaterial({ color: 0x7CBA5F });
     const ground = new THREE.Mesh(groundGeo, groundMat);
@@ -1260,6 +1344,16 @@ function initScene() {
     grid.material.transparent = true;
     grid.material.opacity = 0.3;
     scene.add(grid);
+
+    // House reference (back wall)
+    const houseMat = new THREE.MeshStandardMaterial({ color: 0xD4C4A8, roughness: 0.9 });
+    const houseGeo = new THREE.BoxGeometry(state.length + 8, 10, 1);
+    const house = new THREE.Mesh(houseGeo, houseMat);
+    house.position.set(0, 5, -state.width / 2 - 2);
+    house.castShadow = true;
+    house.receiveShadow = true;
+    house.name = "house";
+    scene.add(house);
 
     deckGroup = new THREE.Group();
     scene.add(deckGroup);
@@ -1287,7 +1381,7 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-// Build deck
+// IMPROVED: Build deck with orientation support and transparent railing
 function buildDeck() {
     while (deckGroup.children.length) {
         const child = deckGroup.children[0];
@@ -1299,19 +1393,22 @@ function buildDeck() {
         deckGroup.remove(child);
     }
 
-    const { length, width, height, color, stairs, stairWidth, railing, border } =
-        state;
+    const { length, width, height, color, stairs, stairWidth, railing, border, orientation } = state;
 
-    const deckMatBase = createDeckMaterial(color);
+    // Update house position
+    const house = scene.getObjectByName("house");
+    if (house) {
+        house.position.set(0, 5, -width / 2 - 2);
+        house.geometry.dispose();
+        house.geometry = new THREE.BoxGeometry(length + 8, 10, 1);
+    }
+
     const supportMat = new THREE.MeshStandardMaterial({
         color: 0x8B4513,
         roughness: 0.9
     });
-    const railMat = new THREE.MeshStandardMaterial({
-        color: 0x333333,
-        roughness: 0.7
-    });
 
+    // Support posts
     const postSize = 0.33;
     for (let x = 0; x <= length; x += 6) {
         for (let z = 0; z <= width; z += 6) {
@@ -1324,6 +1421,7 @@ function buildDeck() {
         }
     }
 
+    // Rim joists
     const rimHeight = 0.75;
     const rimThick = 0.125;
 
@@ -1349,29 +1447,59 @@ function buildDeck() {
     rimRight.castShadow = true;
     deckGroup.add(rimRight);
 
-    const numBoards = Math.ceil(length / EFFECTIVE_WIDTH);
-    for (let i = 0; i < numBoards; i++) {
-        const xPos = -length / 2 + BOARD_WIDTH / 2 + i * EFFECTIVE_WIDTH;
-        if (xPos < length / 2) {
-            const boardGeo = new THREE.BoxGeometry(
-                BOARD_WIDTH,
-                BOARD_THICK,
-                width - 0.1
-            );
-            const boardMat = createDeckMaterial(color);
-            if (boardMat.map) {
-                boardMat.map = boardMat.map.clone();
-                boardMat.map.offset.y = Math.random() * 0.5;
-                boardMat.map.needsUpdate = true;
+    // IMPROVED: Deck boards with orientation support
+    if (orientation === "perpendicular") {
+        // Boards run perpendicular to house (along Z axis, across the width)
+        const numBoards = Math.ceil(length / EFFECTIVE_WIDTH);
+        for (let i = 0; i < numBoards; i++) {
+            const xPos = -length / 2 + BOARD_WIDTH / 2 + i * EFFECTIVE_WIDTH;
+            if (xPos < length / 2) {
+                const boardGeo = new THREE.BoxGeometry(
+                    BOARD_WIDTH,
+                    BOARD_THICK,
+                    width - 0.1
+                );
+                const boardMat = createDeckMaterial(color);
+                if (boardMat.map) {
+                    boardMat.map = boardMat.map.clone();
+                    boardMat.map.offset.y = Math.random() * 0.5;
+                    boardMat.map.needsUpdate = true;
+                }
+                const board = new THREE.Mesh(boardGeo, boardMat);
+                board.position.set(xPos, height + BOARD_THICK / 2, 0);
+                board.castShadow = true;
+                board.receiveShadow = true;
+                deckGroup.add(board);
             }
-            const board = new THREE.Mesh(boardGeo, boardMat);
-            board.position.set(xPos, height + BOARD_THICK / 2, 0);
-            board.castShadow = true;
-            board.receiveShadow = true;
-            deckGroup.add(board);
+        }
+    } else {
+        // PARALLEL: Boards run parallel to house (along X axis, across the length)
+        const numBoards = Math.ceil(width / EFFECTIVE_WIDTH);
+        for (let i = 0; i < numBoards; i++) {
+            const zPos = -width / 2 + BOARD_WIDTH / 2 + i * EFFECTIVE_WIDTH;
+            if (zPos < width / 2) {
+                const boardGeo = new THREE.BoxGeometry(
+                    length - 0.1,
+                    BOARD_THICK,
+                    BOARD_WIDTH
+                );
+                const boardMat = createDeckMaterial(color);
+                if (boardMat.map) {
+                    boardMat.map = boardMat.map.clone();
+                    boardMat.map.rotation = Math.PI / 2;  // Rotate texture for parallel boards
+                    boardMat.map.offset.x = Math.random() * 0.5;
+                    boardMat.map.needsUpdate = true;
+                }
+                const board = new THREE.Mesh(boardGeo, boardMat);
+                board.position.set(0, height + BOARD_THICK / 2, zPos);
+                board.castShadow = true;
+                board.receiveShadow = true;
+                deckGroup.add(board);
+            }
         }
     }
 
+    // Picture frame border
     if (border) {
         const frameGeo1 = new THREE.BoxGeometry(
             length + BOARD_WIDTH * 2,
@@ -1410,10 +1538,7 @@ function buildDeck() {
         frameLeft.castShadow = true;
         deckGroup.add(frameLeft);
 
-        const frameRight = new THREE.Mesh(
-            frameGeo2,
-            createDeckMaterial(color)
-        );
+        const frameRight = new THREE.Mesh(frameGeo2, createDeckMaterial(color));
         frameRight.position.set(
             length / 2 + BOARD_WIDTH / 2,
             height + BOARD_THICK / 2 + 0.01,
@@ -1423,83 +1548,136 @@ function buildDeck() {
         deckGroup.add(frameRight);
     }
 
+    // IMPROVED: Transparent railing - you can see through it
     if (railing) {
-        const railHeight = 3;
-        const postSpacing = 4;
-
-        const sides = [
-            { skip: stairs.front, axis: "x", pos: width / 2, range: length },
-            { skip: stairs.back, axis: "x", pos: -width / 2, range: length },
-            { skip: stairs.left, axis: "z", pos: -length / 2, range: width },
-            { skip: stairs.right, axis: "z", pos: length / 2, range: width }
-        ];
-
-        sides.forEach(side => {
-            if (side.skip) return;
-
-            const numPosts = Math.ceil(side.range / postSpacing) + 1;
-            const postGeo = new THREE.BoxGeometry(0.1, railHeight, 0.1);
-
-            for (let i = 0; i < numPosts; i++) {
-                const offset =
-                    -side.range / 2 + (i * side.range) / (numPosts - 1);
-                const railPost = new THREE.Mesh(postGeo, railMat);
-                if (side.axis === "x") {
-                    railPost.position.set(
-                        offset,
-                        height + railHeight / 2,
-                        side.pos
-                    );
-                } else {
-                    railPost.position.set(
-                        side.pos,
-                        height + railHeight / 2,
-                        offset
-                    );
-                }
-                railPost.castShadow = true;
-                deckGroup.add(railPost);
-
-                if (i < numPosts - 1) {
-                    const railGeo = new THREE.BoxGeometry(
-                        side.axis === "x" ? side.range / (numPosts - 1) : 0.08,
-                        2.5,
-                        side.axis === "z" ? side.range / (numPosts - 1) : 0.08
-                    );
-                    const rail = new THREE.Mesh(railGeo, railMat);
-                    if (side.axis === "x") {
-                        rail.position.set(
-                            offset + side.range / (2 * (numPosts - 1)),
-                            height + 1.5,
-                            side.pos
-                        );
-                    } else {
-                        rail.position.set(
-                            side.pos,
-                            height + 1.5,
-                            offset + side.range / (2 * (numPosts - 1))
-                        );
-                    }
-                    rail.castShadow = true;
-                    deckGroup.add(rail);
-                }
-            }
-        });
+        buildTransparentRailing(length, width, height, stairs);
     }
 
     // Build stairs
     if (stairs.front || stairs.back || stairs.left || stairs.right) {
-        buildStairs(
-            stairs.front ? "front" : stairs.back ? "back" : stairs.left ? "left" : "right",
-            stairWidth,
-            height
-        );
+        if (stairs.front) buildStairs("front", stairWidth, height);
+        if (stairs.back) buildStairs("back", stairWidth, height);
+        if (stairs.left) buildStairs("left", stairWidth, height);
+        if (stairs.right) buildStairs("right", stairWidth, height);
     }
 
     updateMaterialEstimates();
 }
 
-// Fixed stair builder
+// NEW: Build transparent railing with visible posts and balusters
+function buildTransparentRailing(length, width, height, stairs) {
+    const railHeight = 3;
+    const postSpacing = 4;
+    const postRadius = 0.06;
+    const balusterRadius = 0.025;
+    const balusterSpacing = 0.33;  // ~4 inches between balusters
+
+    // Dark metal material for posts
+    const postMat = new THREE.MeshStandardMaterial({
+        color: 0x333333,
+        roughness: 0.4,
+        metalness: 0.6
+    });
+
+    // Slightly lighter for balusters
+    const balusterMat = new THREE.MeshStandardMaterial({
+        color: 0x444444,
+        roughness: 0.5,
+        metalness: 0.5
+    });
+
+    const sides = [
+        { skip: stairs.front, axis: "x", pos: width / 2, range: length, dir: "z" },
+        { skip: stairs.back, axis: "x", pos: -width / 2, range: length, dir: "z" },
+        { skip: stairs.left, axis: "z", pos: -length / 2, range: width, dir: "x" },
+        { skip: stairs.right, axis: "z", pos: length / 2, range: width, dir: "x" }
+    ];
+
+    sides.forEach(side => {
+        if (side.skip) return;
+
+        const numPosts = Math.ceil(side.range / postSpacing) + 1;
+        const actualSpacing = side.range / (numPosts - 1);
+
+        for (let i = 0; i < numPosts; i++) {
+            const offset = -side.range / 2 + i * actualSpacing;
+
+            // Main posts (vertical cylinders)
+            const postGeo = new THREE.CylinderGeometry(postRadius, postRadius, railHeight, 8);
+            const post = new THREE.Mesh(postGeo, postMat);
+
+            if (side.axis === "x") {
+                post.position.set(offset, height + railHeight / 2, side.pos);
+            } else {
+                post.position.set(side.pos, height + railHeight / 2, offset);
+            }
+            post.castShadow = true;
+            deckGroup.add(post);
+
+            // Top rail between posts
+            if (i < numPosts - 1) {
+                const railGeo = new THREE.CylinderGeometry(postRadius * 0.7, postRadius * 0.7, actualSpacing, 8);
+                const topRail = new THREE.Mesh(railGeo, postMat);
+
+                if (side.axis === "x") {
+                    topRail.rotation.z = Math.PI / 2;
+                    topRail.position.set(
+                        offset + actualSpacing / 2,
+                        height + railHeight - 0.05,
+                        side.pos
+                    );
+                } else {
+                    topRail.rotation.x = Math.PI / 2;
+                    topRail.position.set(
+                        side.pos,
+                        height + railHeight - 0.05,
+                        offset + actualSpacing / 2
+                    );
+                }
+                topRail.castShadow = true;
+                deckGroup.add(topRail);
+
+                // Bottom rail
+                const bottomRail = new THREE.Mesh(railGeo, postMat);
+                if (side.axis === "x") {
+                    bottomRail.rotation.z = Math.PI / 2;
+                    bottomRail.position.set(
+                        offset + actualSpacing / 2,
+                        height + 0.3,
+                        side.pos
+                    );
+                } else {
+                    bottomRail.rotation.x = Math.PI / 2;
+                    bottomRail.position.set(
+                        side.pos,
+                        height + 0.3,
+                        offset + actualSpacing / 2
+                    );
+                }
+                bottomRail.castShadow = true;
+                deckGroup.add(bottomRail);
+
+                // Balusters between posts
+                const numBalusters = Math.floor(actualSpacing / balusterSpacing);
+                for (let b = 1; b < numBalusters; b++) {
+                    const balusterOffset = offset + b * (actualSpacing / numBalusters);
+                    const balusterGeo = new THREE.CylinderGeometry(balusterRadius, balusterRadius, railHeight - 0.5, 6);
+                    const baluster = new THREE.Mesh(balusterGeo, balusterMat);
+
+                    if (side.axis === "x") {
+                        baluster.position.set(balusterOffset, height + railHeight / 2 - 0.1, side.pos);
+                    } else {
+                        baluster.position.set(side.pos, height + railHeight / 2 - 0.1, balusterOffset);
+                    }
+                    baluster.castShadow = true;
+                    deckGroup.add(baluster);
+                }
+            }
+        }
+    });
+}
+
+// Build stairs (unchanged logic, just cleaner)
 function buildStairs(side, stairWidth, deckHeight) {
     const stairMat = createDeckMaterial(state.color);
     const stringerMat = new THREE.MeshStandardMaterial({
@@ -1515,84 +1693,71 @@ function buildStairs(side, stairWidth, deckHeight) {
     if (side === "front") {
         startX = 0;
         startZ = state.width / 2;
-        direction = { x: 0, z: 1, rise: -1 };
+        direction = { x: 0, z: 1 };
     } else if (side === "back") {
         startX = 0;
         startZ = -state.width / 2;
-        direction = { x: 0, z: -1, rise: -1 };
+        direction = { x: 0, z: -1 };
     } else if (side === "left") {
         startX = -state.length / 2;
         startZ = 0;
-        direction = { x: -1, z: 0, rise: -1 };
+        direction = { x: -1, z: 0 };
     } else {
         startX = state.length / 2;
         startZ = 0;
-        direction = { x: 1, z: 0, rise: -1 };
+        direction = { x: 1, z: 0 };
     }
 
-    // Build stringer (support beam)
+    // Stringers
     const stringerThick = 1.5 / 12;
     const stringerHeight = deckHeight + 1;
-
     const stringerGeo = new THREE.BoxGeometry(
         side === "left" || side === "right" ? stringerThick : stairWidth,
         stringerHeight,
         side === "left" || side === "right" ? stairDepth : stringerThick
     );
 
-    const stringer1Pos = {
-        x: startX + direction.x * stairDepth / 2 + (side === "front" || side === "back" ? -stairWidth / 3 : 0),
-        y: deckHeight / 2 - 0.5,
-        z: startZ + direction.z * stairDepth / 2 + (side === "left" || side === "right" ? -stairWidth / 3 : 0)
-    };
+    const offset1 = (side === "front" || side === "back") ? -stairWidth / 3 : 0;
+    const offset2 = (side === "front" || side === "back") ? stairWidth / 3 : 0;
+    const zOffset1 = (side === "left" || side === "right") ? -stairWidth / 3 : 0;
+    const zOffset2 = (side === "left" || side === "right") ? stairWidth / 3 : 0;
 
     const stringer1 = new THREE.Mesh(stringerGeo, stringerMat);
-    stringer1.position.set(stringer1Pos.x, stringer1Pos.y, stringer1Pos.z);
+    stringer1.position.set(
+        startX + direction.x * stairDepth / 2 + offset1,
+        deckHeight / 2 - 0.5,
+        startZ + direction.z * stairDepth / 2 + zOffset1
+    );
     stringer1.castShadow = true;
     deckGroup.add(stringer1);
 
-    const stringer2Pos = {
-        x: startX + direction.x * stairDepth / 2 + (side === "front" || side === "back" ? stairWidth / 3 : 0),
-        y: deckHeight / 2 - 0.5,
-        z: startZ + direction.z * stairDepth / 2 + (side === "left" || side === "right" ? stairWidth / 3 : 0)
-    };
-
     const stringer2 = new THREE.Mesh(stringerGeo, stringerMat);
-    stringer2.position.set(stringer2Pos.x, stringer2Pos.y, stringer2Pos.z);
+    stringer2.position.set(
+        startX + direction.x * stairDepth / 2 + offset2,
+        deckHeight / 2 - 0.5,
+        startZ + direction.z * stairDepth / 2 + zOffset2
+    );
     stringer2.castShadow = true;
     deckGroup.add(stringer2);
 
-    // Build treads
-    const treadThick = BOARD_THICK;
-
+    // Treads
     for (let i = 0; i < numSteps; i++) {
-        const treadY = state.height + (numSteps - i - 1) * STAIR_RISE - treadThick / 2;
+        const treadY = state.height - (i + 1) * STAIR_RISE + BOARD_THICK / 2;
         const progressDown = (i + 1) * STAIR_RUN;
 
         const treadGeo = new THREE.BoxGeometry(
-            side === "front" || side === "back" ? stairWidth : treadThick,
-            treadThick,
-            side === "left" || side === "right" ? stairWidth : treadThick
+            side === "front" || side === "back" ? stairWidth : STAIR_RUN - 0.05,
+            BOARD_THICK,
+            side === "left" || side === "right" ? stairWidth : STAIR_RUN - 0.05
         );
 
         const treadMat = createDeckMaterial(state.color);
-        if (treadMat.map) {
-            treadMat.map = treadMat.map.clone();
-            treadMat.needsUpdate = true;
-        }
-
         const tread = new THREE.Mesh(treadGeo, treadMat);
-
-        if (side === "front") {
-            tread.position.set(0, treadY, startZ + progressDown * direction.z);
-        } else if (side === "back") {
-            tread.position.set(0, treadY, startZ + progressDown * direction.z);
-        } else if (side === "left") {
-            tread.position.set(startX + progressDown * direction.x, treadY, 0);
-        } else {
-            tread.position.set(startX + progressDown * direction.x, treadY, 0);
-        }
-
+        tread.position.set(
+            startX + direction.x * progressDown,
+            treadY,
+            startZ + direction.z * progressDown
+        );
         tread.castShadow = true;
         tread.receiveShadow = true;
         deckGroup.add(tread);
@@ -1601,10 +1766,20 @@ function buildStairs(side, stairWidth, deckHeight) {
 
 // Calculate material estimates
 function updateMaterialEstimates() {
-    const { length, width, height, boardLength, stairs, stairWidth, border, includePlugs } = state;
+    const { length, width, height, boardLength, customBoardLength, stairs, stairWidth, border, includePlugs, orientation } = state;
 
-    let numStockBoards = Math.ceil((length * width * WASTE_FACTOR) / (BOARD_WIDTH * boardLength));
-    let borderBoards = border ? Math.ceil(((length + width) * 2 * WASTE_FACTOR) / boardLength) : 0;
+    // Get actual board length (standard or custom)
+    const actualBoardLength = boardLength === "custom" ? customBoardLength : parseFloat(boardLength);
+
+    // Calculate based on orientation
+    let numStockBoards;
+    if (orientation === "perpendicular") {
+        numStockBoards = Math.ceil((length * width * WASTE_FACTOR) / (BOARD_WIDTH * actualBoardLength));
+    } else {
+        numStockBoards = Math.ceil((length * width * WASTE_FACTOR) / (BOARD_WIDTH * actualBoardLength));
+    }
+
+    let borderBoards = border ? Math.ceil(((length + width) * 2 * WASTE_FACTOR) / actualBoardLength) : 0;
 
     const numSteps = Math.ceil(height / STAIR_RISE);
     let stairTreads = 0;
@@ -1615,11 +1790,7 @@ function updateMaterialEstimates() {
 
     const surfaceArea = length * width + (stairTreads > 0 ? stairTreads * stairWidth * 0.5 : 0);
     const screwBoxes = Math.ceil((surfaceArea * 8) / SCREWS_PER_BOX);
-    let plugBoxes = 0;
-
-    if (includePlugs) {
-        plugBoxes = Math.ceil(screwBoxes * 0.3);
-    }
+    let plugBoxes = includePlugs ? Math.ceil(screwBoxes * 0.3) : 0;
 
     state.estimates = {
         numStockBoards,
@@ -1639,16 +1810,222 @@ function updateMaterialEstimates() {
     document.getElementById("plugs-hint").textContent = `(${plugBoxes} boxes)`;
 
     const plugsRow = document.getElementById("plugs-row");
-    if (includePlugs) {
-        plugsRow.style.display = "flex";
-    } else {
-        plugsRow.style.display = "none";
-    }
+    plugsRow.style.display = includePlugs ? "flex" : "none";
 }
 
-// DOM Event Handlers
+// ==================== ORDER FORM LOGIC ====================
 
-// Input change handlers
+// IMPROVED: Create editable table row with per-line product selection
+function createEditableRow(productKey = "", colorName = "", lengthValue = "", qty = 1, unitPrice = 0) {
+    const tr = document.createElement("tr");
+
+    // Product dropdown (per line item)
+    const productOptions = Object.entries(PRODUCTS).map(([key, prod]) => 
+        `<option value="${key}" ${key === productKey ? "selected" : ""}>${prod.name}</option>`
+    ).join("");
+
+    // Color dropdown
+    const colorOptions = COLORS.map(c => 
+        `<option value="${c}" ${c === colorName ? "selected" : ""}>${c}</option>`
+    ).join("");
+
+    // Length options including custom
+    const lengthOptions = `
+        <option value="12" ${lengthValue === "12" ? "selected" : ""}>12 ft</option>
+        <option value="16" ${lengthValue === "16" ? "selected" : ""}>16 ft</option>
+        <option value="20" ${lengthValue === "20" ? "selected" : ""}>20 ft</option>
+        <option value="240" ${lengthValue === "240" ? "selected" : ""}>240 ft (box)</option>
+        <option value="50" ${lengthValue === "50" ? "selected" : ""}>50 ft (box)</option>
+        <option value="custom" ${!["12","16","20","240","50",""].includes(lengthValue) ? "selected" : ""}>Custom</option>
+    `;
+
+    const isCustomLength = !["12","16","20","240","50","","N/A"].includes(lengthValue);
+    const customLengthDisplay = isCustomLength ? "inline-block" : "none";
+    const customLengthValue = isCustomLength ? lengthValue : "";
+
+    const subtotal = qty * unitPrice;
+
+    tr.innerHTML = `
+        <td data-label="Product">
+            <select class="line-select editable-product" onchange="window.handleProductChange(this)">
+                <option value="">-- Select --</option>
+                ${productOptions}
+            </select>
+        </td>
+        <td data-label="Color">
+            <select class="line-select editable-color">
+                <option value="">N/A</option>
+                ${colorOptions}
+            </select>
+        </td>
+        <td data-label="Length">
+            <select class="line-select editable-length-preset" onchange="window.handleLengthPresetChange(this)">
+                <option value="">N/A</option>
+                ${lengthOptions}
+            </select>
+            <input type="number" class="line-input editable-length" 
+                   style="display: ${customLengthDisplay}; width: 70px; margin-left: 4px;" 
+                   value="${customLengthValue}" min="1" step="0.5" placeholder="ft"
+                   onchange="window.recalculateRowAndTotal(this.closest('tr'))">
+        </td>
+        <td data-label="Qty" class="numeric">
+            <input type="number" class="line-input editable-qty" value="${qty}" min="0.1" step="0.1"
+                   onchange="window.recalculateRowAndTotal(this.closest('tr'))">
+        </td>
+        <td data-label="Unit Price" class="numeric">
+            <span>$</span><input type="number" class="line-input editable-price" value="${unitPrice.toFixed(2)}" min="0" step="0.01"
+                   onchange="window.recalculateRowAndTotal(this.closest('tr'))">
+        </td>
+        <td data-label="Subtotal" class="numeric subtotal-cell">$${subtotal.toFixed(2)}</td>
+        <td data-label="Actions">
+            <button type="button" class="btn-remove-row" onclick="this.closest('tr').remove(); window.recalculateTotal();">×</button>
+        </td>
+    `;
+
+    // Set initial states based on product
+    setTimeout(() => {
+        const productSelect = tr.querySelector(".editable-product");
+        const colorSelect = tr.querySelector(".editable-color");
+        const lengthSelect = tr.querySelector(".editable-length-preset");
+
+        if (productKey && PRODUCTS[productKey]) {
+            const prod = PRODUCTS[productKey];
+            colorSelect.disabled = !prod.hasColor;
+            lengthSelect.disabled = !prod.allowsLength;
+            if (!prod.hasColor) colorSelect.value = "";
+            if (!prod.allowsLength) lengthSelect.value = "";
+        }
+    }, 0);
+
+    return tr;
+}
+
+// Handle product change - update color/length availability and default price
+window.handleProductChange = function(selectEl) {
+    const row = selectEl.closest("tr");
+    const productKey = selectEl.value;
+    const colorSelect = row.querySelector(".editable-color");
+    const lengthSelect = row.querySelector(".editable-length-preset");
+    const priceInput = row.querySelector(".editable-price");
+
+    if (productKey && PRODUCTS[productKey]) {
+        const prod = PRODUCTS[productKey];
+
+        // Enable/disable color
+        colorSelect.disabled = !prod.hasColor;
+        if (!prod.hasColor) {
+            colorSelect.value = "";
+        } else if (!colorSelect.value) {
+            colorSelect.value = state.color;  // Default to current builder color
+        }
+
+        // Enable/disable length
+        lengthSelect.disabled = !prod.allowsLength;
+        if (!prod.allowsLength) {
+            lengthSelect.value = "";
+            row.querySelector(".editable-length").style.display = "none";
+        } else if (!lengthSelect.value) {
+            lengthSelect.value = "16";  // Default length
+        }
+
+        // Set default price
+        priceInput.value = prod.price.toFixed(2);
+    } else {
+        colorSelect.disabled = true;
+        lengthSelect.disabled = true;
+        priceInput.value = "0.00";
+    }
+
+    window.recalculateRowAndTotal(row);
+};
+
+// Handle length preset change
+window.handleLengthPresetChange = function(selectEl) {
+    const row = selectEl.closest("tr");
+    const customInput = row.querySelector(".editable-length");
+
+    if (selectEl.value === "custom") {
+        customInput.style.display = "inline-block";
+        customInput.value = "18";  // Default custom length
+        customInput.focus();
+    } else {
+        customInput.style.display = "none";
+        customInput.value = "";
+    }
+
+    window.recalculateRowAndTotal(row);
+};
+
+// Recalculate single row and total
+window.recalculateRowAndTotal = function(row) {
+    const qty = parseFloat(row.querySelector(".editable-qty").value) || 0;
+    const price = parseFloat(row.querySelector(".editable-price").value) || 0;
+    const subtotal = qty * price;
+    row.querySelector(".subtotal-cell").textContent = "$" + subtotal.toFixed(2);
+    window.recalculateTotal();
+};
+
+// Recalculate grand total
+window.recalculateTotal = function() {
+    let total = 0;
+    const rows = document.getElementById("order-tbody").querySelectorAll("tr");
+    rows.forEach(row => {
+        const subtotalCell = row.querySelector(".subtotal-cell");
+        if (subtotalCell) {
+            const subtotal = parseFloat(subtotalCell.textContent.replace("$", "")) || 0;
+            total += subtotal;
+        }
+    });
+    document.getElementById("grand-total").textContent = "$" + total.toFixed(2);
+};
+
+// Add new line item
+document.getElementById("btn-add-row").addEventListener("click", () => {
+    const tbody = document.getElementById("order-tbody");
+
+    // Clear placeholder if present
+    if (tbody.rows.length === 1 && tbody.rows[0].cells[0].colSpan === 7) {
+        tbody.innerHTML = "";
+    }
+
+    const row = createEditableRow("", state.color, "16", 1, 0);
+    tbody.appendChild(row);
+});
+
+// Apply 3D builder estimates to order form
+document.getElementById("apply-order").addEventListener("click", () => {
+    const tbody = document.getElementById("order-tbody");
+
+    // Clear placeholder if present
+    if (tbody.rows.length === 1 && tbody.rows[0].cells[0].colSpan === 7) {
+        tbody.innerHTML = "";
+    }
+
+    const { numStockBoards, borderBoards, stairTreads, screwBoxes, plugBoxes } = state.estimates;
+    const boardLen = state.boardLength === "custom" ? state.customBoardLength.toString() : state.boardLength.toString();
+
+    if (numStockBoards > 0) {
+        tbody.appendChild(createEditableRow("system", state.color, boardLen, numStockBoards, 8.0));
+    }
+    if (borderBoards > 0) {
+        tbody.appendChild(createEditableRow("system", state.color, boardLen, borderBoards, 8.0));
+    }
+    if (stairTreads > 0) {
+        tbody.appendChild(createEditableRow("system", state.color, "12", stairTreads, 12.0));
+    }
+    if (screwBoxes > 0) {
+        tbody.appendChild(createEditableRow("screws", "", "", screwBoxes, 37.0));
+    }
+    if (plugBoxes > 0) {
+        tbody.appendChild(createEditableRow("plugs", state.color, "", plugBoxes, 33.79));
+    }
+
+    window.recalculateTotal();
+});
+
+// ==================== EVENT HANDLERS ====================
+
+// Dimension inputs
 document.getElementById("deck-length").addEventListener("input", e => {
     state.length = parseFloat(e.target.value);
     buildDeck();
@@ -1664,9 +2041,34 @@ document.getElementById("deck-height").addEventListener("input", e => {
     buildDeck();
 });
 
+// Board length (standard + custom)
 document.getElementById("board-length").addEventListener("change", e => {
-    state.boardLength = parseFloat(e.target.value);
+    const value = e.target.value;
+    state.boardLength = value;
+
+    const customField = document.getElementById("custom-length-field");
+    if (value === "custom") {
+        customField.style.display = "block";
+        state.boardLength = "custom";
+    } else {
+        customField.style.display = "none";
+    }
     updateMaterialEstimates();
+});
+
+document.getElementById("custom-board-length").addEventListener("input", e => {
+    state.customBoardLength = parseFloat(e.target.value);
+    updateMaterialEstimates();
+});
+
+// NEW: Orientation toggle
+document.querySelectorAll(".orientation-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".orientation-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        state.orientation = btn.dataset.orientation;
+        buildDeck();
+    });
 });
 
 document.getElementById("stair-width").addEventListener("input", e => {
@@ -1726,7 +2128,34 @@ document.querySelectorAll(".stair-btn").forEach(btn => {
     });
 });
 
-// Color comparison dropdown
+// View buttons
+document.querySelectorAll(".view-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".view-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const view = btn.dataset.view;
+        const dist = Math.max(state.length, state.width) * 1.5;
+
+        switch(view) {
+            case "top":
+                camera.position.set(0, dist, 0.01);
+                break;
+            case "front":
+                camera.position.set(0, state.height + 2, dist);
+                break;
+            case "side":
+                camera.position.set(dist, state.height + 2, 0);
+                break;
+            default:
+                camera.position.set(20, 15, 20);
+        }
+        controls.target.set(0, state.height / 2, 0);
+        controls.update();
+    });
+});
+
+// Color modal
 document.getElementById("preview-color-1").addEventListener("click", () => {
     const modal = document.getElementById("colorModal");
     document.getElementById("modal-color-img").src = document.getElementById("preview-color-1").src;
@@ -1758,6 +2187,8 @@ document.getElementById("reset-builder").addEventListener("click", () => {
         height: 3,
         color: "Driftwood",
         boardLength: 16,
+        customBoardLength: 18,
+        orientation: "perpendicular",
         stairs: { front: false, back: false, left: false, right: false },
         stairWidth: 4,
         railing: false,
@@ -1768,130 +2199,21 @@ document.getElementById("reset-builder").addEventListener("click", () => {
     document.getElementById("deck-length").value = 16;
     document.getElementById("deck-width").value = 12;
     document.getElementById("deck-height").value = 3;
+    document.getElementById("board-length").value = "16";
+    document.getElementById("custom-length-field").style.display = "none";
     document.getElementById("stair-width").value = 4;
     document.getElementById("add-railing").checked = false;
     document.getElementById("add-border").checked = false;
     document.getElementById("add-plugs").checked = false;
     document.querySelectorAll(".stair-btn").forEach(btn => btn.classList.remove("active"));
+    document.querySelectorAll(".orientation-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.orientation === "perpendicular");
+    });
     selectColor("Driftwood");
     buildDeck();
 });
 
-// Order form functions
-function createTableRow(product, color, length, qty, unitPrice) {
-    const subtotal = qty * unitPrice;
-    const productName = PRODUCTS[product]?.name || product;
-    const hasColorField = PRODUCTS[product]?.hasColor || false;
-
-    const colorImg = hasColorField ? `<img src="colors/${COLOR_IMAGES[color] || "Driftwood.png"}" alt="${color}">` : "";
-    const colorText = hasColorField ? `<span>${color}</span>` : "<span>N/A</span>";
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-        <td data-label="Product">${productName}</td>
-        <td data-label="Color" class="color-cell">${colorImg}${colorText}</td>
-        <td data-label="Length">${length || "N/A"}</td>
-        <td data-label="Qty" class="numeric">${qty.toFixed(1)}</td>
-        <td data-label="Unit Price" class="numeric">$${unitPrice.toFixed(2)}</td>
-        <td data-label="Subtotal" class="numeric">$${subtotal.toFixed(2)}</td>
-        <td data-label="Actions">
-            <button type="button" class="btn-remove-row">×</button>
-        </td>
-    `;
-    tr.querySelector(".btn-remove-row").addEventListener("click", () => {
-        tr.remove();
-        recalculateTotal();
-    });
-    return tr;
-}
-
-function addLineItem() {
-    const product = document.getElementById("product-select").value;
-    const qty = parseFloat(document.getElementById("product-qty").value);
-
-    if (!product || qty <= 0) {
-        alert("Please select a product and enter a quantity");
-        return;
-    }
-
-    const productData = PRODUCTS[product];
-    if (!productData) {
-        alert("Invalid product selected");
-        return;
-    }
-
-    const length = productData.isFt ? (productData.hasColor ? "1-16" : "Box") : "";
-    const color = productData.hasColor ? state.color : "";
-    const row = createTableRow(product, color, length, qty, productData.price);
-
-    const tbody = document.getElementById("order-tbody");
-    if (tbody.rows.length === 1 && tbody.rows[0].cells[0].colSpan === 7) {
-        tbody.innerHTML = "";
-    }
-    tbody.appendChild(row);
-
-    document.getElementById("product-select").value = "";
-    document.getElementById("product-qty").value = "1";
-    recalculateTotal();
-}
-
-document.getElementById("btn-add-preset").addEventListener("click", addLineItem);
-
-document.getElementById("btn-add-row").addEventListener("click", () => {
-    const tbody = document.getElementById("order-tbody");
-    const row = createTableRow("", "", "", 1, 0);
-    if (tbody.rows.length === 1 && tbody.rows[0].cells[0].colSpan === 7) {
-        tbody.innerHTML = "";
-    }
-    tbody.appendChild(row);
-});
-
-document.getElementById("apply-order").addEventListener("click", () => {
-    const tbody = document.getElementById("order-tbody");
-    if (tbody.rows.length === 1 && tbody.rows[0].cells[0].colSpan === 7) {
-        tbody.innerHTML = "";
-    }
-
-    const { numStockBoards, borderBoards, stairTreads, screwBoxes, plugBoxes } = state.estimates;
-
-    if (numStockBoards > 0) {
-        const row = createTableRow("system", state.color, "16", numStockBoards, 8.0);
-        tbody.appendChild(row);
-    }
-    if (borderBoards > 0) {
-        const row = createTableRow("system", state.color, "16", borderBoards, 8.0);
-        tbody.appendChild(row);
-    }
-    if (stairTreads > 0) {
-        const row = createTableRow("system", state.color, "12", stairTreads, 12.0);
-        tbody.appendChild(row);
-    }
-    if (screwBoxes > 0) {
-        const row = createTableRow("screws", "", "", screwBoxes, 37.0);
-        tbody.appendChild(row);
-    }
-    if (plugBoxes > 0) {
-        const row = createTableRow("plugs", state.color, "", plugBoxes, 33.79);
-        tbody.appendChild(row);
-    }
-
-    recalculateTotal();
-});
-
-function recalculateTotal() {
-    let total = 0;
-    const rows = document.getElementById("order-tbody").querySelectorAll("tr");
-    rows.forEach(row => {
-        const subtotalCell = row.cells[5];
-        if (subtotalCell) {
-            const subtotal = parseFloat(subtotalCell.textContent.replace("$", "")) || 0;
-            total += subtotal;
-        }
-    });
-    document.getElementById("grand-total").textContent = "$" + total.toFixed(2);
-}
-
-// Form handlers
+// Reset form
 document.getElementById("btn-reset-form").addEventListener("click", () => {
     document.getElementById("cust-name").value = "";
     document.getElementById("cust-company").value = "";
@@ -1899,8 +2221,17 @@ document.getElementById("btn-reset-form").addEventListener("click", () => {
     document.getElementById("cust-email").value = "";
     document.getElementById("cust-address").value = "";
     document.getElementById("special-notes").value = "";
+    document.getElementById("order-tbody").innerHTML = `
+        <tr>
+            <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                Design your deck above and click "Apply to Order Form" or add items manually below.
+            </td>
+        </tr>
+    `;
+    document.getElementById("grand-total").textContent = "$0.00";
 });
 
+// Submit
 document.getElementById("btn-submit").addEventListener("click", () => {
     const name = document.getElementById("cust-name").value.trim();
     const phone = document.getElementById("cust-phone").value.trim();
@@ -1915,11 +2246,12 @@ document.getElementById("btn-submit").addEventListener("click", () => {
     alert("Order submitted!\n\nCustomer: " + name + "\nEmail: " + email + "\nTotal: " + document.getElementById("grand-total").textContent);
 });
 
+// PDF export placeholder
 document.getElementById("btn-pdf").addEventListener("click", () => {
     alert("PDF export feature coming soon. For now, use your browser's Print to PDF function.");
 });
 
-// Initialize 3D scene
+// Initialize
 initScene();
 </script>
 
