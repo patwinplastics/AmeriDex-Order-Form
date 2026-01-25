@@ -49,6 +49,12 @@
         margin-bottom: 1rem;
     }
 
+    header.app-header img.logo {
+        max-width: 180px;
+        height: auto;
+        margin-bottom: 0.5rem;
+    }
+
     header.app-header h1 {
         margin: 0;
         font-size: 1.6rem;
@@ -82,6 +88,7 @@
         color: var(--text-muted);
     }
 
+    /* 3D Builder Layout */
     .deck-builder-container {
         display: grid;
         grid-template-columns: 1fr;
@@ -111,6 +118,8 @@
 
     .control-section:last-child {
         border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
     }
 
     .control-section-title {
@@ -150,6 +159,7 @@
         box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
     }
 
+    /* Color Grid */
     .color-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -162,11 +172,13 @@
         overflow: hidden;
         cursor: pointer;
         transition: all 0.2s ease;
+        background: white;
     }
 
     .color-card:hover {
         border-color: var(--primary);
         transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
     .color-card.selected {
@@ -178,93 +190,89 @@
         width: 100%;
         height: 45px;
         object-fit: cover;
+        display: block;
     }
 
     .color-card-label {
         text-align: center;
         font-size: 0.65rem;
         font-weight: 600;
-        padding: 0.25rem;
+        padding: 0.25rem 0.15rem;
+        color: var(--text-main);
         background: #f9fafb;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    .pattern-selector {
+    /* Color Preview Panel */
+    .color-preview-panel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        margin-top: 0.75rem;
+        padding: 0.75rem;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid var(--border-subtle);
+    }
+
+    .color-preview-box {
+        text-align: center;
+    }
+
+    .color-preview-box h5 {
+        margin: 0 0 0.4rem 0;
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+    }
+
+    .color-preview-box img {
+        width: 100%;
+        max-width: 100px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid var(--border-subtle);
+    }
+
+    .color-preview-box .color-name {
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 0.3rem;
+    }
+
+    /* Stair Buttons */
+    .stair-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 0.5rem;
+        gap: 0.4rem;
     }
 
-    .pattern-btn {
+    .stair-btn {
         padding: 0.5rem;
         font-size: 0.75rem;
         font-weight: 600;
-        border: 2px solid #d1d5db;
+        border: 1px solid var(--border-subtle);
         background: white;
         border-radius: 6px;
         cursor: pointer;
+        transition: all 0.15s ease;
     }
 
-    .pattern-btn:hover {
-        border-color: var(--success);
+    .stair-btn:hover {
+        border-color: var(--primary);
+        background: var(--primary-soft);
     }
 
-    .pattern-btn.active {
-        background: var(--success);
+    .stair-btn.active {
+        background: var(--primary);
         color: white;
-        border-color: var(--success);
+        border-color: var(--primary);
     }
 
-    .material-summary {
-        background: white;
-        border-radius: 8px;
-        padding: 0.75rem;
-        border: 1px solid var(--border-subtle);
-        margin-top: 1rem;
-        font-size: 0.8rem;
-    }
-
-    .material-summary h4 {
-        margin: 0 0 0.5rem 0;
-        color: var(--primary-dark);
-    }
-
-    .material-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 0.3rem 0;
-        border-bottom: 1px dotted var(--border-subtle);
-    }
-
-    .material-row:last-child {
-        border-bottom: none;
-        border-top: 1px solid var(--border-subtle);
-        font-weight: 700;
-        margin-top: 0.25rem;
-        padding-top: 0.5rem;
-    }
-
-    .material-row.optional {
-        background: #fef3c7;
-        margin: 0.25rem -0.75rem;
-        padding: 0.4rem 0.75rem;
-        border-radius: 4px;
-        border-bottom: none;
-    }
-
-    .bom-optimizer {
-        background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
-        border: 1px solid #86efac;
-        border-radius: 8px;
-        padding: 0.75rem;
-        margin-top: 1rem;
-        font-size: 0.8rem;
-    }
-
-    .bom-optimizer h4 {
-        margin: 0 0 0.5rem 0;
-        color: #166534;
-    }
-
+    /* Options row */
     .check-row {
         display: flex;
         align-items: center;
@@ -290,6 +298,58 @@
         margin-left: auto;
     }
 
+    /* Material Summary */
+    .material-summary {
+        background: white;
+        border-radius: 8px;
+        padding: 0.75rem;
+        border: 1px solid var(--border-subtle);
+        margin-top: 1rem;
+    }
+
+    .material-summary h4 {
+        margin: 0 0 0.5rem 0;
+        font-size: 0.85rem;
+        color: var(--primary-dark);
+    }
+
+    .material-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        padding: 0.3rem 0;
+        border-bottom: 1px dotted var(--border-subtle);
+    }
+
+    .material-row:last-child {
+        border-bottom: none;
+        padding-top: 0.5rem;
+        margin-top: 0.25rem;
+        border-top: 1px solid var(--border-subtle);
+        font-weight: 700;
+    }
+
+    .material-row span:first-child {
+        color: var(--text-muted);
+    }
+
+    .material-row span:last-child {
+        font-weight: 600;
+    }
+
+    .material-row.optional {
+        background: #fef3c7;
+        margin: 0.25rem -0.5rem;
+        padding: 0.4rem 0.5rem;
+        border-radius: 4px;
+        border-bottom: none;
+    }
+
+    .material-row.optional span:first-child {
+        color: #92400e;
+    }
+
+    /* Buttons */
     .btn {
         display: inline-flex;
         align-items: center;
@@ -310,6 +370,11 @@
 
     .btn-primary:hover {
         background: var(--primary-dark);
+    }
+
+    .btn-success {
+        background: var(--success);
+        color: white;
     }
 
     .btn-outline {
@@ -334,6 +399,7 @@
         color: var(--danger);
     }
 
+    /* 3D Viewport */
     .builder-viewport {
         position: relative;
         background: linear-gradient(180deg, #87CEEB 0%, #B0E0E6 40%, #90EE90 100%);
@@ -343,10 +409,19 @@
         border: 2px solid var(--border-subtle);
     }
 
+    @media (min-width: 1000px) {
+        .builder-viewport {
+            min-height: 620px;
+        }
+    }
+
     #deck-canvas {
         width: 100% !important;
         height: 100% !important;
         display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 
     .viewport-overlay {
@@ -366,6 +441,7 @@
         font-size: 0.75rem;
         font-weight: 600;
         cursor: pointer;
+        transition: all 0.15s ease;
     }
 
     .view-btn:hover,
@@ -375,6 +451,74 @@
         border-color: var(--primary);
     }
 
+    .viewport-instructions {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: rgba(0,0,0,0.6);
+        color: white;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        z-index: 10;
+    }
+
+    .viewport-color-indicator {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(255,255,255,0.95);
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: 1px solid var(--border-subtle);
+    }
+
+    .viewport-color-indicator img {
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        object-fit: cover;
+    }
+
+    .texture-loading {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        background: rgba(255,255,255,0.95);
+        padding: 0.4rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        z-index: 10;
+        display: none;
+        align-items: center;
+        gap: 0.4rem;
+        border: 1px solid var(--border-subtle);
+    }
+
+    .texture-loading.visible {
+        display: flex;
+    }
+
+    .texture-loading .spinner {
+        width: 12px;
+        height: 12px;
+        border: 2px solid var(--border-subtle);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Order table with manual line items */
     .order-table {
         width: 100%;
         border-collapse: collapse;
@@ -392,13 +536,42 @@
     .order-table th {
         background: #f9fafb;
         font-weight: 600;
+        color: #4b5563;
     }
 
     .order-table td.numeric {
         text-align: right;
     }
 
-    .line-input, .line-select {
+    .order-table .color-cell {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .order-table .color-cell img {
+        width: 28px;
+        height: 28px;
+        border-radius: 4px;
+        object-fit: cover;
+        border: 1px solid var(--border-subtle);
+    }
+
+    .line-input {
+        width: 100%;
+        padding: 0.35rem 0.4rem;
+        font-size: 0.8rem;
+        border-radius: 6px;
+        border: 1px solid var(--border-subtle);
+    }
+
+    .line-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 1px rgba(37,99,235,0.2);
+    }
+
+    .line-select {
         width: 100%;
         padding: 0.35rem 0.4rem;
         font-size: 0.8rem;
@@ -409,9 +582,10 @@
     .btn-remove-row {
         background-color: #fee2e2;
         color: #b91c1c;
+        border-radius: 999px;
         border: none;
-        border-radius: 4px;
-        padding: 0.25rem 0.5rem;
+        padding: 0.18rem 0.55rem;
+        font-size: 1rem;
         cursor: pointer;
     }
 
@@ -419,23 +593,9 @@
         background-color: #fecaca;
     }
 
-    .custom-product-form {
-        background: #fefce8;
-        border: 1px solid #fde047;
-        border-radius: 8px;
-        padding: 1rem;
-        margin-top: 1rem;
-        display: none;
-    }
-
-    .custom-product-form.active {
-        display: block;
-    }
-
-    .custom-form-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr 1fr;
-        gap: 0.5rem;
+    .btn-add-row {
+        margin-top: 0.75rem;
+        font-size: 0.85rem;
     }
 
     .total-bar {
@@ -448,12 +608,18 @@
         margin-top: 1rem;
     }
 
+    .total-bar .label {
+        font-weight: 600;
+        color: #4b5563;
+    }
+
     .total-bar .value {
         font-size: 1.25rem;
         font-weight: 700;
         color: var(--primary-dark);
     }
 
+    /* Customer fields */
     .form-grid {
         display: grid;
         grid-template-columns: 1fr;
@@ -472,13 +638,20 @@
         border: 1px solid var(--border-subtle);
         border-radius: 6px;
         font-size: 0.9rem;
+        font-family: inherit;
         resize: vertical;
         min-height: 80px;
+    }
+
+    textarea:focus {
+        outline: none;
+        border-color: var(--primary);
     }
 
     .actions-row {
         display: flex;
         gap: 0.75rem;
+        flex-wrap: wrap;
         justify-content: center;
         margin-top: 1rem;
     }
@@ -498,31 +671,222 @@
         color: var(--primary);
         text-decoration: none;
     }
+
+    footer a:hover {
+        text-decoration: underline;
+    }
+
+    /* Color modal */
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 100;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        max-width: 400px;
+        text-align: center;
+        position: relative;
+    }
+
+    .modal-content img {
+        max-width: 100%;
+        border-radius: 8px;
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 10px;
+        right: 12px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #6b7280;
+        background: none;
+        border: none;
+    }
+
+    .modal-close:hover {
+        color: #111827;
+    }
+
+    /* NEW: Pattern Selector Styles */
+    .pattern-selector {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .pattern-btn {
+        padding: 0.5rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        border: 2px solid #d1d5db;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        text-align: center;
+    }
+
+    .pattern-btn:hover {
+        border-color: var(--success);
+        background: #f0fdf4;
+    }
+
+    .pattern-btn.active {
+        background: var(--success);
+        color: white;
+        border-color: var(--success);
+    }
+
+    .pattern-btn .pattern-icon {
+        font-size: 1.1rem;
+        display: block;
+        margin-bottom: 0.15rem;
+    }
+
+    /* NEW: BOM Optimizer Styles */
+    .bom-optimizer {
+        background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+        border: 1px solid #86efac;
+        border-radius: 8px;
+        padding: 0.75rem;
+        margin-top: 0.75rem;
+    }
+
+    .bom-optimizer h4 {
+        margin: 0 0 0.5rem 0;
+        color: #166534;
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .bom-optimizer h4::before {
+        content: "💡";
+    }
+
+    .optimization-result {
+        font-size: 0.75rem;
+        line-height: 1.4;
+    }
+
+    .optimization-result .savings {
+        color: var(--success);
+        font-weight: 700;
+    }
+
+    .optimization-result .waste-info {
+        color: var(--warning);
+        font-weight: 600;
+    }
+
+    /* NEW: Custom Product Form Styles */
+    .custom-product-form {
+        background: #fefce8;
+        border: 1px solid #fde047;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-top: 1rem;
+        display: none;
+    }
+
+    .custom-product-form.active {
+        display: block;
+    }
+
+    .custom-product-form h4 {
+        margin: 0 0 0.75rem 0;
+        color: #854d0e;
+        font-size: 0.9rem;
+    }
+
+    .custom-form-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .custom-form-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    /* Mobile tweaks for order table */
+    @media (max-width: 768px) {
+        .order-table, .order-table thead, .order-table tbody, .order-table th, .order-table td, .order-table tr {
+            display: block;
+        }
+        .order-table thead {
+            display: none;
+        }
+        .order-table tr {
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            background-color: #ffffff;
+            padding: 0.5rem 0.75rem;
+        }
+        .order-table td {
+            border: none;
+            padding: 0.25rem 0;
+            text-align: left;
+        }
+        .order-table td.numeric {
+            text-align: left;
+        }
+        .order-table td::before {
+            content: attr(data-label);
+            display: block;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-bottom: 0.05rem;
+        }
+    }
 </style>
 </head>
 <body>
 
 <div class="page-shell">
     <header class="app-header">
+        <img src="colors/AmeriDex.png" alt="AmeriDex Logo" class="logo">
         <h1>AmeriDex 3D Deck Builder & Order Form</h1>
-        <p>Design your deck in 3D, then manage your order with full customization</p>
+        <p>Design your deck in 3D, then fine-tune the order with manual line items</p>
     </header>
 
+    <!-- 3D Builder -->
     <section class="card">
         <h2 class="card-title">3D Deck Designer</h2>
-        <p class="card-subtitle">Drag to rotate, scroll to zoom</p>
+        <p class="card-subtitle">Drag to rotate, scroll to zoom, right-click to pan</p>
 
         <div class="deck-builder-container">
+            <!-- Controls Panel -->
             <div class="builder-controls">
                 <div class="control-section">
                     <div class="control-section-title">Deck Dimensions</div>
                     <div class="field">
                         <label>Length (ft)</label>
-                        <input type="number" id="deck-length" value="16" min="6" max="40">
+                        <input type="number" id="deck-length" value="16" min="6" max="40" step="1">
                     </div>
                     <div class="field">
                         <label>Width (ft)</label>
-                        <input type="number" id="deck-width" value="12" min="6" max="30">
+                        <input type="number" id="deck-width" value="12" min="6" max="30" step="1">
                     </div>
                     <div class="field">
                         <label>Height (ft)</label>
@@ -533,35 +897,115 @@
                 <div class="control-section">
                     <div class="control-section-title">Board Color</div>
                     <div class="color-grid" id="color-grid"></div>
+                    <div class="color-preview-panel">
+                        <div class="color-preview-box">
+                            <h5>Selected Color</h5>
+                            <img id="preview-color-1" src="colors/Driftwood.png" alt="Selected">
+                            <div class="color-name" id="preview-name-1">Driftwood</div>
+                        </div>
+                        <div class="color-preview-box">
+                            <h5>Compare With</h5>
+                            <img id="preview-color-2" src="colors/Khaki.png" alt="Compare">
+                            <div class="color-name" id="preview-name-2">Khaki</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="control-section">
-                    <div class="control-section-title">Pattern</div>
-                    <div class="pattern-selector" id="pattern-selector"></div>
+                    <div class="control-section-title">Board Length</div>
+                    <div class="field">
+                        <select id="board-length">
+                            <option value="12">12 ft boards</option>
+                            <option value="16" selected>16 ft boards</option>
+                            <option value="20">20 ft boards</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- NEW: Decking Pattern Section -->
+                <div class="control-section">
+                    <div class="control-section-title">Decking Pattern</div>
+                    <div class="pattern-selector" id="pattern-selector">
+                        <button type="button" class="pattern-btn active" data-pattern="standard">
+                            <span class="pattern-icon">═══</span>
+                            Standard
+                        </button>
+                        <button type="button" class="pattern-btn" data-pattern="diagonal">
+                            <span class="pattern-icon">╱╱╱</span>
+                            Diagonal
+                        </button>
+                        <button type="button" class="pattern-btn" data-pattern="herringbone">
+                            <span class="pattern-icon">⋘⋙</span>
+                            Herringbone
+                        </button>
+                        <button type="button" class="pattern-btn" data-pattern="chevron">
+                            <span class="pattern-icon">∧∧∧</span>
+                            Chevron
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <div class="control-section-title">Add Stairs</div>
+                    <div class="stair-grid">
+                        <button type="button" class="stair-btn" data-side="front">Front</button>
+                        <button type="button" class="stair-btn" data-side="back">Back</button>
+                        <button type="button" class="stair-btn" data-side="left">Left</button>
+                        <button type="button" class="stair-btn" data-side="right">Right</button>
+                    </div>
+                    <div class="field" style="margin-top: 0.5rem;">
+                        <label>Stair Width (ft)</label>
+                        <input type="number" id="stair-width" value="4" min="3" max="8" step="0.5">
+                    </div>
                 </div>
 
                 <div class="control-section">
                     <div class="control-section-title">Options</div>
                     <div class="check-row">
+                        <input type="checkbox" id="add-railing">
+                        <label for="add-railing">Add Railing</label>
+                    </div>
+                    <div class="check-row">
+                        <input type="checkbox" id="add-border">
+                        <label for="add-border">Picture Frame Border</label>
+                    </div>
+                    <div class="check-row">
                         <input type="checkbox" id="add-dexerdry">
                         <label for="add-dexerdry">Add DexerDry Seal</label>
                         <span class="hint" id="dexerdry-hint">(0 ft)</span>
                     </div>
-                    <div class="check-row">
-                        <input type="checkbox" id="add-railing">
-                        <label for="add-railing">Add Railing</label>
+                    <div class="check-row" style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border-subtle);">
+                        <input type="checkbox" id="add-plugs">
+                        <label for="add-plugs">Add Color-Matching Plugs</label>
+                        <span class="hint" id="plugs-hint">(0 boxes)</span>
                     </div>
                 </div>
 
                 <div class="material-summary">
                     <h4>Materials Estimate</h4>
                     <div class="material-row">
-                        <span>Deck Boards (ft):</span>
+                        <span>Deck Boards:</span>
                         <span id="mat-boards">0</span>
                     </div>
-                    <div class="material-row optional" id="dexerdry-row" style="display:none;">
-                        <span>DexerDry Seal (ft):</span>
-                        <span id="mat-dexerdry">0 ft</span>
+                    <div class="material-row">
+                        <span>Border Boards:</span>
+                        <span id="mat-border">0</span>
+                    </div>
+                    <div class="material-row">
+                        <span>Stair Treads:</span>
+                        <span id="mat-stairs">0</span>
+                    </div>
+                    <div class="material-row">
+                        <span>Screw Boxes:</span>
+                        <span id="mat-screws">0</span>
+                    </div>
+                    <div class="material-row optional" id="dexerdry-row" style="display: none;">
+                        <span>DexerDry Seal:</span>
+                        <span id="mat-dexerdry">0 ft ($0.00)</span>
+                    </div>
+                    <div class="material-row optional" id="plugs-row" style="display: none;">
+                        <span>Plug Boxes (optional):</span>
+                        <span id="mat-plugs">0</span>
                     </div>
                     <div class="material-row">
                         <span>Estimated Total:</span>
@@ -569,101 +1013,195 @@
                     </div>
                 </div>
 
+                <!-- NEW: BOM Optimizer -->
                 <div class="bom-optimizer" id="bom-optimizer">
-                    <h4>Optimization Suggestion</h4>
-                    <div id="optimization-result">Select dimensions to see suggestions.</div>
+                    <h4>Material Optimization</h4>
+                    <div class="optimization-result" id="optimization-result">
+                        <p>Select dimensions to see optimization suggestions.</p>
+                    </div>
                 </div>
 
-                <button class="btn btn-primary" style="width:100%; margin-top:1rem;" id="apply-order">Apply to Order</button>
+                <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="apply-order">
+                    Apply to Order Form
+                </button>
+                <button type="button" class="btn btn-ghost" style="width: 100%; margin-top: 0.5rem;" id="reset-builder">
+                    Reset Design
+                </button>
             </div>
 
+            <!-- 3D Viewport -->
             <div class="builder-viewport" id="viewport-container">
+                <div class="viewport-instructions">
+                    Drag to rotate | Scroll to zoom
+                </div>
+                <div class="viewport-color-indicator">
+                    <img id="viewport-color-img" src="colors/Driftwood.png" alt="Color">
+                    <span id="viewport-color-name">Driftwood</span>
+                </div>
+                <div class="texture-loading" id="texture-loading">
+                    <div class="spinner"></div>
+                    <span>Loading texture...</span>
+                </div>
                 <canvas id="deck-canvas"></canvas>
                 <div class="viewport-overlay">
-                    <button class="view-btn active" data-view="3d">3D</button>
-                    <button class="view-btn" data-view="top">Top</button>
-                    <button class="view-btn" data-view="front">Front</button>
+                    <button type="button" class="view-btn active" data-view="3d">3D</button>
+                    <button type="button" class="view-btn" data-view="top">Top</button>
+                    <button type="button" class="view-btn" data-view="front">Front</button>
+                    <button type="button" class="view-btn" data-view="side">Side</button>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Customer Info -->
     <section class="card">
         <h2 class="card-title">Customer Information</h2>
         <div class="form-grid form-grid-2">
             <div class="field">
-                <label>Name</label>
+                <label>Name *</label>
                 <input type="text" id="cust-name">
             </div>
             <div class="field">
-                <label>Email</label>
+                <label>Company</label>
+                <input type="text" id="cust-company">
+            </div>
+            <div class="field">
+                <label>Phone *</label>
+                <input type="tel" id="cust-phone">
+            </div>
+            <div class="field">
+                <label>Email *</label>
                 <input type="email" id="cust-email">
             </div>
         </div>
+        <div class="field" style="margin-top: 0.75rem;">
+            <label>Address *</label>
+            <textarea id="cust-address" rows="2"></textarea>
+        </div>
     </section>
 
+    <!-- Order Details -->
     <section class="card">
         <h2 class="card-title">Order Details</h2>
-        <p class="card-subtitle">Preset products or custom entries. Edit price, quantity, product name freely.</p>
+        <p class="card-subtitle">Add products from dropdown, enter custom items, or edit any line directly.</p>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:1rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
             <div class="field">
                 <label>Select Product</label>
                 <select id="product-select" class="line-select">
-                    <option value="">-- Choose --</option>
-                    <option value="system">AmeriDex System Boards (per ft)</option>
-                    <option value="dexerdry-50">DexerDry Seal 50 ft Box</option>
-                    <option value="dexerdry-100">DexerDry Seal 100 ft Box</option>
-                    <option value="dexerdry-240">DexerDry Seal 240 ft Box</option>
-                    <option value="screws">Epoxy Screws (box)</option>
-                    <option value="custom">+ Custom Product</option>
+                    <option value="">-- Choose Product --</option>
+                    <optgroup label="Deck Boards">
+                        <option value="system">AmeriDex System Boards (per ft)</option>
+                        <option value="solid">Solid Edge Deck Boards (per ft)</option>
+                    </optgroup>
+                    <optgroup label="DexerDry Seal ($2.00/ft)">
+                        <option value="dexerdry-50">DexerDry Seal - 50 ft Box ($100)</option>
+                        <option value="dexerdry-100">DexerDry Seal - 100 ft Box ($200)</option>
+                        <option value="dexerdry-240">DexerDry Seal - 240 ft Box ($480)</option>
+                    </optgroup>
+                    <optgroup label="Hardware">
+                        <option value="screws">Epoxy-Coated Screws (box of 375)</option>
+                        <option value="plugs">Color-Matching Plugs (box)</option>
+                    </optgroup>
+                    <optgroup label="Custom">
+                        <option value="custom">+ Add Custom Product</option>
+                    </optgroup>
                 </select>
             </div>
             <div class="field">
-                <label>Qty</label>
+                <label>Quantity</label>
                 <input type="number" id="product-qty" class="line-input" value="1" min="0.1" step="0.1">
             </div>
         </div>
 
+        <!-- NEW: Custom Product Entry Form -->
         <div class="custom-product-form" id="custom-product-form">
-            <h4>Custom Product</h4>
+            <h4>Custom Product Entry</h4>
             <div class="custom-form-grid">
-                <div class="field"><label>Name</label><input type="text" id="custom-product-name" class="line-input"></div>
-                <div class="field"><label>Price ($)</label><input type="number" id="custom-unit-price" class="line-input" value="0" min="0" step="0.01"></div>
-                <div class="field"><label>Unit</label><input type="text" id="custom-unit-type" class="line-input" value="each"></div>
-                <div class="field"><label>Color</label><select id="custom-color" class="line-select"><option value="">N/A</option><option value="Driftwood">Driftwood</option><option value="Khaki">Khaki</option></select></div>
+                <div class="field">
+                    <label>Product Name *</label>
+                    <input type="text" id="custom-product-name" class="line-input" placeholder="Enter product name">
+                </div>
+                <div class="field">
+                    <label>Unit Price ($) *</label>
+                    <input type="number" id="custom-unit-price" class="line-input" value="0" min="0" step="0.01">
+                </div>
+                <div class="field">
+                    <label>Unit Type</label>
+                    <select id="custom-unit-type" class="line-select">
+                        <option value="each">Each</option>
+                        <option value="ft">Per Foot</option>
+                        <option value="box">Per Box</option>
+                        <option value="sqft">Per Sq Ft</option>
+                        <option value="bundle">Per Bundle</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Color</label>
+                    <select id="custom-color" class="line-select">
+                        <option value="">N/A</option>
+                        <option value="Driftwood">Driftwood</option>
+                        <option value="Khaki">Khaki</option>
+                        <option value="Slate">Slate</option>
+                        <option value="Beachwood">Beachwood</option>
+                        <option value="Chestnut">Chestnut</option>
+                        <option value="Redwood">Redwood</option>
+                        <option value="Hazelnut">Hazelnut</option>
+                    </select>
+                </div>
             </div>
         </div>
 
-        <button class="btn btn-outline" id="btn-add-preset" style="margin-bottom:1rem; width:100%;">+ Add Product</button>
+        <button type="button" class="btn btn-outline" id="btn-add-preset" style="margin-bottom: 1rem; width: 100%;">
+            + Add Selected Product
+        </button>
 
-        <table class="order-table">
+        <table class="order-table" id="order-table">
             <thead>
                 <tr>
                     <th>Product</th>
+                    <th>Color</th>
+                    <th>Length/Unit</th>
                     <th>Qty</th>
-                    <th>Price</th>
+                    <th>Unit Price</th>
                     <th>Subtotal</th>
-                    <th>Action</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody id="order-tbody">
-                <tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:2rem;">No items yet</td></tr>
+                <tr>
+                    <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                        Design your deck above and click "Apply to Order Form" or add items from the dropdown.
+                    </td>
+                </tr>
             </tbody>
         </table>
 
-        <button class="btn btn-ghost" id="btn-add-row" style="margin-top:0.75rem;">+ Manual Line Item</button>
+        <button type="button" class="btn btn-ghost btn-add-row" id="btn-add-row">
+            + Add Manual Line Item
+        </button>
 
         <div class="total-bar">
-            <span>Estimated Total</span>
+            <span class="label">Estimated Total</span>
             <span class="value" id="grand-total">$0.00</span>
         </div>
     </section>
 
+    <!-- Special Instructions -->
+    <section class="card">
+        <h2 class="card-title">Additional Notes</h2>
+        <div class="field">
+            <label>Special Instructions</label>
+            <textarea id="special-notes" placeholder="Any special requirements for your order..."></textarea>
+        </div>
+    </section>
+
+    <!-- Actions -->
     <section class="card">
         <div class="actions-row">
-            <button class="btn btn-ghost" id="btn-reset-form">Reset</button>
-            <button class="btn btn-primary" id="btn-submit">Submit Order</button>
+            <button type="button" class="btn btn-ghost" id="btn-reset-form">Reset Form</button>
+            <button type="button" class="btn btn-primary" id="btn-pdf">Export PDF</button>
+            <button type="button" class="btn btn-primary" id="btn-submit">Submit Order</button>
         </div>
     </section>
 
@@ -672,6 +1210,16 @@
     </footer>
 </div>
 
+<!-- Color Preview Modal -->
+<div id="colorModal" class="modal">
+    <div class="modal-content">
+        <button type="button" class="modal-close" id="modal-close">&times;</button>
+        <img id="modal-color-img" src="" alt="Color Preview">
+        <div style="margin-top: 0.75rem; font-weight: 600; font-size: 1.1rem;" id="modal-color-name"></div>
+    </div>
+</div>
+
+<!-- Three.js -->
 <script type="importmap">
 {
     "imports": {
@@ -685,69 +1233,195 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-const COLORS = ["Driftwood", "Khaki", "Slate", "Beachwood", "Chestnut"];
-const PATTERNS = ["standard", "diagonal", "herringbone", "chevron"];
+// COLORS & IMAGES
+const COLORS = ["Driftwood", "Khaki", "Slate", "Beachwood", "Chestnut", "Redwood", "Hazelnut"];
 
+const COLOR_IMAGES = {
+    Driftwood: "Driftwood.png",
+    Khaki: "Khaki.png",
+    Slate: "Slate.png",
+    Beachwood: "Beachwood.png",
+    Chestnut: "Chestnut.png",
+    Redwood: "Redwood.png",
+    Hazelnut: "Hazelnut.png"
+};
+
+const COLOR_HEX_FALLBACK = {
+    Driftwood: 0xA89F91,
+    Khaki: 0xC2B280,
+    Slate: 0x708090,
+    Beachwood: 0xD4C4A8,
+    Chestnut: 0x954535,
+    Redwood: 0xA45A52,
+    Hazelnut: 0x8B7355
+};
+
+// PRODUCTS - UPDATED with DexerDry Seal at correct $2.00/ft pricing
 const PRODUCTS = {
-    system: { name: "AmeriDex System Boards", price: 8.0, unit: "ft" },
-    "dexerdry-50": { name: "DexerDry Seal 50 ft", price: 100.0, unit: "box", linearFeet: 50 },
-    "dexerdry-100": { name: "DexerDry Seal 100 ft", price: 200.0, unit: "box", linearFeet: 100 },
-    "dexerdry-240": { name: "DexerDry Seal 240 ft", price: 480.0, unit: "box", linearFeet: 240 },
-    screws: { name: "Epoxy-Coated Screws", price: 37.0, unit: "box" }
+    system: {
+        name: "AmeriDex System Boards (Grooved + Dexerdry included)",
+        price: 8.0,
+        unit: "ft",
+        hasColor: true
+    },
+    solid: {
+        name: "Solid Edge Deck Boards",
+        price: 6.0,
+        unit: "ft",
+        hasColor: true
+    },
+    // FIXED: DexerDry Seal - $2.00 per linear foot
+    "dexerdry-50": {
+        name: "DexerDry Seal - 50 ft Box",
+        price: 100.00,  // $2.00/ft × 50 ft
+        unit: "box",
+        hasColor: false,
+        linearFeet: 50
+    },
+    "dexerdry-100": {
+        name: "DexerDry Seal - 100 ft Box",
+        price: 200.00,  // $2.00/ft × 100 ft
+        unit: "box",
+        hasColor: false,
+        linearFeet: 100
+    },
+    "dexerdry-240": {
+        name: "DexerDry Seal - 240 ft Box",
+        price: 480.00,  // $2.00/ft × 240 ft
+        unit: "box",
+        hasColor: false,
+        linearFeet: 240
+    },
+    screws: {
+        name: "Epoxy-Coated Screws (box of 375)",
+        price: 37.0,
+        unit: "box",
+        hasColor: false
+    },
+    plugs: {
+        name: "Color-Matching Plugs",
+        price: 33.79,
+        unit: "box",
+        hasColor: true
+    }
 };
 
-const PATTERN_WASTE = { standard: 1.10, diagonal: 1.15, herringbone: 1.25, chevron: 1.20 };
+// NEW: Pattern waste factors based on industry standards
+const PATTERN_WASTE_FACTORS = {
+    standard: 1.10,     // 10% waste
+    diagonal: 1.15,     // 15% waste
+    herringbone: 1.25,  // 25% waste
+    chevron: 1.20       // 20% waste
+};
 
+const PATTERN_INFO = {
+    standard: { name: "Standard (Parallel)", joistSpacing: 16, difficulty: "Easy" },
+    diagonal: { name: "Diagonal (45°)", joistSpacing: 12, difficulty: "Moderate" },
+    herringbone: { name: "Herringbone", joistSpacing: 12, difficulty: "Advanced" },
+    chevron: { name: "Chevron", joistSpacing: 12, difficulty: "Advanced" }
+};
+
+// Board geometry constants
+const BOARD_WIDTH_INCH = 5.5;
+const BOARD_THICKNESS_INCH = 1;
+const GAP_INCH = 0.125;
+const BOARD_WIDTH = BOARD_WIDTH_INCH / 12;
+const BOARD_THICK = BOARD_THICKNESS_INCH / 12;
+const EFFECTIVE_WIDTH = (BOARD_WIDTH_INCH + GAP_INCH) / 12;
+const SCREWS_PER_BOX = 375;
+const STAIR_RISE = 7.5 / 12;
+const STAIR_RUN = 10.5 / 12;
+const DEXERDRY_PRICE_PER_FT = 2.00;
+
+// State
 let state = {
-    length: 16, width: 12, height: 3, color: "Driftwood", pattern: "standard",
-    railing: false, dexerdry: false,
-    estimates: { boards: 0, dexerdryFeet: 0, total: 0 }
+    length: 16,
+    width: 12,
+    height: 3,
+    color: "Driftwood",
+    boardLength: 16,
+    pattern: "standard",
+    stairs: { front: false, back: false, left: false, right: false },
+    stairWidth: 4,
+    railing: false,
+    border: false,
+    includeDexerDry: false,
+    includePlugs: false,
+    estimates: {
+        numStockBoards: 0,
+        borderBoards: 0,
+        stairTreads: 0,
+        screwBoxes: 0,
+        dexerDryFeet: 0,
+        plugBoxes: 0,
+        total: 0
+    }
 };
 
-let scene, camera, renderer, controls, deckGroup, houseGroup;
 let orderLines = [];
+let scene, camera, renderer, controls;
+let deckGroup, houseGroup;
+let deckTextures = {};
+let textureLoader = new THREE.TextureLoader();
 
-function initScene() {
-    const container = document.getElementById("viewport-container");
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x87CEEB);
-
-    camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 500);
-    camera.position.set(25, 18, 25);
-
-    renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("deck-canvas"), antialias: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.shadowMap.enabled = true;
-
-    controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.target.set(0, state.height / 2, 0);
-
-    const ambLight = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambLight);
-
-    const sunLight = new THREE.DirectionalLight(0xffffff, 0.9);
-    sunLight.position.set(15, 25, 15);
-    sunLight.castShadow = true;
-    sunLight.shadow.mapSize.width = 2048;
-    sunLight.shadow.mapSize.height = 2048;
-    scene.add(sunLight);
-
-    const groundGeo = new THREE.PlaneGeometry(100, 100);
-    const groundMat = new THREE.MeshLambertMaterial({ color: 0x7CBA5F });
-    const ground = new THREE.Mesh(groundGeo, groundMat);
-    ground.rotation.x = -Math.PI / 2;
-    ground.receiveShadow = true;
-    scene.add(ground);
-
-    deckGroup = new THREE.Group();
-    scene.add(deckGroup);
-
-    buildDeck();
-    buildHouse();
-    animate();
+function showTextureLoading(show) {
+    const el = document.getElementById("texture-loading");
+    if (show) el.classList.add("visible");
+    else el.classList.remove("visible");
 }
 
+function loadColorTexture(colorName) {
+    return new Promise((resolve, reject) => {
+        if (deckTextures[colorName]) {
+            resolve(deckTextures[colorName]);
+            return;
+        }
+        showTextureLoading(true);
+        textureLoader.load(
+            "colors/" + COLOR_IMAGES[colorName],
+            tex => {
+                tex.wrapS = THREE.RepeatWrapping;
+                tex.wrapT = THREE.RepeatWrapping;
+                tex.repeat.set(1, 4);
+                tex.anisotropy = 16;
+                tex.colorSpace = THREE.SRGBColorSpace;
+                deckTextures[colorName] = tex;
+                showTextureLoading(false);
+                resolve(tex);
+            },
+            undefined,
+            err => {
+                console.warn("Texture load failed for " + colorName, err);
+                showTextureLoading(false);
+                reject(err);
+            }
+        );
+    });
+}
+
+function preloadAllTextures() {
+    COLORS.forEach(c => loadColorTexture(c).catch(() => {}));
+}
+
+function createDeckMaterial(colorName) {
+    if (deckTextures[colorName]) {
+        const tex = deckTextures[colorName].clone();
+        tex.needsUpdate = true;
+        return new THREE.MeshStandardMaterial({
+            map: tex,
+            roughness: 0.8,
+            metalness: 0.0,
+            side: THREE.FrontSide
+        });
+    }
+    return new THREE.MeshStandardMaterial({
+        color: COLOR_HEX_FALLBACK[colorName],
+        roughness: 0.8,
+        metalness: 0.0
+    });
+}
+
+// NEW: Build house model
 function buildHouse() {
     if (houseGroup) {
         while (houseGroup.children.length) {
@@ -763,253 +1437,164 @@ function buildHouse() {
 
     const sidingMat = new THREE.MeshStandardMaterial({ color: 0xE8DCC4, roughness: 0.9 });
     const roofMat = new THREE.MeshStandardMaterial({ color: 0x4A4A4A, roughness: 0.95 });
-    const windowMat = new THREE.MeshStandardMaterial({ color: 0x87CEEB, roughness: 0.1 });
+    const trimMat = new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.7 });
+    const windowMat = new THREE.MeshStandardMaterial({ color: 0x87CEEB, roughness: 0.1, metalness: 0.3 });
     const doorMat = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.8 });
 
-    const w = 20, d = 16, h = 10;
-    const houseX = -state.length / 2 - w / 2 - 2;
+    const houseWidth = 20;
+    const houseDepth = 16;
+    const houseHeight = 10;
+    const roofHeight = 6;
+    const houseX = -state.length / 2 - houseWidth / 2 - 2;
 
-    const bodyGeo = new THREE.BoxGeometry(w, h, d);
+    // Main body
+    const bodyGeo = new THREE.BoxGeometry(houseWidth, houseHeight, houseDepth);
     const body = new THREE.Mesh(bodyGeo, sidingMat);
-    body.position.set(houseX, h / 2, 0);
+    body.position.set(houseX, houseHeight / 2, 0);
     body.castShadow = true;
+    body.receiveShadow = true;
     houseGroup.add(body);
 
+    // Roof
     const roofShape = new THREE.Shape();
-    roofShape.moveTo(-w / 2, 0);
-    roofShape.lineTo(w / 2, 0);
-    roofShape.lineTo(0, 6);
-    roofShape.lineTo(-w / 2, 0);
-    const roofGeo = new THREE.ExtrudeGeometry(roofShape, { depth: d, bevelEnabled: false });
+    roofShape.moveTo(-houseWidth / 2 - 1, 0);
+    roofShape.lineTo(houseWidth / 2 + 1, 0);
+    roofShape.lineTo(0, roofHeight);
+    roofShape.lineTo(-houseWidth / 2 - 1, 0);
+    const roofGeo = new THREE.ExtrudeGeometry(roofShape, { steps: 1, depth: houseDepth + 2, bevelEnabled: false });
     const roof = new THREE.Mesh(roofGeo, roofMat);
     roof.rotation.x = Math.PI / 2;
-    roof.position.set(houseX, h, 0);
+    roof.position.set(houseX, houseHeight, houseDepth / 2 + 1);
+    roof.castShadow = true;
     houseGroup.add(roof);
 
-    const doorGeo = new THREE.BoxGeometry(2, 6, 0.2);
+    // Door
+    const doorGeo = new THREE.BoxGeometry(0.2, 7, 3);
     const door = new THREE.Mesh(doorGeo, doorMat);
-    door.position.set(houseX + w / 2 + 0.1, 3, 0);
+    door.position.set(houseX + houseWidth / 2 + 0.1, 3.5, 0);
     houseGroup.add(door);
 
-    const windowGeo = new THREE.BoxGeometry(2, 2, 0.2);
-    const win1 = new THREE.Mesh(windowGeo, windowMat);
-    win1.position.set(houseX - 3, 6, -5);
-    houseGroup.add(win1);
-    const win2 = new THREE.Mesh(windowGeo, windowMat);
-    win2.position.set(houseX - 3, 6, 5);
-    houseGroup.add(win2);
-}
+    // Door frame
+    const frameGeo = new THREE.BoxGeometry(0.3, 7.5, 3.5);
+    const frame = new THREE.Mesh(frameGeo, trimMat);
+    frame.position.set(houseX + houseWidth / 2 + 0.05, 3.75, 0);
+    houseGroup.add(frame);
 
-function buildDeck() {
-    while (deckGroup.children.length) {
-        const child = deckGroup.children[0];
-        if (child.geometry) child.geometry.dispose();
-        if (child.material) child.material.dispose();
-        deckGroup.remove(child);
-    }
+    // Windows
+    const windowGeo = new THREE.BoxGeometry(0.2, 3, 2.5);
+    const windowFrameGeo = new THREE.BoxGeometry(0.25, 3.4, 2.9);
 
-    const supportMat = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.9 });
-    const boardMat = new THREE.MeshStandardMaterial({ color: 0xA89F91, roughness: 0.8 });
+    [{ z: -4 }, { z: 4 }].forEach(pos => {
+        const wFrame = new THREE.Mesh(windowFrameGeo, trimMat);
+        wFrame.position.set(houseX + houseWidth / 2 + 0.08, houseHeight * 0.6, pos.z);
+        houseGroup.add(wFrame);
 
-    const postSize = 0.33;
-    for (let x = 0; x <= state.length; x += 6) {
-        for (let z = 0; z <= state.width; z += 6) {
-            const postGeo = new THREE.BoxGeometry(postSize, state.height, postSize);
-            const post = new THREE.Mesh(postGeo, supportMat);
-            post.position.set(x - state.length / 2, state.height / 2, z - state.width / 2);
-            post.castShadow = true;
-            deckGroup.add(post);
-        }
-    }
-
-    const BOARD_W = 5.5 / 12;
-    const BOARD_T = 1 / 12;
-    const effectiveW = (5.5 + 0.125) / 12;
-    const numBoards = Math.ceil(state.length / effectiveW);
-
-    for (let i = 0; i < numBoards; i++) {
-        const x = -state.length / 2 + BOARD_W / 2 + i * effectiveW;
-        if (x < state.length / 2) {
-            const boardGeo = new THREE.BoxGeometry(BOARD_W, BOARD_T, state.width - 0.1);
-            const board = new THREE.Mesh(boardGeo, boardMat);
-            board.position.set(x, state.height + BOARD_T / 2, 0);
-            board.castShadow = true;
-            deckGroup.add(board);
-        }
-    }
-
-    if (state.railing) {
-        const railMat = new THREE.MeshStandardMaterial({ color: 0x333333 });
-        const railGeo = new THREE.BoxGeometry(state.length, 2.5, 0.1);
-        const rail = new THREE.Mesh(railGeo, railMat);
-        rail.position.set(0, state.height + 1.5, state.width / 2 + 0.1);
-        deckGroup.add(rail);
-    }
-
-    updateMaterialEstimates();
-    updateBOMOptimizer();
-}
-
-function updateMaterialEstimates() {
-    const wasteFactor = PATTERN_WASTE[state.pattern] || 1.10;
-    const surfaceArea = state.length * state.width;
-    const boardArea = (5.5 / 12) * 16;
-    const boards = Math.ceil((surfaceArea * wasteFactor) / boardArea);
-
-    let dexerdryFeet = 0;
-    if (state.dexerdry) {
-        const joistCount = Math.ceil(state.length / (16 / 12));
-        dexerdryFeet = Math.ceil(joistCount * state.width * 1.1);
-    }
-
-    const total = boards * 8 + dexerdryFeet * 2.0;
-
-    state.estimates = { boards, dexerdryFeet, total };
-    document.getElementById("mat-boards").textContent = boards + " ft";
-    document.getElementById("mat-dexerdry").textContent = dexerdryFeet + " ft";
-    document.getElementById("mat-total").textContent = "$" + total.toFixed(2);
-    document.getElementById("dexerdry-hint").textContent = `(${dexerdryFeet} ft)`;
-    document.getElementById("dexerdry-row").style.display = state.dexerdry ? "flex" : "none";
-}
-
-function updateBOMOptimizer() {
-    const wastePercent = ((PATTERN_WASTE[state.pattern] - 1) * 100).toFixed(0);
-    const msg = state.pattern === "standard" ? "Standard pattern is most efficient." : `${state.pattern} pattern has ${wastePercent}% extra waste.`;
-    document.getElementById("optimization-result").innerHTML = `<p>${msg}</p>`;
-}
-
-function recalculateTotal() {
-    let total = 0;
-    document.querySelectorAll("#order-tbody tr").forEach(tr => {
-        const qtyEl = tr.querySelector(".edit-qty") || tr.querySelector("[data-qty]");
-        const priceEl = tr.querySelector(".edit-price") || tr.querySelector("[data-price]");
-        if (qtyEl && priceEl) {
-            const qty = parseFloat(qtyEl.value || qtyEl.textContent) || 0;
-            const price = parseFloat(priceEl.value || priceEl.textContent) || 0;
-            total += qty * price;
-        }
+        const wPane = new THREE.Mesh(windowGeo, windowMat);
+        wPane.position.set(houseX + houseWidth / 2 + 0.12, houseHeight * 0.6, pos.z);
+        houseGroup.add(wPane);
     });
-    document.getElementById("grand-total").textContent = "$" + total.toFixed(2);
+
+    // Foundation
+    const foundGeo = new THREE.BoxGeometry(houseWidth + 0.5, 0.5, houseDepth + 0.5);
+    const foundMat = new THREE.MeshStandardMaterial({ color: 0x666666, roughness: 0.95 });
+    const foundation = new THREE.Mesh(foundGeo, foundMat);
+    foundation.position.set(houseX, 0.25, 0);
+    foundation.receiveShadow = true;
+    houseGroup.add(foundation);
+
+    // Chimney
+    const chimGeo = new THREE.BoxGeometry(2, 4, 2);
+    const chimMat = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.9 });
+    const chimney = new THREE.Mesh(chimGeo, chimMat);
+    chimney.position.set(houseX - 4, houseHeight + roofHeight * 0.4, -3);
+    chimney.castShadow = true;
+    houseGroup.add(chimney);
+
+    // Ledger board
+    const ledgerGeo = new THREE.BoxGeometry(0.2, 1, state.width + 2);
+    const ledgerMat = new THREE.MeshStandardMaterial({ color: 0x654321, roughness: 0.85 });
+    const ledger = new THREE.Mesh(ledgerGeo, ledgerMat);
+    ledger.position.set(houseX + houseWidth / 2 + 0.1, state.height - 0.5, 0);
+    houseGroup.add(ledger);
 }
 
-function addLineItem() {
-    const product = document.getElementById("product-select").value;
-    const qty = parseFloat(document.getElementById("product-qty").value);
+function initScene() {
+    const container = document.getElementById("viewport-container");
+    const canvas = document.getElementById("deck-canvas");
 
-    if (!product || qty <= 0) {
-        alert("Select product and qty");
-        return;
-    }
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x87CEEB);
 
-    const tbody = document.getElementById("order-tbody");
-    if (tbody.rows[0]?.cells[0]?.colSpan === 5) tbody.innerHTML = "";
+    camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 500);
+    camera.position.set(25, 18, 25);
 
-    if (product === "custom") {
-        const name = document.getElementById("custom-product-name").value;
-        const price = parseFloat(document.getElementById("custom-unit-price").value);
-        if (!name || isNaN(price)) {
-            alert("Enter custom product details");
-            return;
-        }
-        const tr = createRow(name, qty, price);
-        tbody.appendChild(tr);
-        document.getElementById("custom-product-form").classList.remove("active");
-    } else {
-        const p = PRODUCTS[product];
-        const tr = createRow(p.name, qty, p.price);
-        tbody.appendChild(tr);
-    }
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-    document.getElementById("product-select").value = "";
-    document.getElementById("product-qty").value = "1";
-    recalculateTotal();
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.minDistance = 5;
+    controls.maxDistance = 80;
+    controls.maxPolarAngle = Math.PI / 2 - 0.05;
+    controls.target.set(0, state.height / 2, 0);
+
+    const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambient);
+
+    const sun = new THREE.DirectionalLight(0xffffff, 0.9);
+    sun.position.set(15, 25, 15);
+    sun.castShadow = true;
+    sun.shadow.mapSize.width = 2048;
+    sun.shadow.mapSize.height = 2048;
+    sun.shadow.camera.near = 1;
+    sun.shadow.camera.far = 100;
+    sun.shadow.camera.left = -40;
+    sun.shadow.camera.right = 40;
+    sun.shadow.camera.top = 40;
+    sun.shadow.camera.bottom = -40;
+    scene.add(sun);
+
+    const fill = new THREE.DirectionalLight(0xffffff, 0.4);
+    fill.position.set(-10, 10, -10);
+    scene.add(fill);
+
+    const groundGeo = new THREE.PlaneGeometry(100, 100);
+    const groundMat = new THREE.MeshLambertMaterial({ color: 0x7CBA5F });
+    const ground = new THREE.Mesh(groundGeo, groundMat);
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    const grid = new THREE.GridHelper(100, 100, 0x5CAD4A, 0x5CAD4A);
+    grid.position.y = 0.01;
+    grid.material.transparent = true;
+    grid.material.opacity = 0.3;
+    scene.add(grid);
+
+    deckGroup = new THREE.Group();
+    scene.add(deckGroup);
+
+    preloadAllTextures();
+
+    loadColorTexture(state.color)
+        .then(() => { buildDeck(); buildHouse(); })
+        .catch(() => { buildDeck(); buildHouse(); });
+
+    animate();
+    window.addEventListener("resize", onResize);
 }
 
-function createRow(name, qty, price) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-        <td><input type="text" class="line-input edit-name" value="${name}"></td>
-        <td class="numeric"><input type="number" class="line-input edit-qty" value="${qty}" min="0.1" step="0.1"></td>
-        <td class="numeric">$<input type="number" class="line-input edit-price" value="${price.toFixed(2)}" min="0" step="0.01" style="width:60px;"></td>
-        <td class="numeric">$<span class="edit-subtotal">${(qty * price).toFixed(2)}</span></td>
-        <td><button class="btn-remove-row" type="button">×</button></td>
-    `;
-    tr.querySelector(".edit-qty").addEventListener("input", recalculateTotal);
-    tr.querySelector(".edit-price").addEventListener("input", recalculateTotal);
-    tr.querySelector(".btn-remove-row").addEventListener("click", () => {
-        tr.remove();
-        recalculateTotal();
-    });
-    return tr;
+function onResize() {
+    const container = document.getElementById("viewport-container");
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
 }
-
-document.getElementById("product-select").addEventListener("change", e => {
-    document.getElementById("custom-product-form").classList.toggle("active", e.target.value === "custom");
-});
-
-document.getElementById("btn-add-preset").addEventListener("click", addLineItem);
-document.getElementById("btn-add-row").addEventListener("click", () => {
-    const tbody = document.getElementById("order-tbody");
-    if (tbody.rows[0]?.cells[0]?.colSpan === 5) tbody.innerHTML = "";
-    const tr = createRow("Custom Item", 1, 0);
-    tbody.appendChild(tr);
-});
-
-document.getElementById("deck-length").addEventListener("input", e => { state.length = parseFloat(e.target.value); buildDeck(); });
-document.getElementById("deck-width").addEventListener("input", e => { state.width = parseFloat(e.target.value); buildDeck(); });
-document.getElementById("deck-height").addEventListener("input", e => { state.height = parseFloat(e.target.value); buildDeck(); buildHouse(); });
-document.getElementById("add-railing").addEventListener("change", e => { state.railing = e.target.checked; buildDeck(); });
-document.getElementById("add-dexerdry").addEventListener("change", e => { state.dexerdry = e.target.checked; updateMaterialEstimates(); });
-
-const colorGrid = document.getElementById("color-grid");
-COLORS.forEach((c, i) => {
-    const card = document.createElement("div");
-    card.className = "color-card" + (i === 0 ? " selected" : "");
-    card.innerHTML = `<div style="width:100%; height:45px; background:${c === "Driftwood" ? "#A89F91" : c === "Khaki" ? "#C2B280" : "#708090"};"></div><div class="color-card-label">${c}</div>`;
-    card.addEventListener("click", () => {
-        document.querySelectorAll(".color-card").forEach(x => x.classList.remove("selected"));
-        card.classList.add("selected");
-        state.color = c;
-    });
-    colorGrid.appendChild(card);
-});
-
-const patternSel = document.getElementById("pattern-selector");
-PATTERNS.forEach(p => {
-    const btn = document.createElement("button");
-    btn.className = "pattern-btn" + (p === "standard" ? " active" : "");
-    btn.textContent = p.charAt(0).toUpperCase() + p.slice(1);
-    btn.type = "button";
-    btn.addEventListener("click", () => {
-        document.querySelectorAll(".pattern-btn").forEach(x => x.classList.remove("active"));
-        btn.classList.add("active");
-        state.pattern = p;
-        updateMaterialEstimates();
-        updateBOMOptimizer();
-    });
-    patternSel.appendChild(btn);
-});
-
-document.querySelectorAll(".view-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        document.querySelectorAll(".view-btn").forEach(x => x.classList.remove("active"));
-        btn.classList.add("active");
-        const view = btn.dataset.view;
-        if (view === "top") camera.position.set(0, 30, 0.1);
-        else if (view === "front") camera.position.set(0, state.height + 5, 25);
-        else camera.position.set(25, 18, 25);
-        controls.update();
-    });
-});
-
-document.getElementById("btn-submit").addEventListener("click", () => {
-    alert("Order submitted! Name: " + document.getElementById("cust-name").value);
-});
-
-document.getElementById("btn-reset-form").addEventListener("click", () => {
-    document.getElementById("order-tbody").innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:2rem;">No items yet</td></tr>';
-    recalculateTotal();
-});
 
 function animate() {
     requestAnimationFrame(animate);
@@ -1017,13 +1602,803 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-window.addEventListener("resize", () => {
-    const container = document.getElementById("viewport-container");
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
+function buildDeck() {
+    while (deckGroup.children.length) {
+        const child = deckGroup.children[0];
+        if (child.geometry) child.geometry.dispose();
+        if (child.material) {
+            if (child.material.map) child.material.map.dispose();
+            child.material.dispose();
+        }
+        deckGroup.remove(child);
+    }
+
+    const { length, width, height, color, stairs, stairWidth, railing, border } = state;
+
+    const supportMat = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.9 });
+    const railMat = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.7 });
+
+    // Support posts
+    const postSize = 0.33;
+    for (let x = 0; x <= length; x += 6) {
+        for (let z = 0; z <= width; z += 6) {
+            const postGeo = new THREE.BoxGeometry(postSize, height, postSize);
+            const post = new THREE.Mesh(postGeo, supportMat);
+            post.position.set(x - length / 2, height / 2, z - width / 2);
+            post.castShadow = true;
+            post.receiveShadow = true;
+            deckGroup.add(post);
+        }
+    }
+
+    // Rim joists
+    const rimHeight = 0.75;
+    const rimThick = 0.125;
+
+    const rimFBGeo = new THREE.BoxGeometry(length, rimHeight, rimThick);
+    const rimFront = new THREE.Mesh(rimFBGeo, supportMat);
+    rimFront.position.set(0, height - rimHeight / 2, width / 2);
+    rimFront.castShadow = true;
+    deckGroup.add(rimFront);
+
+    const rimBack = new THREE.Mesh(rimFBGeo, supportMat);
+    rimBack.position.set(0, height - rimHeight / 2, -width / 2);
+    rimBack.castShadow = true;
+    deckGroup.add(rimBack);
+
+    const rimLRGeo = new THREE.BoxGeometry(rimThick, rimHeight, width);
+    const rimLeft = new THREE.Mesh(rimLRGeo, supportMat);
+    rimLeft.position.set(-length / 2, height - rimHeight / 2, 0);
+    rimLeft.castShadow = true;
+    deckGroup.add(rimLeft);
+
+    const rimRight = new THREE.Mesh(rimLRGeo, supportMat);
+    rimRight.position.set(length / 2, height - rimHeight / 2, 0);
+    rimRight.castShadow = true;
+    deckGroup.add(rimRight);
+
+    // Deck boards
+    const numBoards = Math.ceil(length / EFFECTIVE_WIDTH);
+    for (let i = 0; i < numBoards; i++) {
+        const xPos = -length / 2 + BOARD_WIDTH / 2 + i * EFFECTIVE_WIDTH;
+        if (xPos < length / 2) {
+            const boardGeo = new THREE.BoxGeometry(BOARD_WIDTH, BOARD_THICK, width - 0.1);
+            const boardMat = createDeckMaterial(color);
+            if (boardMat.map) {
+                boardMat.map = boardMat.map.clone();
+                boardMat.map.offset.y = Math.random() * 0.5;
+                boardMat.map.needsUpdate = true;
+            }
+            const board = new THREE.Mesh(boardGeo, boardMat);
+            board.position.set(xPos, height + BOARD_THICK / 2, 0);
+            board.castShadow = true;
+            board.receiveShadow = true;
+            deckGroup.add(board);
+        }
+    }
+
+    // Picture frame border
+    if (border) {
+        const frameGeo1 = new THREE.BoxGeometry(length + BOARD_WIDTH * 2, BOARD_THICK * 1.2, BOARD_WIDTH);
+        const frameFront = new THREE.Mesh(frameGeo1, createDeckMaterial(color));
+        frameFront.position.set(0, height + BOARD_THICK / 2 + 0.01, width / 2 + BOARD_WIDTH / 2);
+        frameFront.castShadow = true;
+        deckGroup.add(frameFront);
+
+        const frameBack = new THREE.Mesh(frameGeo1, createDeckMaterial(color));
+        frameBack.position.set(0, height + BOARD_THICK / 2 + 0.01, -width / 2 - BOARD_WIDTH / 2);
+        frameBack.castShadow = true;
+        deckGroup.add(frameBack);
+
+        const frameGeo2 = new THREE.BoxGeometry(BOARD_WIDTH, BOARD_THICK * 1.2, width);
+        const frameLeft = new THREE.Mesh(frameGeo2, createDeckMaterial(color));
+        frameLeft.position.set(-length / 2 - BOARD_WIDTH / 2, height + BOARD_THICK / 2 + 0.01, 0);
+        frameLeft.castShadow = true;
+        deckGroup.add(frameLeft);
+
+        const frameRight = new THREE.Mesh(frameGeo2, createDeckMaterial(color));
+        frameRight.position.set(length / 2 + BOARD_WIDTH / 2, height + BOARD_THICK / 2 + 0.01, 0);
+        frameRight.castShadow = true;
+        deckGroup.add(frameRight);
+    }
+
+    // Railing
+    if (railing) {
+        const railHeight = 3;
+        const postSpacing = 4;
+
+        const sides = [
+            { skip: stairs.front, axis: "x", pos: width / 2, range: length },
+            { skip: stairs.back, axis: "x", pos: -width / 2, range: length },
+            { skip: stairs.left, axis: "z", pos: -length / 2, range: width },
+            { skip: stairs.right, axis: "z", pos: length / 2, range: width }
+        ];
+
+        sides.forEach(side => {
+            if (side.skip) return;
+
+            const numPosts = Math.ceil(side.range / postSpacing) + 1;
+            const postGeo = new THREE.BoxGeometry(0.1, railHeight, 0.1);
+
+            for (let i = 0; i < numPosts; i++) {
+                const offset = -side.range / 2 + (i * side.range) / (numPosts - 1);
+                const railPost = new THREE.Mesh(postGeo, railMat);
+                if (side.axis === "x") {
+                    railPost.position.set(offset, height + railHeight / 2, side.pos);
+                } else {
+                    railPost.position.set(side.pos, height + railHeight / 2, offset);
+                }
+                railPost.castShadow = true;
+                deckGroup.add(railPost);
+
+                if (i < numPosts - 1) {
+                    const railGeo = new THREE.BoxGeometry(
+                        side.axis === "x" ? side.range / (numPosts - 1) : 0.08,
+                        2.5,
+                        side.axis === "z" ? side.range / (numPosts - 1) : 0.08
+                    );
+                    const rail = new THREE.Mesh(railGeo, railMat);
+                    if (side.axis === "x") {
+                        rail.position.set(offset + side.range / (2 * (numPosts - 1)), height + 1.5, side.pos);
+                    } else {
+                        rail.position.set(side.pos, height + 1.5, offset + side.range / (2 * (numPosts - 1)));
+                    }
+                    rail.castShadow = true;
+                    deckGroup.add(rail);
+                }
+            }
+        });
+    }
+
+    // Build stairs for each active side
+    Object.keys(stairs).forEach(side => {
+        if (stairs[side]) {
+            buildStairs(side, stairWidth, height);
+        }
+    });
+
+    updateMaterialEstimates();
+    updateBOMOptimizer();
+}
+
+function buildStairs(side, stairWidth, deckHeight) {
+    const stairMat = createDeckMaterial(state.color);
+    const stringerMat = new THREE.MeshStandardMaterial({ color: 0xA0826D, roughness: 0.8 });
+
+    const numSteps = Math.ceil(deckHeight / STAIR_RISE);
+    const stairDepth = numSteps * STAIR_RUN;
+
+    let startX, startZ, direction;
+
+    if (side === "front") {
+        startX = 0;
+        startZ = state.width / 2;
+        direction = { x: 0, z: 1, rise: -1 };
+    } else if (side === "back") {
+        startX = 0;
+        startZ = -state.width / 2;
+        direction = { x: 0, z: -1, rise: -1 };
+    } else if (side === "left") {
+        startX = -state.length / 2;
+        startZ = 0;
+        direction = { x: -1, z: 0, rise: -1 };
+    } else {
+        startX = state.length / 2;
+        startZ = 0;
+        direction = { x: 1, z: 0, rise: -1 };
+    }
+
+    const stringerThick = 1.5 / 12;
+    const stringerHeight = deckHeight + 1;
+
+    const stringerGeo = new THREE.BoxGeometry(
+        side === "left" || side === "right" ? stringerThick : stairWidth,
+        stringerHeight,
+        side === "left" || side === "right" ? stairDepth : stringerThick
+    );
+
+    const stringer1Pos = {
+        x: startX + direction.x * stairDepth / 2 + (side === "front" || side === "back" ? -stairWidth / 3 : 0),
+        y: deckHeight / 2 - 0.5,
+        z: startZ + direction.z * stairDepth / 2 + (side === "left" || side === "right" ? -stairWidth / 3 : 0)
+    };
+
+    const stringer1 = new THREE.Mesh(stringerGeo, stringerMat);
+    stringer1.position.set(stringer1Pos.x, stringer1Pos.y, stringer1Pos.z);
+    stringer1.castShadow = true;
+    deckGroup.add(stringer1);
+
+    const stringer2Pos = {
+        x: startX + direction.x * stairDepth / 2 + (side === "front" || side === "back" ? stairWidth / 3 : 0),
+        y: deckHeight / 2 - 0.5,
+        z: startZ + direction.z * stairDepth / 2 + (side === "left" || side === "right" ? stairWidth / 3 : 0)
+    };
+
+    const stringer2 = new THREE.Mesh(stringerGeo, stringerMat);
+    stringer2.position.set(stringer2Pos.x, stringer2Pos.y, stringer2Pos.z);
+    stringer2.castShadow = true;
+    deckGroup.add(stringer2);
+
+    const treadThick = BOARD_THICK;
+
+    for (let i = 0; i < numSteps; i++) {
+        const treadY = state.height + (numSteps - i - 1) * STAIR_RISE - treadThick / 2;
+        const progressDown = (i + 1) * STAIR_RUN;
+
+        const treadGeo = new THREE.BoxGeometry(
+            side === "front" || side === "back" ? stairWidth : treadThick,
+            treadThick,
+            side === "left" || side === "right" ? stairWidth : treadThick
+        );
+
+        const treadMat = createDeckMaterial(state.color);
+        if (treadMat.map) {
+            treadMat.map = treadMat.map.clone();
+            treadMat.needsUpdate = true;
+        }
+
+        const tread = new THREE.Mesh(treadGeo, treadMat);
+
+        if (side === "front") {
+            tread.position.set(0, treadY, startZ + progressDown * direction.z);
+        } else if (side === "back") {
+            tread.position.set(0, treadY, startZ + progressDown * direction.z);
+        } else if (side === "left") {
+            tread.position.set(startX + progressDown * direction.x, treadY, 0);
+        } else {
+            tread.position.set(startX + progressDown * direction.x, treadY, 0);
+        }
+
+        tread.castShadow = true;
+        tread.receiveShadow = true;
+        deckGroup.add(tread);
+    }
+}
+
+function updateMaterialEstimates() {
+    const { length, width, height, boardLength, stairs, stairWidth, border, includePlugs, includeDexerDry, pattern } = state;
+
+    const wasteFactor = PATTERN_WASTE_FACTORS[pattern] || 1.10;
+    let numStockBoards = Math.ceil((length * width * wasteFactor) / (BOARD_WIDTH * boardLength));
+    let borderBoards = border ? Math.ceil(((length + width) * 2 * wasteFactor) / boardLength) : 0;
+
+    const numSteps = Math.ceil(height / STAIR_RISE);
+    let stairTreads = 0;
+    if (stairs.front) stairTreads += numSteps;
+    if (stairs.back) stairTreads += numSteps;
+    if (stairs.left) stairTreads += numSteps;
+    if (stairs.right) stairTreads += numSteps;
+
+    const surfaceArea = length * width + (stairTreads > 0 ? stairTreads * stairWidth * 0.5 : 0);
+    const screwBoxes = Math.ceil((surfaceArea * 8) / SCREWS_PER_BOX);
+
+    let dexerDryFeet = 0;
+    if (includeDexerDry) {
+        const joistCount = Math.ceil(length / (16 / 12));
+        dexerDryFeet = Math.ceil(joistCount * width * 1.1);
+    }
+
+    let plugBoxes = 0;
+    if (includePlugs) {
+        plugBoxes = Math.ceil(screwBoxes * 0.3);
+    }
+
+    const dexerDryCost = dexerDryFeet * DEXERDRY_PRICE_PER_FT;
+
+    state.estimates = {
+        numStockBoards,
+        borderBoards,
+        stairTreads,
+        screwBoxes,
+        dexerDryFeet,
+        plugBoxes,
+        total: numStockBoards * 8 + borderBoards * 6 + stairTreads * 12 + screwBoxes * 37 + dexerDryCost + plugBoxes * 33.79
+    };
+
+    document.getElementById("mat-boards").textContent = numStockBoards;
+    document.getElementById("mat-border").textContent = borderBoards;
+    document.getElementById("mat-stairs").textContent = stairTreads;
+    document.getElementById("mat-screws").textContent = screwBoxes;
+    document.getElementById("mat-dexerdry").textContent = dexerDryFeet + " ft ($" + dexerDryCost.toFixed(2) + ")";
+    document.getElementById("mat-plugs").textContent = plugBoxes;
+    document.getElementById("mat-total").textContent = "$" + state.estimates.total.toFixed(2);
+    document.getElementById("plugs-hint").textContent = `(${plugBoxes} boxes)`;
+    document.getElementById("dexerdry-hint").textContent = `(${dexerDryFeet} ft)`;
+
+    document.getElementById("plugs-row").style.display = includePlugs ? "flex" : "none";
+    document.getElementById("dexerdry-row").style.display = includeDexerDry ? "flex" : "none";
+}
+
+// NEW: Update BOM Optimizer suggestions
+function updateBOMOptimizer() {
+    const { length, width, boardLength, pattern } = state;
+    const resultEl = document.getElementById("optimization-result");
+
+    const patternInfo = PATTERN_INFO[pattern];
+    const wasteFactor = PATTERN_WASTE_FACTORS[pattern];
+    const wastePercent = ((wasteFactor - 1) * 100).toFixed(0);
+
+    const boardLengths = [12, 16, 20];
+    let optimalLength = boardLength;
+    let minWaste = Infinity;
+
+    boardLengths.forEach(bl => {
+        const boardsNeededLength = Math.ceil(width / bl);
+        const wastedPerBoard = (boardsNeededLength * bl) - width;
+        const totalWaste = wastedPerBoard * Math.ceil(length / EFFECTIVE_WIDTH);
+        if (totalWaste < minWaste) {
+            minWaste = totalWaste;
+            optimalLength = bl;
+        }
+    });
+
+    const currentBoards = Math.ceil((length * width * wasteFactor) / (BOARD_WIDTH * boardLength));
+    const optimalBoards = Math.ceil((length * width * wasteFactor) / (BOARD_WIDTH * optimalLength));
+    const savings = (currentBoards - optimalBoards) * 8;
+
+    let html = `
+        <p><strong>Pattern:</strong> ${patternInfo.name}</p>
+        <p><strong>Joist Spacing:</strong> ${patternInfo.joistSpacing}" on center</p>
+        <p class="waste-info">Waste Factor: ~${wastePercent}% extra material</p>
+    `;
+
+    if (optimalLength !== boardLength && savings > 0) {
+        html += `<p class="savings">Tip: Using ${optimalLength}' boards could save ~$${savings.toFixed(2)}</p>`;
+    }
+
+    if (pattern === "herringbone" || pattern === "chevron") {
+        html += `<p style="color:#854d0e; font-size:0.7rem; margin-top:0.5rem;">Note: This pattern requires additional blocking and precise cutting.</p>`;
+    }
+
+    resultEl.innerHTML = html;
+}
+
+// Event Handlers
+document.getElementById("deck-length").addEventListener("input", e => {
+    state.length = parseFloat(e.target.value);
+    buildDeck();
+    buildHouse();
 });
 
+document.getElementById("deck-width").addEventListener("input", e => {
+    state.width = parseFloat(e.target.value);
+    buildDeck();
+    buildHouse();
+});
+
+document.getElementById("deck-height").addEventListener("input", e => {
+    state.height = parseFloat(e.target.value);
+    buildDeck();
+    buildHouse();
+});
+
+document.getElementById("board-length").addEventListener("change", e => {
+    state.boardLength = parseFloat(e.target.value);
+    updateMaterialEstimates();
+    updateBOMOptimizer();
+});
+
+document.getElementById("stair-width").addEventListener("input", e => {
+    state.stairWidth = parseFloat(e.target.value);
+    buildDeck();
+});
+
+document.getElementById("add-railing").addEventListener("change", e => {
+    state.railing = e.target.checked;
+    buildDeck();
+});
+
+document.getElementById("add-border").addEventListener("change", e => {
+    state.border = e.target.checked;
+    buildDeck();
+});
+
+document.getElementById("add-dexerdry").addEventListener("change", e => {
+    state.includeDexerDry = e.target.checked;
+    updateMaterialEstimates();
+});
+
+document.getElementById("add-plugs").addEventListener("change", e => {
+    state.includePlugs = e.target.checked;
+    updateMaterialEstimates();
+});
+
+// Pattern selector
+document.querySelectorAll(".pattern-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".pattern-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        state.pattern = btn.dataset.pattern;
+        updateMaterialEstimates();
+        updateBOMOptimizer();
+    });
+});
+
+// Color grid
+const colorGrid = document.getElementById("color-grid");
+COLORS.forEach((color, idx) => {
+    const card = document.createElement("div");
+    card.className = "color-card";
+    if (idx === 0) card.classList.add("selected");
+    card.innerHTML = `
+        <img src="colors/${COLOR_IMAGES[color]}" alt="${color}">
+        <div class="color-card-label">${color}</div>
+    `;
+    card.addEventListener("click", () => selectColor(color));
+    colorGrid.appendChild(card);
+});
+
+function selectColor(colorName) {
+    COLORS.forEach((c, idx) => {
+        colorGrid.children[idx].classList.toggle("selected", c === colorName);
+    });
+    state.color = colorName;
+    document.getElementById("preview-color-1").src = "colors/" + COLOR_IMAGES[colorName];
+    document.getElementById("preview-name-1").textContent = colorName;
+    document.getElementById("viewport-color-img").src = "colors/" + COLOR_IMAGES[colorName];
+    document.getElementById("viewport-color-name").textContent = colorName;
+    loadColorTexture(colorName).catch(buildDeck);
+    buildDeck();
+}
+
+// Stair buttons
+document.querySelectorAll(".stair-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const side = btn.dataset.side;
+        state.stairs[side] = !state.stairs[side];
+        btn.classList.toggle("active", state.stairs[side]);
+        buildDeck();
+    });
+});
+
+// View buttons
+document.querySelectorAll(".view-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".view-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const view = btn.dataset.view;
+        switch (view) {
+            case "top":
+                camera.position.set(0, 35, 0.1);
+                controls.target.set(0, state.height, 0);
+                break;
+            case "front":
+                camera.position.set(0, state.height + 5, 30);
+                controls.target.set(0, state.height, 0);
+                break;
+            case "side":
+                camera.position.set(30, state.height + 5, 0);
+                controls.target.set(0, state.height, 0);
+                break;
+            default:
+                camera.position.set(25, 18, 25);
+                controls.target.set(0, state.height / 2, 0);
+        }
+        controls.update();
+    });
+});
+
+// Color modal
+document.getElementById("preview-color-1").addEventListener("click", () => {
+    const modal = document.getElementById("colorModal");
+    document.getElementById("modal-color-img").src = document.getElementById("preview-color-1").src;
+    document.getElementById("modal-color-name").textContent = document.getElementById("preview-name-1").textContent;
+    modal.classList.add("active");
+});
+
+document.getElementById("preview-color-2").addEventListener("click", () => {
+    const modal = document.getElementById("colorModal");
+    const current = document.getElementById("preview-name-1").textContent;
+    const nextIdx = (COLORS.indexOf(current) + 1) % COLORS.length;
+    const nextColor = COLORS[nextIdx];
+    document.getElementById("preview-color-2").src = "colors/" + COLOR_IMAGES[nextColor];
+    document.getElementById("preview-name-2").textContent = nextColor;
+    document.getElementById("modal-color-img").src = "colors/" + COLOR_IMAGES[nextColor];
+    document.getElementById("modal-color-name").textContent = nextColor;
+    modal.classList.add("active");
+});
+
+document.getElementById("modal-close").addEventListener("click", () => {
+    document.getElementById("colorModal").classList.remove("active");
+});
+
+// Reset builder
+document.getElementById("reset-builder").addEventListener("click", () => {
+    state = {
+        length: 16,
+        width: 12,
+        height: 3,
+        color: "Driftwood",
+        boardLength: 16,
+        pattern: "standard",
+        stairs: { front: false, back: false, left: false, right: false },
+        stairWidth: 4,
+        railing: false,
+        border: false,
+        includeDexerDry: false,
+        includePlugs: false,
+        estimates: { numStockBoards: 0, borderBoards: 0, stairTreads: 0, screwBoxes: 0, dexerDryFeet: 0, plugBoxes: 0, total: 0 }
+    };
+    document.getElementById("deck-length").value = 16;
+    document.getElementById("deck-width").value = 12;
+    document.getElementById("deck-height").value = 3;
+    document.getElementById("stair-width").value = 4;
+    document.getElementById("add-railing").checked = false;
+    document.getElementById("add-border").checked = false;
+    document.getElementById("add-dexerdry").checked = false;
+    document.getElementById("add-plugs").checked = false;
+    document.querySelectorAll(".stair-btn").forEach(btn => btn.classList.remove("active"));
+    document.querySelectorAll(".pattern-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.pattern === "standard");
+    });
+    selectColor("Driftwood");
+    buildDeck();
+    buildHouse();
+});
+
+// Show/hide custom product form
+document.getElementById("product-select").addEventListener("change", e => {
+    const customForm = document.getElementById("custom-product-form");
+    if (e.target.value === "custom") {
+        customForm.classList.add("active");
+    } else {
+        customForm.classList.remove("active");
+    }
+});
+
+// Order form functions
+function createTableRow(productKey, color, length, qty, unitPrice, productName = null) {
+    const subtotal = qty * unitPrice;
+    const displayName = productName || PRODUCTS[productKey]?.name || productKey;
+    const hasColorField = PRODUCTS[productKey]?.hasColor || (color && color !== "");
+
+    const colorImg = hasColorField && color ? `<img src="colors/${COLOR_IMAGES[color] || "Driftwood.png"}" alt="${color}">` : "";
+    const colorText = hasColorField && color ? `<span>${color}</span>` : "<span>N/A</span>";
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+        <td data-label="Product">${displayName}</td>
+        <td data-label="Color" class="color-cell">${colorImg}${colorText}</td>
+        <td data-label="Length/Unit">${length || "N/A"}</td>
+        <td data-label="Qty" class="numeric">${qty.toFixed(1)}</td>
+        <td data-label="Unit Price" class="numeric">$${unitPrice.toFixed(2)}</td>
+        <td data-label="Subtotal" class="numeric">$${subtotal.toFixed(2)}</td>
+        <td data-label="Actions">
+            <button type="button" class="btn-remove-row">×</button>
+        </td>
+    `;
+    tr.querySelector(".btn-remove-row").addEventListener("click", () => {
+        tr.remove();
+        recalculateTotal();
+    });
+    return tr;
+}
+
+function addLineItem() {
+    const productSelect = document.getElementById("product-select");
+    const product = productSelect.value;
+    const qty = parseFloat(document.getElementById("product-qty").value);
+
+    if (!product || qty <= 0) {
+        alert("Please select a product and enter a quantity");
+        return;
+    }
+
+    const tbody = document.getElementById("order-tbody");
+    if (tbody.rows.length === 1 && tbody.rows[0].cells[0].colSpan === 7) {
+        tbody.innerHTML = "";
+    }
+
+    // Handle custom product
+    if (product === "custom") {
+        const customName = document.getElementById("custom-product-name").value.trim();
+        const customPrice = parseFloat(document.getElementById("custom-unit-price").value);
+        const customUnit = document.getElementById("custom-unit-type").value;
+        const customColor = document.getElementById("custom-color").value;
+
+        if (!customName) {
+            alert("Please enter a product name for custom items");
+            return;
+        }
+        if (isNaN(customPrice) || customPrice < 0) {
+            alert("Please enter a valid unit price");
+            return;
+        }
+
+        const row = createTableRow("custom", customColor, customUnit, qty, customPrice, customName);
+        tbody.appendChild(row);
+
+        // Reset custom form
+        document.getElementById("custom-product-name").value = "";
+        document.getElementById("custom-unit-price").value = "0";
+        document.getElementById("custom-product-form").classList.remove("active");
+    } else {
+        const productData = PRODUCTS[product];
+        if (!productData) {
+            alert("Invalid product selected");
+            return;
+        }
+
+        const length = productData.unit || "";
+        const color = productData.hasColor ? state.color : "";
+        const row = createTableRow(product, color, length, qty, productData.price);
+        tbody.appendChild(row);
+    }
+
+    productSelect.value = "";
+    document.getElementById("product-qty").value = "1";
+    recalculateTotal();
+}
+
+document.getElementById("btn-add-preset").addEventListener("click", addLineItem);
+
+// Manual editable row
+document.getElementById("btn-add-row").addEventListener("click", () => {
+    const tbody = document.getElementById("order-tbody");
+    if (tbody.rows.length === 1 && tbody.rows[0].cells[0].colSpan === 7) {
+        tbody.innerHTML = "";
+    }
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+        <td data-label="Product">
+            <input type="text" class="line-input edit-product" placeholder="Product name" value="">
+        </td>
+        <td data-label="Color">
+            <select class="line-select edit-color">
+                <option value="">N/A</option>
+                ${COLORS.map(c => `<option value="${c}">${c}</option>`).join("")}
+            </select>
+        </td>
+        <td data-label="Length/Unit">
+            <input type="text" class="line-input edit-length" placeholder="ft/box/etc" value="">
+        </td>
+        <td data-label="Qty" class="numeric">
+            <input type="number" class="line-input edit-qty" value="1" min="0.1" step="0.1">
+        </td>
+        <td data-label="Unit Price" class="numeric">
+            <input type="number" class="line-input edit-price" value="0" min="0" step="0.01">
+        </td>
+        <td data-label="Subtotal" class="numeric edit-subtotal">$0.00</td>
+        <td data-label="Actions">
+            <button type="button" class="btn-remove-row">×</button>
+        </td>
+    `;
+
+    const qtyInput = tr.querySelector(".edit-qty");
+    const priceInput = tr.querySelector(".edit-price");
+    const subtotalCell = tr.querySelector(".edit-subtotal");
+
+    const updateSubtotal = () => {
+        const qty = parseFloat(qtyInput.value) || 0;
+        const price = parseFloat(priceInput.value) || 0;
+        subtotalCell.textContent = "$" + (qty * price).toFixed(2);
+        recalculateTotal();
+    };
+
+    qtyInput.addEventListener("input", updateSubtotal);
+    priceInput.addEventListener("input", updateSubtotal);
+
+    tr.querySelector(".btn-remove-row").addEventListener("click", () => {
+        tr.remove();
+        recalculateTotal();
+    });
+
+    tbody.appendChild(tr);
+});
+
+document.getElementById("apply-order").addEventListener("click", () => {
+    const tbody = document.getElementById("order-tbody");
+    if (tbody.rows.length === 1 && tbody.rows[0].cells[0].colSpan === 7) {
+        tbody.innerHTML = "";
+    }
+
+    const { numStockBoards, borderBoards, stairTreads, screwBoxes, plugBoxes, dexerDryFeet } = state.estimates;
+
+    if (numStockBoards > 0) {
+        const row = createTableRow("system", state.color, state.boardLength + " ft", numStockBoards, 8.0);
+        tbody.appendChild(row);
+    }
+    if (borderBoards > 0) {
+        const row = createTableRow("system", state.color, state.boardLength + " ft (border)", borderBoards, 8.0);
+        tbody.appendChild(row);
+    }
+    if (stairTreads > 0) {
+        const row = createTableRow("system", state.color, "12 ft (stairs)", stairTreads, 12.0);
+        tbody.appendChild(row);
+    }
+    if (screwBoxes > 0) {
+        const row = createTableRow("screws", "", "box", screwBoxes, 37.0);
+        tbody.appendChild(row);
+    }
+    if (state.includeDexerDry && dexerDryFeet > 0) {
+        // Calculate best box size
+        let boxes240 = Math.floor(dexerDryFeet / 240);
+        let remaining = dexerDryFeet - (boxes240 * 240);
+        let boxes100 = Math.floor(remaining / 100);
+        remaining = remaining - (boxes100 * 100);
+        let boxes50 = Math.ceil(remaining / 50);
+
+        if (boxes240 > 0) {
+            const row = createTableRow("dexerdry-240", "", "240 ft box", boxes240, 480.0);
+            tbody.appendChild(row);
+        }
+        if (boxes100 > 0) {
+            const row = createTableRow("dexerdry-100", "", "100 ft box", boxes100, 200.0);
+            tbody.appendChild(row);
+        }
+        if (boxes50 > 0) {
+            const row = createTableRow("dexerdry-50", "", "50 ft box", boxes50, 100.0);
+            tbody.appendChild(row);
+        }
+    }
+    if (plugBoxes > 0) {
+        const row = createTableRow("plugs", state.color, "box", plugBoxes, 33.79);
+        tbody.appendChild(row);
+    }
+
+    recalculateTotal();
+});
+
+function recalculateTotal() {
+    let total = 0;
+    const rows = document.getElementById("order-tbody").querySelectorAll("tr");
+    rows.forEach(row => {
+        // Check for editable subtotal cell
+        const editSubtotal = row.querySelector(".edit-subtotal");
+        if (editSubtotal) {
+            const subtotal = parseFloat(editSubtotal.textContent.replace("$", "")) || 0;
+            total += subtotal;
+        } else {
+            // Static row
+            const subtotalCell = row.cells[5];
+            if (subtotalCell && !subtotalCell.colSpan) {
+                const subtotal = parseFloat(subtotalCell.textContent.replace("$", "")) || 0;
+                total += subtotal;
+            }
+        }
+    });
+    document.getElementById("grand-total").textContent = "$" + total.toFixed(2);
+}
+
+// Form handlers
+document.getElementById("btn-reset-form").addEventListener("click", () => {
+    document.getElementById("cust-name").value = "";
+    document.getElementById("cust-company").value = "";
+    document.getElementById("cust-phone").value = "";
+    document.getElementById("cust-email").value = "";
+    document.getElementById("cust-address").value = "";
+    document.getElementById("special-notes").value = "";
+    document.getElementById("order-tbody").innerHTML = `
+        <tr>
+            <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                Design your deck above and click "Apply to Order Form" or add items from the dropdown.
+            </td>
+        </tr>
+    `;
+    recalculateTotal();
+});
+
+document.getElementById("btn-submit").addEventListener("click", () => {
+    const name = document.getElementById("cust-name").value.trim();
+    const phone = document.getElementById("cust-phone").value.trim();
+    const email = document.getElementById("cust-email").value.trim();
+    const address = document.getElementById("cust-address").value.trim();
+
+    if (!name || !phone || !email || !address) {
+        alert("Please fill in all required fields (Name, Phone, Email, Address)");
+        return;
+    }
+
+    alert("Order submitted!\n\nCustomer: " + name + "\nEmail: " + email + "\nTotal: " + document.getElementById("grand-total").textContent);
+});
+
+document.getElementById("btn-pdf").addEventListener("click", () => {
+    alert("PDF export feature coming soon. For now, use your browser's Print to PDF function (Ctrl+P or Cmd+P).");
+});
+
+// Initialize
 initScene();
 </script>
 
